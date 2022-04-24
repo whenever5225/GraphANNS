@@ -2,49 +2,51 @@
 @Author: wmz
 @Contact: wmengzhao@qq.com
 @File: main.cpp
-@Time: 2022/3/26 9:19 PM
-@Desc: TODO
+@Time: 2022/4/12 10:23 AM
+@Desc:
 ***************************/
-#include "src/data/load_for_build.h"
-#include "src/components/c1_initialization/c1_nssg.h"
-#include "src/components/c2_candidate/c2_2order_neighbor.h"
-#include "src/components/c3_neighbor/c3_nsg.h"
-#include "src/data/save_index.h"
-#include "src/data/load_for_search.h"
-#include "src/data/load_index.h"
-#include "src/components/c6_seed/c6_random.h"
-#include "src/components/c7_routing/c7_greedy.h"
-#include "src/regions/search_region.h"
-#include "src/data/load_for_eva.h"
-#include "src/evaluation/eva_recall.h"
+
+#include "../src/graph_anns.h"
 
 using namespace CGraph;
 
-int main(){
+int main() {
     GPipelinePtr pipeline = GPipelineFactory::create();
 
-    GElementPtr a, b, c, d, e, f, g, h, i, j, k, a_region= nullptr;
+    GElementPtr a, b, c, d, e, f, g, h, i, j, k, l, de_region, ij_region= nullptr;
     // build
-    CStatus status = pipeline->registerGElement<LoadForBuild>(&a, {}, "base_data");
-    status += pipeline->registerGElement<C1NSSG>(&b, {a}, "c1_nssg");
-    status += pipeline->registerGElement<C2TwoOrderNeighbor>(&c, {a,b}, "c2_nssg");
-    status += pipeline->registerGElement<C3NSG>(&d, {a,b,c}, "c3_nsg");
-    status += pipeline->registerGElement<SaveIndex>(&e, {a,b,c,d}, "save_index");
+    CStatus status = pipeline->registerGElement<ConfigNPG>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<LoadForBuild>(&b, {a}, "base_data");
+    status += pipeline->registerGElement<C1InitializationKGraph>(&c, {b}, "c1_nssg");
 
-    status += pipeline->registerGElement<LoadForSearch>(&f, {}, "load_for_search");
-    status += pipeline->registerGElement<LoadIndex>(&g, {f}, "load_index");
+//    d = pipeline->createGNode<C2CandidateNSSG>(GNodeInfo({}, "c2_nssg"));
+//    e = pipeline->createGNode<C3NeighborNSG>(GNodeInfo({d}, "c3_nsg"));
+//    de_region = pipeline->createGGroup<BuildRegion>({d, e});
+//
+//    status += pipeline->registerGElement<BuildRegion>(&de_region, {c}, "build_region");
+
+    status += pipeline->registerGElement<C2CandidateNSSGV1>(&d, {c}, "c2_nssg");
+    status += pipeline->registerGElement<C3NeighborNSGV1>(&e, {d}, "c3_nsg");
+    status += pipeline->registerGElement<SaveIndex>(&f, {e}, "save_index");
+
+    status += pipeline->registerGElement<LoadForSearch>(&g, {f}, "load_for_search");
+    status += pipeline->registerGElement<LoadIndex>(&h, {g}, "load_index");
 
     //search
-    h = pipeline->createGNode<C6Random>(GNodeInfo({}, "c6_random"));
-    i = pipeline->createGNode<C7Greedy>(GNodeInfo({h}, "c7_greedy"));
+    i = pipeline->createGNode<C6SeedKGraph>(GNodeInfo({}, "c6_random"));
+    j = pipeline->createGNode<C7RoutingKGraph>(GNodeInfo({i}, "c7_greedy"));
 
-    a_region = pipeline->createGGroup<SearchRegion>({h,i});
+    ij_region = pipeline->createGGroup<SearchRegion>({i, j});
 
-    status += pipeline->registerGElement<SearchRegion>(&a_region, {f,g}, "search_region");
-    status += pipeline->registerGElement<LoadForEva>(&j, {a_region}, "load_for_eva");
-    status += pipeline->registerGElement<EvaRecall>(&k, {j}, "eva_recall");
+    status += pipeline->registerGElement<SearchRegion>(&ij_region, {g, h}, "search_region");
+    status += pipeline->registerGElement<LoadForEva>(&k, {ij_region}, "load_for_eva");
+    status += pipeline->registerGElement<EvaRecall>(&l, {k}, "eva_recall");
 
     status += pipeline->process();
+    if (!status.isOK()) {
+        CGRAPH_ECHO("process graph error, error info is [%s]", status.getInfo().c_str());
+        return 0;
+    }
     GPipelineFactory::remove(pipeline);
     return 0;
 }
