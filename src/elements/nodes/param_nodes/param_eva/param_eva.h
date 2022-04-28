@@ -15,4 +15,5 @@ class EvaParams : public CGraph::GParam {
 public:
 
 };
+
 #endif //GRAPHANNS_EVA_PARAMS_H

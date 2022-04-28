@@ -19,7 +19,7 @@ If you are a developer using CLion as the IDE, you can open the `CMakeLists.txt`
 You need to configure the data file, index file, and parameters in [here](https://github.com/whenever5225/GraphANNS/blob/main/src/graph_anns_define.h) (please refer to [here](http://corpus-texmex.irisa.fr/) for test data download). Suppose you use 'npg' algorithm and '[siftsmall](ftp://ftp.irisa.fr/local/texmex/corpus/siftsmall.tar.gz)' dataset, you can modify the data path to yours in its configure file (`graph_anns_define.h`):
 
 ```cpp
-const static char* GA_NPG_BASE_PATH = "/your_base_data_root_path/siftsmall/siftsmall_base.fvecs";
+const static char* GA_NPG_BASE_PATH = "your_base_data_root_path/siftsmall/siftsmall_base.fvecs";
 const static char* GA_NPG_QUERY_PATH = "your_base_data_root_path/siftsmall/siftsmall_query.fvecs";
 const static char* GA_NPG_GROUNDTRUTH_PATH = "your_base_data_root_path/siftsmall/siftsmall_groundtruth.ivecs";
 const static char* GA_NPG_INDEX_PATH = "your_base_data_root_path/anns.index";

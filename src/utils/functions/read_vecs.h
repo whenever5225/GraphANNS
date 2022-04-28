@@ -13,7 +13,7 @@
 #include "../../../../CGraph/src/CGraph.h"
 
 /**
- * load data in format 'fvecs' or 'ivec'
+ * load data in format 'fvecs' or 'ivecs'
  * @tparam T
  * @param filename
  * @param data
@@ -21,6 +21,7 @@
  * @param dim
  */
 
+// todo : suggest, this function must be refine.
 template<typename T>
 CStatus read_vecs(char *filename, T *&data, unsigned &num, unsigned &dim) {
     std::ifstream in(filename, std::ios::binary);

@@ -3,7 +3,7 @@
 @Contact: wmengzhao@qq.com
 @File: param_basic.h
 @Time: 2022/4/14 7:02 PM
-@Desc: TODO
+@Desc:
 ***************************/
 
 #ifndef GRAPHANNS_PARAM_BASIC_H
@@ -40,7 +40,7 @@ public:
     VecValType *query = nullptr;
     unsigned q_num = 0;
     unsigned q_dim = 0;
-    std::string groundtruth_path;  // groundtruth id
+    std::string groundtruth_path;  // groundtruth path
     unsigned *gt = nullptr;
     unsigned gt_num = 0;
     unsigned gt_dim = 0;
@@ -55,7 +55,6 @@ public:
     CVoid reset() override {
         sp.clear();
     }
-
 };
 
 #endif //GRAPHANNS_PARAM_BASIC_H

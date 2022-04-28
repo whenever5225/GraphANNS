@@ -72,11 +72,11 @@ public:
     }
 
     CStatus refreshParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(g_param)
 
         {
-            CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param);
+            CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param)
             g_param->results.push_back(res_);
         }
         return CStatus();

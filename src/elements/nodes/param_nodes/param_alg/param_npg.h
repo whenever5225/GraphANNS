@@ -9,6 +9,8 @@
 #ifndef GRAPHANNS_NPG_PARAMS_H
 #define GRAPHANNS_NPG_PARAMS_H
 
+#include <fstream>
+
 #include "../param_basic.h"
 
 static const char* GRAPH_INFO_PARAM_KEY = "NPG_info";

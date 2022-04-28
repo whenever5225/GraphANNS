@@ -15,7 +15,7 @@
 class BuildRegion : public CGraph::GRegion {
 public:
     CBool isHold() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
         g_param->cur_id++;
         return g_param->cur_id < g_param->num;
     }

@@ -15,7 +15,7 @@
 using VecValType = float;   // vector value type
 using DistResType = float;  // distances value type
 
-// distances calculation method
+// distances calculation type
 using DistCalcType = CGraph::UDistanceCalculator<VecValType, DistResType, EuclideanDistance<VecValType, DistResType> >;
 
 #endif //GRAPHANNS_UTILS_DEFINE_H
