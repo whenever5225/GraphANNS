@@ -14,23 +14,22 @@
 class ConfigNPG : public ConfigBasic {
 public:
     CStatus init() override {
-        CStatus status = CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        return status;
+        return CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
     }
 
     CStatus run() override {
         auto *npg_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(npg_param)
-        npg_param->base_path = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_base.fvecs";
-        npg_param->query_path = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_query.fvecs";
-        npg_param->groundtruth_path = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_groundtruth.ivecs";
 
-        npg_param->index_path = "/Users/wmz/Documents/Postgraduate/Code/tmp/test.index";
+        npg_param->base_path = GA_NPG_BASE_PATH;
+        npg_param->query_path = GA_NPG_QUERY_PATH;
+        npg_param->groundtruth_path = GA_NPG_GROUNDTRUTH_PATH;
+        npg_param->index_path = GA_NPG_INDEX_PATH;
 
-        npg_param->L_candidate = 100;
-        npg_param->R_neighbor = 100;
-        npg_param->C_neighbor = 200;
-        npg_param->k_init_graph = 20;
+        npg_param->L_candidate = GA_NPG_L_CANDIDATE;
+        npg_param->R_neighbor = GA_NPG_R_NEIGHBOR;
+        npg_param->C_neighbor = GA_NPG_C_NEIGHBOR;
+        npg_param->k_init_graph = GA_NPG_K_INIT_GRAPH;
         return CStatus();
     }
 };

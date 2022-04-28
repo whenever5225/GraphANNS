@@ -3,11 +3,11 @@ This repository contains a unified pipeline with seven fine-grained components f
 
 ## Background
 
-Approximate nearest neighbor search (ANNS) is a task that finds the approximate nearest neighbors among a high-dimensional dataset for a query via a well-designed index. According to the index adopted, the existing ANNS algorithms can be divided into four major types: hashing-based; tree-based; quantization-based; and graph-based algorithms. Recently, graph-based algorithms have emerged as a highly effective option for ANNS. Thanks to graph-based ANNS algorithms' extraordinary ability to express neighbor relationships, they only need to evaluate fewer points of dataset to receive more accurate results, comparing to other categories.
+Approximate Nearest Neighbor Search(ANNS) is a task that finds the approximate nearest neighbors among a high-dimensional dataset for a query via a well-designed index. According to the index adopted, the existing ANNS algorithms can be divided into four major types: hashing-based; tree-based; quantization-based; and graph-based algorithms. Recently, graph-based algorithms have emerged as a highly effective option for ANNS. Thanks to graph-based ANNS algorithms' extraordinary ability to express neighbor relationships, they only need to evaluate fewer points of dataset to receive more accurate results, comparing to other categories.
 
 ## Install
 
-This project supports MacOS, Linux, and Windows platforms, requiring [CGraph](https://github.com/ChunelFeng/CGraph). You can download this project by runing the following instructions.
+This project supports MacOS, Linux, and Windows platforms, requiring [CGraph](https://github.com/ChunelFeng/CGraph). You can download this project by running the following instructions.
 
 ```
 git clone --recursive https://github.com/whenever5225/GraphANNS.git
@@ -16,32 +16,18 @@ git clone --recursive https://github.com/whenever5225/GraphANNS.git
 If you are a developer using CLion as the IDE, you can open the `CMakeLists.txt` file as a project for compiling. 
 
 ## Usage
-You need to configure the data file, index file, and parameters in [here](https://github.com/whenever5225/GraphANNS/blob/main/src/elements/nodes/config_nodes/config_alg/) (please refer to [here](http://corpus-texmex.irisa.fr/) for test data download). Suppose you use 'npg' algorithm and '[siftsmall](ftp://ftp.irisa.fr/local/texmex/corpus/siftsmall.tar.gz)' dataset, you can modify the data path to yours in its configure file (`config_npg.h`):
+You need to configure the data file, index file, and parameters in [here](https://github.com/whenever5225/GraphANNS/blob/main/src/graph_anns_define.h) (please refer to [here](http://corpus-texmex.irisa.fr/) for test data download). Suppose you use 'npg' algorithm and '[siftsmall](ftp://ftp.irisa.fr/local/texmex/corpus/siftsmall.tar.gz)' dataset, you can modify the data path to yours in its configure file (`graph_anns_define.h`):
 
 ```cpp
-class ConfigNPG : public ConfigBasic {
-public:
-    CStatus init() override {
-        CStatus status = CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        return status;
-    }
+const static char* GA_NPG_BASE_PATH = "/your_base_data_root_path/siftsmall/siftsmall_base.fvecs";
+const static char* GA_NPG_QUERY_PATH = "your_base_data_root_path/siftsmall/siftsmall_query.fvecs";
+const static char* GA_NPG_GROUNDTRUTH_PATH = "your_base_data_root_path/siftsmall/siftsmall_groundtruth.ivecs";
+const static char* GA_NPG_INDEX_PATH = "your_base_data_root_path/anns.index";
 
-    CStatus run() override {
-        auto *npg_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(npg_param);
-        npg_param->base_path = "your_base_data_root_path/siftsmall/siftsmall_base.fvecs";	// 'fvecs' format
-        npg_param->query_path = "your_query_data_root_path/siftsmall/siftsmall_query.fvecs";	// 'fvecs' format
-        npg_param->groundtruth_path = "your_truth_result_root_path/siftsmall/siftsmall_groundtruth.ivecs";	// 'ivecs' format
-
-        npg_param->index_path = "your_index_root_path/index_file_name";	// binary file
-
-        npg_param->L_candidate = 100;
-        npg_param->R_neighbor = 100;
-        npg_param->C_neighbor = 200;
-        npg_param->k_init_graph = 20;
-        return CStatus();
-    }
-};
+const static unsigned GA_NPG_L_CANDIDATE = 100;      // size of candidate set for neighbor selection
+const static unsigned GA_NPG_R_NEIGHBOR = 100;       // size of neighbor set
+const static unsigned GA_NPG_C_NEIGHBOR = 200;       // number of visited candidate neighbors when neighbor selection
+const static unsigned GA_NPG_K_INIT_GRAPH = 20;      // number of neighbors of initial graph
 ```
 
-HINT: Please refer [here](http://corpus-texmex.irisa.fr/) for the desciption of `fvecs/ivecs` format. 
+HINT: Please refer [here](http://corpus-texmex.irisa.fr/) for the description of `fvecs/ivecs` format.

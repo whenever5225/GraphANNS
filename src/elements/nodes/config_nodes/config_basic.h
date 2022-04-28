@@ -11,6 +11,7 @@
 
 #include "../../CGraph/src/CGraph.h"
 #include "../param_nodes/param_include.h"
+#include "../../../graph_anns_define.h"
 
 class ConfigBasic : public CGraph::GNode {
 
