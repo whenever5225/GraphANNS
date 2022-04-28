@@ -10,7 +10,7 @@
 #define GRAPHANNS_C3_NEIGHBOR_NSG_H
 
 #include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils_include.h"
+#include "../../../utils/utils.h"
 #include "../c3_neighbor_basic.h"
 
 class C3NeighborNSG : public C3NeighborBasic {
@@ -49,7 +49,8 @@ public:
                     break;
                 }
                 DistResType djk = 0;
-                eucDist.calculate(data_ + (t.id_ * dim_),
+                DistCalcType distOper;
+                distOper.calculate(data_ + (t.id_ * dim_),
                                   data_ + p.id_ * dim_, dim_, dim_, djk);
                 if (djk < p.distance_) {
                     occlude = true;

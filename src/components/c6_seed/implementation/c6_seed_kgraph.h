@@ -10,8 +10,8 @@
 #define GRAPHANNS_C6_SEED_KGRAPH_H
 
 #include "../c6_seed_basic.h"
-#include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils_include.h"
+#include "../../../utils/utils.h"
+#include "../../../elements/elements.h"
 
 class C6SeedKGraph : public C6SeedBasic {
 public:
@@ -23,10 +23,10 @@ public:
         num_ = g_param->num;
         dim_ = g_param->dim;
         search_L_ = g_param->search_L;
-        return DAnnFuncType::ANN_TRAIN;
+        return DAnnFuncType::ANN_SEARCH;
     }
 
-    CStatus train() override {
+    CStatus search() override {
         auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(g_param)
         g_param->sp.reserve(search_L_ + 1);
@@ -39,9 +39,10 @@ public:
         for (unsigned i = 0; i < search_L_; i++) {
             unsigned id = init_ids[i];
             DistResType dist = 0;
-            eucDist.calculate(g_param->query + (g_param->query_id * dim_), g_param->data + id * dim_,
+            DistCalcType distOper;
+            distOper.calculate(g_param->query + (g_param->query_id * dim_), g_param->data + id * dim_,
                               dim_, dim_, dist);
-            g_param->sp[i] = SearchPool(id, dist, true);
+            g_param->sp[i] = NeighborFlag(id, dist, true);
         }
 
         std::sort(g_param->sp.begin(), g_param->sp.begin() + search_L_);

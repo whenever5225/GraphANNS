@@ -21,7 +21,7 @@ public:
 
         std::fstream f_out(&g_param->index_path[0], std::ios::binary | std::ios::out);
         for (unsigned i = 0; i < g_param->num; i++) {
-            unsigned GK = (unsigned) g_param->cut_graph[i].size();
+            auto GK = (unsigned) g_param->cut_graph[i].size();
             std::vector<unsigned> tmp;
             for (unsigned j = 0; j < GK; j++) {
                 tmp.push_back(g_param->cut_graph[i][j].id_);

@@ -11,7 +11,7 @@
 
 #include "../c2_candidate_basic.h"
 #include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils_include.h"
+#include "../../../utils/utils.h"
 
 class C2CandidateNSSG : public C2CandidateBasic {
 public:
@@ -49,7 +49,8 @@ public:
                 if (flags[nnid]) continue;
                 flags[nnid] = true;
                 DistResType dist = 0;
-                eucDist.calculate(data_ + cur_id_ * dim_, data_ + nnid * dim_,
+                DistCalcType distOper;
+                distOper.calculate(data_ + cur_id_ * dim_, data_ + nnid * dim_,
                                   dim_, dim_, dist);
                 g_param->pool.emplace_back(nnid, dist);
                 if (g_param->pool.size() >= L_) break;

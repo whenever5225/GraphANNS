@@ -6,13 +6,13 @@
 @Desc: simple neighbor with <id> and <distances> information
 ***************************/
 
-#ifndef GRAPHANNS_SIMPLE_NEIGHBOR_H
-#define GRAPHANNS_SIMPLE_NEIGHBOR_H
+#ifndef GRAPHANNS_NEIGHBOR_H
+#define GRAPHANNS_NEIGHBOR_H
 
 #include "../utils/utils_define.h"
 
 struct Neighbor {
-
+public:
     Neighbor() = default;
 
     Neighbor(unsigned id, DistResType distance) : id_{id}, distance_{distance} {}
@@ -20,10 +20,13 @@ struct Neighbor {
     inline bool operator<(const Neighbor &other) const {
         return distance_ < other.distance_;
     }
+    inline bool operator>(const Neighbor &other) const {
+        return distance_ > other.distance_;
+    }
 
-protected:
+public:
     unsigned id_;
     DistResType distance_;
 };
 
-#endif //GRAPHANNS_SIMPLE_NEIGHBOR_H
+#endif //GRAPHANNS_NEIGHBOR_H

@@ -10,7 +10,7 @@
 #define GRAPHANNS_READ_VECS_H
 
 #include <fstream>
-#include "../../CGraph/src/CGraph.h"
+#include "../../../../CGraph/src/CGraph.h"
 
 /**
  * load data in format 'fvecs' or 'ivec'

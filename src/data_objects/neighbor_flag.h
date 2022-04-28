@@ -6,25 +6,28 @@
 @Desc: candidate results when searching
 ***************************/
 
-#ifndef GRAPHANNS_SEARCH_POOL_H
-#define GRAPHANNS_SEARCH_POOL_H
+#ifndef GRAPHANNS_NEIGHBOR_FLAG_H
+#define GRAPHANNS_NEIGHBOR_FLAG_H
 
-struct SearchPool {
-    unsigned id;
-    DistResType distance;
-    bool flag;
+#include "neighbor_basic.h"
 
-    SearchPool() = default;
+struct NeighborFlag : public Neighbor {
+public:
+    NeighborFlag() = default;
 
-    SearchPool(unsigned id, DistResType distance, bool f) : id{id}, distance{distance}, flag(f) {}
+    NeighborFlag(unsigned id, DistResType distance, bool f) : Neighbor(), id_{id}, distance_{distance}, flag_(f) {}
 
-    inline bool operator<(const SearchPool &other) const {
-        return distance < other.distance;
+    inline bool operator<(const NeighborFlag &other) const {
+        return distance_ < other.distance_;
+    }
+    inline bool operator>(const NeighborFlag &other) const {
+        return distance_ > other.distance_;
     }
 
-    inline bool operator>(const SearchPool &other) const {
-        return distance > other.distance;
-    }
+public:
+    unsigned id_;
+    DistResType distance_;
+    bool flag_;
 };
 
-#endif //GRAPHANNS_SEARCH_POOL_H
+#endif //GRAPHANNS_NEIGHBOR_FLAG_H

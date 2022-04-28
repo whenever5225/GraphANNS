@@ -19,7 +19,7 @@ protected:
     unsigned cur_id_ = 0;  // data id being processed
     unsigned C_ = 0;
     unsigned R_ = 0;
-    std::vector<SimpleNeighbor> result_;
+    std::vector<Neighbor> result_;
 };
 
 #endif //GRAPHANNS_C3_NEIGHBOR_BASIC_H

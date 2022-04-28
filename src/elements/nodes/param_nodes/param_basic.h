@@ -9,10 +9,12 @@
 #ifndef GRAPHANNS_PARAM_BASIC_H
 #define GRAPHANNS_PARAM_BASIC_H
 
+#include "../../../utils/utils.h"
+#include "../../../data_objects/data_objects.h"
 #include "../../CGraph/src/CGraph.h"
-#include "../../../utils/utils_include.h"
 
 class ParamBasic : public CGraph::GParam {
+protected:
 public:
     /**
      * parameters for build
@@ -25,7 +27,7 @@ public:
 
     std::string index_path; // path to graph index
 
-    typedef std::vector<std::vector<SimpleNeighbor> > graph_neighbor;
+    typedef std::vector<std::vector<Neighbor> > graph_neighbor;
     typedef std::vector<std::vector<unsigned> > graph_matrix;
 
     graph_neighbor graph_n;
@@ -47,7 +49,7 @@ public:
     unsigned search_L = top_k + 500;
     unsigned query_id = 0;
 
-    std::vector<SearchPool> sp;
+    std::vector<NeighborFlag> sp;
     std::vector<std::vector<unsigned> > results;
 
     CVoid reset() override {

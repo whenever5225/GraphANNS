@@ -6,12 +6,12 @@
 @Desc: randomly initialize a graph index (like 'KGraph' algorithm)
 ***************************/
 
-#ifndef GRAPHANNS_C1_INITIALIZATION_KRAPH_H
-#define GRAPHANNS_C1_INITIALIZATION_KRAPH_H
+#ifndef GRAPHANNS_C1_INITIALIZATION_KGRAPH_H
+#define GRAPHANNS_C1_INITIALIZATION_KGRAPH_H
 
 #include "../c1_initialization_basic.h"
 #include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils_include.h"
+#include "../../../utils/utils.h"
 
 class C1InitializationKGraph : public C1InitializationBasic {
 public:
@@ -37,7 +37,8 @@ public:
         for (const unsigned int &id: neighbor_id) {
             if (id != cur_num_) {
                 DistResType dist = 0;
-                eucDist.calculate(data_ + (id * dim_),
+                DistCalcType distOper;
+                distOper.calculate(data_ + (id * dim_),
                                   data_ + cur_num_ * dim_,
                                   dim_, dim_, dist);
                 graph_neigh_.emplace_back(id, dist);
@@ -63,7 +64,7 @@ public:
     }
 
 protected:
-    std::vector<SimpleNeighbor> graph_neigh_;   // temp neighbor
+    std::vector<Neighbor> graph_neigh_;   // temp neighbor
 };
 
-#endif //GRAPHANNS_C1_INITIALIZATION_KRAPH_H
+#endif //GRAPHANNS_C1_INITIALIZATION_KGRAPH_H

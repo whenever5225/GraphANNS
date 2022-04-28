@@ -7,7 +7,6 @@ include_directories(CGraph)
 
 file(GLOB_RECURSE SRC_LIST "CGraph/src/*.cpp")
 
-
 IF(APPLE)
     # It does not support automatic generation of session information for non-Mac platform
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64 -finline-functions -Wno-deprecated-declarations")

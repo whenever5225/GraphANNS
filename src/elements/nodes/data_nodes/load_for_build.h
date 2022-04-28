@@ -11,7 +11,7 @@
 
 #include "src/CGraph.h"
 #include "../param_nodes/param_include.h"
-#include "../../../utils/function/read_vecs.h"
+#include "../../../utils/functions/read_vecs.h"
 #include "../config_nodes/config_include.h"
 
 class LoadForBuild : public CGraph::GNode {

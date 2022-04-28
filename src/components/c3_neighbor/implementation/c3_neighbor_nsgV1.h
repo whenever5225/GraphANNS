@@ -10,7 +10,7 @@
 #define GRAPHANNS_C3_NEIGHBOR_NSGV1_H
 
 #include "../../../elements/elements.h"
-#include "../../../utils/utils_include.h"
+#include "../../../utils/utils.h"
 #include "../c3_neighbor_basic.h"
 
 class C3NeighborNSGV1 : public C3NeighborBasic {
@@ -37,7 +37,7 @@ public:
         for (unsigned i = 0; i < num_; i++) {
             unsigned start = 0;
             std::sort(g_param->pool_m[i].begin(), g_param->pool_m[i].end());
-            std::vector<SimpleNeighbor> result;
+            std::vector<Neighbor> result;
             if (g_param->pool_m[i][start].id_ == i) start++;
             result.push_back(g_param->pool_m[i][start]);
 
@@ -51,6 +51,7 @@ public:
                         break;
                     }
                     DistResType djk = 0;
+                    DistCalcType eucDist;
                     eucDist.calculate(data_ + (res.id_ * dim_),
                                       data_ + p.id_ * dim_,
                                       dim_, dim_, djk);

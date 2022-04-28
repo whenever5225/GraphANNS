@@ -22,9 +22,9 @@ public:
     unsigned k_init_graph = 20; // number of neighbors of initial graph
 
 
-    std::vector<SimpleNeighbor> pool;
-    std::vector<std::vector<SimpleNeighbor> > pool_m;
-    std::vector<std::vector<SimpleNeighbor> > cut_graph;
+    std::vector<Neighbor> pool;
+    std::vector<std::vector<Neighbor> > pool_m;
+    std::vector<std::vector<Neighbor> > cut_graph;
 
     CVoid reset()override{
 

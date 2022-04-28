@@ -11,7 +11,7 @@
 
 #include "../c7_routing_basic.h"
 #include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils_include.h"
+#include "../../../utils/utils.h"
 
 class C7RoutingKGraph : public C7RoutingBasic {
 public:
@@ -27,10 +27,10 @@ public:
         K_ = g_param->top_k;
         query_ = g_param->query;
         query_id_ = g_param->query_id;
-        return DAnnFuncType::ANN_TRAIN;
+        return DAnnFuncType::ANN_SEARCH;
     }
 
-    CStatus train() override {
+    CStatus search() override {
         auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(g_param)
 
@@ -41,9 +41,9 @@ public:
         while (k < (int) search_L_) {
             unsigned nk = search_L_;
 
-            if (g_param->sp[k].flag) {
-                g_param->sp[k].flag = false;
-                unsigned n = g_param->sp[k].id;
+            if (g_param->sp[k].flag_) {
+                g_param->sp[k].flag_ = false;
+                unsigned n = g_param->sp[k].id_;
 
                 for (unsigned m = 0; m < g_param->graph_m[n].size(); ++m) {
                     unsigned id = g_param->graph_m[n][m];
@@ -52,11 +52,12 @@ public:
                     flags[id] = 1;
 
                     DistResType dist = 0;
-                    eucDist.calculate(query_ + (query_id_ * dim_),
+                    DistCalcType distOper;
+                    distOper.calculate(query_ + (query_id_ * dim_),
                                       data_ + id * dim_, dim_, dim_, dist);
 
-                    if (dist >= g_param->sp[search_L_ - 1].distance) continue;
-                    SearchPool nn(id, dist, true);
+                    if (dist >= g_param->sp[search_L_ - 1].distance_) continue;
+                    NeighborFlag nn(id, dist, true);
                     int r = InsertIntoPool(g_param->sp.data(), search_L_, nn);
 
                     if (r < nk) nk = r;
@@ -67,7 +68,7 @@ public:
 
         res_.reserve(K_);
         for (size_t i = 0; i < K_; i++) {
-            res_.push_back(g_param->sp[i].id);
+            res_.push_back(g_param->sp[i].id_);
         }
         return CStatus();
     }

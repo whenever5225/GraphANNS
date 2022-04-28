@@ -10,7 +10,7 @@
 #define GRAPHANNS_C2_CANDIDATE_NSSGV1_H
 
 #include "../../../elements/elements.h"
-#include "../../../utils/utils_include.h"
+#include "../../../utils/utils.h"
 #include "../c2_candidate_basic.h"
 
 class C2CandidateNSSGV1 : public C2CandidateBasic {
@@ -48,7 +48,8 @@ public:
                     if (flags[nnid]) continue;
                     flags[nnid] = true;
                     DistResType dist = 0;
-                    eucDist.calculate(data_ + i * dim_, data_ + nnid * dim_, dim_, dim_, dist);
+                    DistCalcType distOper;
+                    distOper.calculate(data_ + i * dim_, data_ + nnid * dim_, dim_, dim_, dist);
                     g_param->pool_m[i].emplace_back(nnid, dist);
                     if (g_param->pool_m[i].size() >= L_) break;
                 }
