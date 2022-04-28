@@ -10,8 +10,6 @@
 #define GRAPHANNS_C6_SEED_KGRAPH_H
 
 #include "../c6_seed_basic.h"
-#include "../../../utils/utils.h"
-#include "../../../elements/elements.h"
 
 class C6SeedKGraph : public C6SeedBasic {
 public:
@@ -29,8 +27,8 @@ public:
     CStatus search() override {
         auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(g_param)
-        g_param->sp.reserve(search_L_ + 1);
 
+        g_param->sp.reserve(search_L_ + 1);
         std::vector<unsigned> init_ids(search_L_);
 
         GenRandomID(init_ids.data(), num_, search_L_);

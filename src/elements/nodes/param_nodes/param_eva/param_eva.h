@@ -8,6 +8,7 @@
 
 #ifndef GRAPHANNS_EVA_PARAMS_H
 #define GRAPHANNS_EVA_PARAMS_H
+
 #include "src/CGraph.h"
 
 class EvaParams : public CGraph::GParam {

@@ -6,10 +6,10 @@
 @Desc: TODO
 ***************************/
 
-#ifndef GRAPHANNS_DATA_OBJECTS_INCLUDE_H
-#define GRAPHANNS_DATA_OBJECTS_INCLUDE_H
+#ifndef GRAPHANNS_DATA_OBJECTS_H
+#define GRAPHANNS_DATA_OBJECTS_H
 
 #include "neighbor_basic.h"
 #include "neighbor_flag.h"
 
-#endif //GRAPHANNS_DATA_OBJECTS_INCLUDE_H
+#endif //GRAPHANNS_DATA_OBJECTS_H

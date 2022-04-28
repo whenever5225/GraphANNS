@@ -10,13 +10,11 @@
 #define GRAPHANNS_C2_CANDIDATE_NSSG_H
 
 #include "../c2_candidate_basic.h"
-#include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils.h"
 
 class C2CandidateNSSG : public C2CandidateBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
         if (nullptr == g_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
@@ -30,11 +28,14 @@ public:
 
 
     CStatus train() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
+        CGRAPH_ASSERT_NOT_NULL(g_param)
+
         g_param->pool.clear();
         g_param->pool.reserve(L_);
         std::vector<unsigned> flags(num_, 0);
         flags[cur_id_] = true;
+
         for (unsigned j = 0; j < g_param->graph_n[cur_id_].size(); j++) {
             if (flags[j]) continue;
             flags[j] = true;
@@ -42,6 +43,7 @@ public:
             float ndist = g_param->graph_n[cur_id_][j].distance_;
             g_param->pool.emplace_back(nid, ndist);
         }
+
         for (unsigned j = 0; j < g_param->graph_n[cur_id_].size(); j++) {
             unsigned nid = g_param->graph_n[cur_id_][j].id_;
             for (unsigned nn = 0; nn < g_param->graph_n[nid].size(); nn++) {

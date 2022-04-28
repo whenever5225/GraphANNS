@@ -10,8 +10,6 @@
 #define GRAPHANNS_C7_ROUTING_KGRAPH_H
 
 #include "../c7_routing_basic.h"
-#include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils.h"
 
 class C7RoutingKGraph : public C7RoutingBasic {
 public:
@@ -48,7 +46,7 @@ public:
                 for (unsigned m = 0; m < g_param->graph_m[n].size(); ++m) {
                     unsigned id = g_param->graph_m[n][m];
 
-                    if (flags[id])continue;
+                    if (flags[id]) continue;
                     flags[id] = 1;
 
                     DistResType dist = 0;
@@ -75,7 +73,8 @@ public:
 
     CStatus refreshParam() override {
         auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param);
+        CGRAPH_ASSERT_NOT_NULL(g_param)
+
         {
             CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param);
             g_param->results.push_back(res_);

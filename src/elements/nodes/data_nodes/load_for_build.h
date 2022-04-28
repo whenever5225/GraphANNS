@@ -18,7 +18,6 @@ class LoadForBuild : public CGraph::GNode {
 public:
 
     CStatus run() override {
-
         auto *g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(g_param)
 

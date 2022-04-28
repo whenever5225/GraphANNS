@@ -10,8 +10,6 @@
 #define GRAPHANNS_C1_INITIALIZATION_VAMANA_H
 
 #include "../c1_initialization_basic.h"
-#include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils.h"
 
 class C1InitializationVamana : public C1InitializationBasic {
 public:
@@ -44,10 +42,10 @@ public:
     }
 
     CStatus refreshParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param);
+        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
+        CGRAPH_ASSERT_NOT_NULL(g_param)
         {
-            CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param);
+            CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param)
             g_param->graph_m.emplace_back(graph_neigh_);
         }
         return CStatus();

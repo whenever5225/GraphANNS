@@ -9,8 +9,6 @@
 #ifndef GRAPHANNS_C2_CANDIDATE_NSSGV1_H
 #define GRAPHANNS_C2_CANDIDATE_NSSGV1_H
 
-#include "../../../elements/elements.h"
-#include "../../../utils/utils.h"
 #include "../c2_candidate_basic.h"
 
 class C2CandidateNSSGV1 : public C2CandidateBasic {

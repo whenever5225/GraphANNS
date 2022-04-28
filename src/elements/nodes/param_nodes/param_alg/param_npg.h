@@ -21,13 +21,13 @@ public:
 
     unsigned k_init_graph = 20; // number of neighbors of initial graph
 
-
     std::vector<Neighbor> pool;
     std::vector<std::vector<Neighbor> > pool_m;
     std::vector<std::vector<Neighbor> > cut_graph;
 
-    CVoid reset()override{
+    CVoid reset() override {
 
     }
 };
+
 #endif //GRAPHANNS_NPG_PARAMS_H

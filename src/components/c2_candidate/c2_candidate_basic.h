@@ -11,6 +11,7 @@
 
 #include "../../CGraph/src/CGraph.h"
 #include "../../utils/utils.h"
+#include "../../elements/nodes/param_nodes/param_include.h"
 
 class C2CandidateBasic : public CGraph::DAnnNode {
 protected:

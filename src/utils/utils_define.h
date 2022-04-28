@@ -3,7 +3,7 @@
 @Contact: wmengzhao@qq.com
 @File: utils_define.h
 @Time: 2022/4/11 8:32 PM
-@Desc: TODO
+@Desc:
 ***************************/
 
 #ifndef GRAPHANNS_UTILS_DEFINE_H

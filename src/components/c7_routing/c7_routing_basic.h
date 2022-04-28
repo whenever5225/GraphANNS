@@ -10,10 +10,12 @@
 #define GRAPHANNS_C7_ROUTING_BASIC_H
 
 #include "../../CGraph/src/CGraph.h"
+#include "../../utils/utils.h"
+#include "../../elements/nodes/param_nodes/param_include.h"
 
 class C7RoutingBasic : public CGraph::DAnnNode {
 protected:
-    static int InsertIntoPool(NeighborFlag *addr, unsigned K, NeighborFlag nn) {
+    static int InsertIntoPool(NeighborFlag *addr, unsigned K, const NeighborFlag& nn) {
         // find the location to insert
         int left = 0, right = K - 1;
         if (addr[left].distance_ > nn.distance_) {
@@ -42,6 +44,7 @@ protected:
         addr[right] = nn;
         return right;
     }
+
 protected:
     unsigned num_ = 0;  // number of vector
     unsigned dim_ = 0;  // dimensionality of vector

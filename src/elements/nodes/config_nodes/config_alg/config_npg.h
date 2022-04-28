@@ -10,7 +10,6 @@
 #define GRAPHANNS_CONFIG_NPG_H
 
 #include "../config_basic.h"
-#include "../../param_nodes/param_include.h"
 
 class ConfigNPG : public ConfigBasic {
 public:
@@ -20,8 +19,8 @@ public:
     }
 
     CStatus run() override {
-        auto *npg_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(npg_param);
+        auto *npg_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
+        CGRAPH_ASSERT_NOT_NULL(npg_param)
         npg_param->base_path = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_base.fvecs";
         npg_param->query_path = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_query.fvecs";
         npg_param->groundtruth_path = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_groundtruth.ivecs";

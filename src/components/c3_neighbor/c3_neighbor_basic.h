@@ -10,6 +10,8 @@
 #define GRAPHANNS_C3_NEIGHBOR_BASIC_H
 
 #include "../../CGraph/src/CGraph.h"
+#include "../../elements/nodes/param_nodes/param_include.h"
+#include "../../utils/utils.h"
 
 class C3NeighborBasic : public CGraph::DAnnNode {
 protected:

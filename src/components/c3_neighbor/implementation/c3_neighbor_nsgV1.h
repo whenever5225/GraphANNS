@@ -9,8 +9,6 @@
 #ifndef GRAPHANNS_C3_NEIGHBOR_NSGV1_H
 #define GRAPHANNS_C3_NEIGHBOR_NSGV1_H
 
-#include "../../../elements/elements.h"
-#include "../../../utils/utils.h"
 #include "../c3_neighbor_basic.h"
 
 class C3NeighborNSGV1 : public C3NeighborBasic {

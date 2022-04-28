@@ -10,8 +10,6 @@
 #define GRAPHANNS_C1_INITIALIZATION_KGRAPH_H
 
 #include "../c1_initialization_basic.h"
-#include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils.h"
 
 class C1InitializationKGraph : public C1InitializationBasic {
 public:
