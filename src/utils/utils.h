@@ -9,8 +9,8 @@
 #ifndef GRAPHANNS_UTILS_INCLUDE_H
 #define GRAPHANNS_UTILS_INCLUDE_H
 
-#include "function/function_include.h"
-#include "common/common_include.h"
-#include "utils_proxy.h"
+#include "functions/function_include.h"
+#include "distances/distances_include.h"
+#include "utils_define.h"
 
 #endif //GRAPHANNS_UTILS_INCLUDE_H

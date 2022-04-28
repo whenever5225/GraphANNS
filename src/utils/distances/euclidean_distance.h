@@ -1,7 +1,7 @@
 /***************************
 @Author: wmz
 @Contact: wmengzhao@qq.com
-@File: distance_naive.h
+@File: euclidean_distance.h
 @Time: 2022/4/1 9:16 PM
 @Desc:
 ***************************/
@@ -17,7 +17,7 @@
  * @tparam needSqrt
  */
 
-template<typename TVec = float, typename TRes = TVec, const CBool needSqrt = false>
+template<typename TVec = float, typename TRes = TVec, const int needSqrt = false>
 class EuclideanDistance : public CGraph::UDistance<TVec, TRes> {
 public:
     CStatus calc(const TVec *a, const TVec *b, CSize dim1, CSize dim2, TRes &res, CVoidPtr ext) override {

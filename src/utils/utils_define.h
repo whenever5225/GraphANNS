@@ -16,6 +16,6 @@ using VecValType = float;   // vector value type
 using DistResType = float;  // distances value type
 
 // distances calculation method
-CGraph::UDistanceCalculator<VecValType, DistResType, EuclideanDistance<VecValType, DistResType> > eucDist;
+using DistCalcType = CGraph::UDistanceCalculator<VecValType, DistResType, EuclideanDistance<VecValType, DistResType> >;
 
 #endif //GRAPHANNS_UTILS_PROXY_H
