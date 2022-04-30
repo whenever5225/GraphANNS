@@ -28,6 +28,7 @@ CStatus read_vecs(char *filename, T *&data, unsigned &num, unsigned &dim) {
     if (!in.is_open()) {
         return CStatus("open file error!");
     }
+
     in.read((char *) &dim, 4);
     in.seekg(0, std::ios::end);
     std::ios::pos_type ss = in.tellg();

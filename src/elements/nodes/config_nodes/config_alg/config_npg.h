@@ -17,6 +17,7 @@ public:
         auto *npg_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(npg_param)
 
+        // todo 获取参数逻辑，稍微修改一下获取参数的地方
         npg_param->base_path = GA_NPG_BASE_PATH;
         npg_param->query_path = GA_NPG_QUERY_PATH;
         npg_param->groundtruth_path = GA_NPG_GROUNDTRUTH_PATH;

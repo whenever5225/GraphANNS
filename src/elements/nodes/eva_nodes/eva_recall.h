@@ -14,11 +14,6 @@
 class EvaRecall : public CGraph::GNode {
 public:
     CStatus init() override {
-        CStatus status = CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
-        if (!status.isOK()) {
-            return status;
-        }
-
         auto *g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(g_param)
 

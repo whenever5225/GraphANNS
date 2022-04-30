@@ -14,8 +14,8 @@
 /**
  * generate random id number
  * @param id
- * @param num
- * @param size
+ * @param num 是总个数
+ * @param size 生成的n个数，范围在 [0,num) 之间。不重复
  */
 
 void GenRandomID(unsigned *id, unsigned num, unsigned size) {
