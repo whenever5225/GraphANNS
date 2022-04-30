@@ -12,6 +12,7 @@
 #include "../../../utils/utils.h"
 #include "../../../data_objects/data_objects.h"
 #include "../../CGraph/src/CGraph.h"
+#include "../../../graph_anns_define.h"
 
 class ParamBasic : public CGraph::GParam {
 protected:
@@ -19,13 +20,13 @@ public:
     /**
      * parameters for build
      */
-    std::string base_path;    // base vector path
+    std::string base_path = GA_NPG_BASE_PATH;    // base vector path
     VecValType *data = nullptr;    // meta vector
     unsigned num = 0;
     unsigned dim = 0;
     unsigned cur_id = 0;
 
-    std::string index_path;    // path to graph index
+    std::string index_path = GA_NPG_INDEX_PATH;    // path to graph index
 
     typedef std::vector<std::vector<Neighbor> > graph_neighbor;
     typedef std::vector<std::vector<unsigned> > graph_matrix;
@@ -36,11 +37,11 @@ public:
     /**
      * parameters for search
      */
-    std::string query_path;    // query vector
+    std::string query_path = GA_NPG_QUERY_PATH;    // query vector
     VecValType *query = nullptr;
     unsigned q_num = 0;
     unsigned q_dim = 0;
-    std::string groundtruth_path;    // groundtruth path
+    std::string groundtruth_path = GA_NPG_GROUNDTRUTH_PATH;    // groundtruth path
     unsigned *gt = nullptr;
     unsigned gt_num = 0;
     unsigned gt_dim = 0;

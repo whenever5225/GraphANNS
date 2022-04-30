@@ -9,10 +9,10 @@
 #ifndef GRAPHANNS_GRAPH_ANNS_DEFINE_H
 #define GRAPHANNS_GRAPH_ANNS_DEFINE_H
 
-const static char* GA_NPG_BASE_PATH = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_base.fvecs";
-const static char* GA_NPG_QUERY_PATH = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_query.fvecs";
-const static char* GA_NPG_GROUNDTRUTH_PATH = "/Users/wmz/Documents/Postgraduate/Code/dataset/siftsmall/siftsmall_groundtruth.ivecs";
-const static char* GA_NPG_INDEX_PATH = "/Users/wmz/Documents/Postgraduate/Code/tmp/test.index";
+const static char* GA_NPG_BASE_PATH = "../doc/siftsmall/siftsmall_base.fvecs";
+const static char* GA_NPG_QUERY_PATH = "../doc/siftsmall/siftsmall_query.fvecs";
+const static char* GA_NPG_GROUNDTRUTH_PATH = "../doc/siftsmall/siftsmall_groundtruth.ivecs";
+const static char* GA_NPG_INDEX_PATH = "../doc/siftsmall/siftsmall.index";
 
 const static unsigned GA_NPG_L_CANDIDATE = 100;      // size of candidate set for neighbor selection
 const static unsigned GA_NPG_R_NEIGHBOR = 100;       // size of neighbor set

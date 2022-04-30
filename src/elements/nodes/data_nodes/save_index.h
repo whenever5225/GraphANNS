@@ -16,18 +16,23 @@
 class SaveIndex : public CGraph::GNode {
 public:
     CStatus run() override {
+        CGRAPH_EMPTY_FUNCTION
+    }
+
+    CStatus destroy() override {
         auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(g_param)
 
         std::fstream f_out(&g_param->index_path[0], std::ios::binary | std::ios::out);
         for (unsigned i = 0; i < g_param->num; i++) {
             auto GK = (unsigned) g_param->cut_graph[i].size();
-            std::vector<unsigned> tmp;
+            std::vector<unsigned> vec;
+            vec.reserve(GK);
             for (unsigned j = 0; j < GK; j++) {
-                tmp.push_back(g_param->cut_graph[i][j].id_);
+                vec.push_back(g_param->cut_graph[i][j].id_);
             }
             f_out.write((char *) &GK, sizeof(unsigned));
-            f_out.write((char *) tmp.data(), GK * sizeof(unsigned));
+            f_out.write((char *) vec.data(), GK * sizeof(unsigned));
         }
         f_out.close();
         return CStatus();
