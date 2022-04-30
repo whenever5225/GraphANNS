@@ -22,7 +22,7 @@ int main() {
     status += pipeline->registerGElement<C3NeighborNSGV1>(&d, {c}, "c3_nsg");
     status += pipeline->registerGElement<SaveIndex>(&e, {d}, "save_index");
 
-    pipeline->createGParam<ParamNPG>(GRAPH_INFO_PARAM_KEY);     // pipeline执行之前，先构建 ParamNPG 参数
+    pipeline->createGParam<ParamBasic>(GRAPH_INFO_PARAM_KEY);     // pipeline执行之前，先构建 ParamNPG 参数
 
     status += pipeline->process();
     if (!status.isOK()) {
