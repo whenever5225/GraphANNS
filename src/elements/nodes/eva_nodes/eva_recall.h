@@ -13,6 +13,19 @@
 
 class EvaRecall : public CGraph::GNode {
 public:
+    CStatus init() override {
+        CStatus status = CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
+        if (!status.isOK()) {
+            return status;
+        }
+
+        auto *g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        CGRAPH_ASSERT_NOT_NULL(g_param)
+
+        read_vecs(&g_param->groundtruth_path[0], g_param->gt, g_param->gt_num, g_param->gt_dim);
+        return CStatus();
+    }
+
     CStatus run() override {
         auto *g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
         gt_num_ = g_param->gt_num;
@@ -34,6 +47,10 @@ public:
 
         float acc = 1 - (float) cnt / (float) (gt_num_ * top_k_);
         CGraph::CGRAPH_ECHO("%d NN accuracy: %f", top_k_, acc);
+        return CStatus();
+    }
+
+    CStatus destroy() override {
         return CStatus();
     }
 

@@ -9,9 +9,6 @@
 #ifndef GRAPHANNS_DATA_INCLUDE_H
 #define GRAPHANNS_DATA_INCLUDE_H
 
-#include "load_for_build.h"
-#include "load_for_eva.h"
-#include "load_for_search.h"
 #include "load_index.h"
 #include "save_index.h"
 

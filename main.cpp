@@ -16,7 +16,7 @@ int main() {
     GElementPtr a, b, c, d, e, f, g, h, i, j, k, l, de_region, ij_region= nullptr;
     // build
     CStatus status = pipeline->registerGElement<ConfigNPG>(&a, {}, "config_npg");
-    status += pipeline->registerGElement<LoadForBuild>(&b, {a}, "base_data");
+    //status += pipeline->registerGElement<LoadForBuild>(&b, {a}, "base_data");
     status += pipeline->registerGElement<C1InitializationKGraph>(&c, {b}, "c1_nssg");
 
 //    d = pipeline->createGNode<C2CandidateNSSG>(GNodeInfo({}, "c2_nssg"));
@@ -29,8 +29,7 @@ int main() {
     status += pipeline->registerGElement<C3NeighborNSGV1>(&e, {d}, "c3_nsg");
     status += pipeline->registerGElement<SaveIndex>(&f, {e}, "save_index");
 
-    status += pipeline->registerGElement<LoadForSearch>(&g, {f}, "load_for_search");
-    status += pipeline->registerGElement<LoadIndex>(&h, {g}, "load_index");
+    status += pipeline->registerGElement<LoadIndex>(&h, {f}, "load_index");
 
     //search
     i = pipeline->createGNode<C6SeedKGraph>(GNodeInfo({}, "c6_random"));
@@ -39,8 +38,8 @@ int main() {
     ij_region = pipeline->createGGroup<SearchRegion>({i, j});
 
     status += pipeline->registerGElement<SearchRegion>(&ij_region, {g, h}, "search_region");
-    status += pipeline->registerGElement<LoadForEva>(&k, {ij_region}, "load_for_eva");
-    status += pipeline->registerGElement<EvaRecall>(&l, {k}, "eva_recall");
+    //status += pipeline->registerGElement<LoadForEva>(&k, {ij_region}, "load_for_eva");
+    status += pipeline->registerGElement<EvaRecall>(&k, {ij_region}, "eva_recall");
 
     status += pipeline->process();
     if (!status.isOK()) {

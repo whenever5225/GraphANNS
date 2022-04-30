@@ -28,7 +28,6 @@ public:
     std::vector<std::vector<Neighbor> > cut_graph;
 
     CVoid reset() override {
-
     }
 };
 

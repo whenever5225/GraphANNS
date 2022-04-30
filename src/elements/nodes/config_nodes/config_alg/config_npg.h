@@ -14,10 +14,11 @@
 class ConfigNPG : public ConfigBasic {
 public:
     CStatus init() override {
-        return CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
-    }
+        CStatus status = CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        if (!status.isOK()) {
+            return status;
+        }
 
-    CStatus run() override {
         auto *npg_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(npg_param)
 
@@ -30,6 +31,10 @@ public:
         npg_param->R_neighbor = GA_NPG_R_NEIGHBOR;
         npg_param->C_neighbor = GA_NPG_C_NEIGHBOR;
         npg_param->k_init_graph = GA_NPG_K_INIT_GRAPH;
+        return CStatus();
+    }
+
+    CStatus run() override {
         return CStatus();
     }
 };

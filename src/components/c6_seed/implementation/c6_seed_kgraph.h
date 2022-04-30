@@ -37,8 +37,7 @@ public:
         for (unsigned i = 0; i < search_L_; i++) {
             unsigned id = init_ids[i];
             DistResType dist = 0;
-            DistCalcType distOper;
-            distOper.calculate(g_param->query + (g_param->query_id * dim_), g_param->data + id * dim_,
+            dist_op_.calculate(g_param->query + (g_param->query_id * dim_), g_param->data + id * dim_,
                               dim_, dim_, dist);
             g_param->sp[i] = NeighborFlag(id, dist, true);
         }

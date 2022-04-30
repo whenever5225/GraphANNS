@@ -19,13 +19,13 @@ public:
     /**
      * parameters for build
      */
-    std::string base_path; // base vector
-    VecValType *data = nullptr;
+    std::string base_path;    // base vector path
+    VecValType *data = nullptr;    // meta vector
     unsigned num = 0;
     unsigned dim = 0;
-    unsigned cur_id = 0;    //
+    unsigned cur_id = 0;
 
-    std::string index_path; // path to graph index
+    std::string index_path;    // path to graph index
 
     typedef std::vector<std::vector<Neighbor> > graph_neighbor;
     typedef std::vector<std::vector<unsigned> > graph_matrix;
@@ -40,7 +40,7 @@ public:
     VecValType *query = nullptr;
     unsigned q_num = 0;
     unsigned q_dim = 0;
-    std::string groundtruth_path;  // groundtruth path
+    std::string groundtruth_path;    // groundtruth path
     unsigned *gt = nullptr;
     unsigned gt_num = 0;
     unsigned gt_dim = 0;
