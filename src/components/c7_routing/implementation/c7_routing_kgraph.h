@@ -50,8 +50,7 @@ public:
                     flags[id] = 1;
 
                     DistResType dist = 0;
-                    DistCalcType distOper;
-                    distOper.calculate(query_ + (query_id_ * dim_),
+                    dist_op_.calculate(query_ + (query_id_ * dim_),
                                       data_ + id * dim_, dim_, dim_, dist);
 
                     if (dist >= g_param->sp[search_L_ - 1].distance_) continue;

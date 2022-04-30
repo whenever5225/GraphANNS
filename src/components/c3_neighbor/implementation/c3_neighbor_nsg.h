@@ -47,8 +47,7 @@ public:
                     break;
                 }
                 DistResType djk = 0;
-                DistCalcType distOper;
-                distOper.calculate(data_ + (t.id_ * dim_),
+                dist_op_.calculate(data_ + (t.id_ * dim_),
                                   data_ + p.id_ * dim_, dim_, dim_, djk);
                 if (djk < p.distance_) {
                     occlude = true;

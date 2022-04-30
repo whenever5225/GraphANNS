@@ -35,8 +35,7 @@ public:
         for (const unsigned int &id: neighbor_id) {
             if (id != cur_num_) {
                 DistResType dist = 0;
-                DistCalcType distOper;
-                distOper.calculate(data_ + (id * dim_),
+                dist_op_.calculate(data_ + (id * dim_),
                                   data_ + cur_num_ * dim_,
                                   dim_, dim_, dist);
                 graph_neigh_.emplace_back(id, dist);

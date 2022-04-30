@@ -9,11 +9,11 @@
 #ifndef GRAPHANNS_C7_ROUTING_BASIC_H
 #define GRAPHANNS_C7_ROUTING_BASIC_H
 
-#include "../../CGraph/src/CGraph.h"
+#include "../components_basic.h"
 #include "../../utils/utils.h"
 #include "../../elements/nodes/param_nodes/param_include.h"
 
-class C7RoutingBasic : public CGraph::DAnnNode {
+class C7RoutingBasic : public ComponentsBasic {
 protected:
     static int InsertIntoPool(NeighborFlag *addr, unsigned K, const NeighborFlag& nn) {
         // find the location to insert
@@ -46,9 +46,6 @@ protected:
     }
 
 protected:
-    unsigned num_ = 0;  // number of vector
-    unsigned dim_ = 0;  // dimensionality of vector
-    VecValType *data_ = nullptr;   // vector data
     unsigned search_L_; // candidate pool size for search
     unsigned K_;    // top-k for search
     VecValType *query_ = nullptr;    // query data

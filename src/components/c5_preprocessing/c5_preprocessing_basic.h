@@ -9,11 +9,11 @@
 #ifndef GRAPHANNS_C5_PREPROCESSING_BASIC_H
 #define GRAPHANNS_C5_PREPROCESSING_BASIC_H
 
-#include "../../CGraph/src/CGraph.h"
+#include "../components_basic.h"
 #include "../../elements/nodes/param_nodes/param_include.h"
 #include "../../utils/utils.h"
 
-class C5PreprocessingBasic : public CGraph::DAnnNode {
+class C5PreprocessingBasic : public ComponentsBasic {
 
 };
 

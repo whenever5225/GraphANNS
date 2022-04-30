@@ -46,8 +46,7 @@ public:
                     if (flags[nnid]) continue;
                     flags[nnid] = true;
                     DistResType dist = 0;
-                    DistCalcType distOper;
-                    distOper.calculate(data_ + i * dim_, data_ + nnid * dim_, dim_, dim_, dist);
+                    dist_op_.calculate(data_ + i * dim_, data_ + nnid * dim_, dim_, dim_, dist);
                     g_param->pool_m[i].emplace_back(nnid, dist);
                     if (g_param->pool_m[i].size() >= L_) break;
                 }
