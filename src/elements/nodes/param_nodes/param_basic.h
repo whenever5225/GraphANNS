@@ -42,6 +42,9 @@ public:
     unsigned q_num = 0;
     unsigned q_dim = 0;
 
+    /**
+     * parameters for eval
+     */
     std::string groundtruth_path = GA_NPG_GROUNDTRUTH_PATH;    // groundtruth path
     unsigned *gt = nullptr;
     unsigned gt_num = 0;

@@ -14,35 +14,40 @@
 class C6SeedKGraph : public C6SeedBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        if (nullptr == g_param) {
+        auto *t_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
+        auto *s_param = CGRAPH_GET_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM);
+        if (nullptr == t_param || nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        num_ = g_param->num;
-        dim_ = g_param->dim;
-        search_L_ = g_param->search_L;
+
+        num_ = s_param->num;
+        dim_ = s_param->dim;
+        search_L_ = s_param->search_L;
         return DAnnFuncType::ANN_SEARCH;
     }
 
     CStatus search() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param)
+        /**
+         * todo 确认，这个是不是 search的参数鸭，不然要出事的
+         */
+        auto *s_param = CGRAPH_GET_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM);
+        CGRAPH_ASSERT_NOT_NULL(s_param)
 
-        g_param->sp.reserve(search_L_ + 1);
+        s_param->sp.reserve(search_L_ + 1);
         std::vector<unsigned> init_ids(search_L_);
 
         GenRandomID(init_ids.data(), num_, search_L_);
         std::vector<char> flags(num_);
-        memset(flags.data(), 0, g_param->num * sizeof(char));
+        memset(flags.data(), 0, s_param->num * sizeof(char));
         for (unsigned i = 0; i < search_L_; i++) {
             unsigned id = init_ids[i];
             DistResType dist = 0;
-            dist_op_.calculate(g_param->query + (g_param->query_id * dim_), g_param->data + id * dim_,
+            dist_op_.calculate(s_param->query + (s_param->query_id * dim_), s_param->data + id * dim_,
                               dim_, dim_, dist);
-            g_param->sp[i] = NeighborFlag(id, dist, true);
+            s_param->sp[i] = NeighborFlag(id, dist, true);
         }
 
-        std::sort(g_param->sp.begin(), g_param->sp.begin() + search_L_);
+        std::sort(s_param->sp.begin(), s_param->sp.begin() + search_L_);
 
         return CStatus();
     }

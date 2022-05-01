@@ -14,7 +14,7 @@
 class C1InitializationVamana : public C1InitializationBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        auto g_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM);
         if (nullptr == g_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
@@ -42,7 +42,7 @@ public:
     }
 
     CStatus refreshParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
+        auto g_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM);
         CGRAPH_ASSERT_NOT_NULL(g_param)
         {
             CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param)

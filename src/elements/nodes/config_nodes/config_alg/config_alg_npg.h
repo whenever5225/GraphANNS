@@ -1,23 +1,31 @@
 /***************************
 @Author: wmz
 @Contact: wmengzhao@qq.com
-@File: config_npg.h
+@File: config_alg_npg.h
 @Time: 2022/4/14 6:56 PM
 @Desc: 'npg' algorithm configuration
 ***************************/
 
-#ifndef GRAPHANNS_CONFIG_NPG_H
-#define GRAPHANNS_CONFIG_NPG_H
+#ifndef GRAPHANNS_CONFIG_ALG_NPG_H
+#define GRAPHANNS_CONFIG_ALG_NPG_H
 
 #include "../config_basic.h"
+#include "config_alg_define.h"
 
-class ConfigNPG : public ConfigBasic {
+class ConfigAlgNPG : public ConfigBasic {
 public:
     CStatus init() override {
+        CStatus status = CGRAPH_CREATE_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+
+        status += CGRAPH_CREATE_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
+        status += CGRAPH_CREATE_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM)
+        if (!status.isOK()) {
+            return CStatus("create param failed");
+        }
+
         auto *npg_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(npg_param)
 
-        // todo 获取参数逻辑，稍微修改一下获取参数的地方
         npg_param->base_path = GA_NPG_BASE_PATH;
         npg_param->query_path = GA_NPG_QUERY_PATH;
         npg_param->groundtruth_path = GA_NPG_GROUNDTRUTH_PATH;
@@ -35,4 +43,4 @@ public:
     }
 };
 
-#endif //GRAPHANNS_CONFIG_NPG_H
+#endif //GRAPHANNS_CONFIG_ALG_NPG_H

@@ -11,5 +11,6 @@
 
 #include "param_alg/param_npg.h"
 #include "param_basic_v2.h"
+#include "param_alg/param_alg_include.h"
 
 #endif //GRAPHANNS_PARAM_INCLUDE_H

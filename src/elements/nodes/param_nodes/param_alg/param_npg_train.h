@@ -1,20 +1,17 @@
 /***************************
-@Author: wmz
-@Contact: wmengzhao@qq.com
-@File: param_npg.h
-@Time: 2022/4/4 8:55 PM
-@Desc: parameters for our graph-based ANNS algorithm 'npg'
+@Author: Chunel
+@Contact: chunel@foxmail.com
+@File: param_npg_train.h
+@Time: 2022/5/1 15:18
+@Desc: 
 ***************************/
 
-#ifndef GRAPHANNS_NPG_PARAMS_H
-#define GRAPHANNS_NPG_PARAMS_H
+#ifndef GRAPHANNS_PARAM_NPG_TRAIN_H
+#define GRAPHANNS_PARAM_NPG_TRAIN_H
 
-#include <fstream>
+#include "../param_basic_v2.h"
 
-#include "../param_basic.h"
-
-class ParamNPG : public ParamBasic {
-public:
+struct ParamNpgTrain : public ParamBasicV2<> {
     unsigned L_candidate = 100; // size of candidate set for neighbor selection
     unsigned R_neighbor = 100;  // size of neighbor set
     unsigned C_neighbor = 200;  // number of visited candidate neighbors when neighbor selection
@@ -25,8 +22,12 @@ public:
     std::vector<std::vector<Neighbor> > pool_m;
     std::vector<std::vector<Neighbor> > cut_graph;
 
-    CVoid reset() override {
-    }
+    unsigned cur_id = 0;
+    typedef std::vector<std::vector<Neighbor> > graph_neighbor;
+    typedef std::vector<std::vector<unsigned> > graph_matrix;
+
+    graph_neighbor graph_n;
+    graph_matrix graph_m;
 };
 
-#endif //GRAPHANNS_NPG_PARAMS_H
+#endif //GRAPHANNS_PARAM_NPG_TRAIN_H

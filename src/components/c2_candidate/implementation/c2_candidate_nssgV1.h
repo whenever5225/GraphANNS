@@ -14,7 +14,7 @@
 class C2CandidateNSSGV1 : public C2CandidateBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+        auto g_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
         if (nullptr == g_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }

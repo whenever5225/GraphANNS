@@ -9,24 +9,29 @@
 #ifndef GRAPHANNS_PARAM_BASIC_V2_H
 #define GRAPHANNS_PARAM_BASIC_V2_H
 
+#include <string>
+
 #include "../../../utils/utils.h"
 #include "../../../data_objects/data_objects.h"
 #include "../../CGraph/src/CGraph.h"
 #include "../../../graph_anns_define.h"
 
-template<typename T>
+template<typename T = VecValType>
 struct ParamBasicV2 : public CGraph::GParam {
     T *data = nullptr;
     unsigned num = 0;
     unsigned dim = 0;
 
     CVoid reset() override {
+        /**
+         * todo 要看一下，这个pipeline结束之后，是否需要 reset啥东西
+         */
     }
 
     CStatus load(const std::string& path) override {
         std::ifstream in(path.data(), std::ios::binary);
         if (!in.is_open()) {
-            return CStatus("open file error!");
+            return CStatus(path + " open file error!");
         }
 
         in.read((char *) &dim, 4);
@@ -43,6 +48,10 @@ struct ParamBasicV2 : public CGraph::GParam {
         }
         in.close();
         return CStatus();
+    }
+
+    ~ParamBasicV2() override {
+        CGRAPH_DELETE_PTR(data)
     }
 };
 

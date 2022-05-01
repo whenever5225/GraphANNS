@@ -16,15 +16,27 @@
 class C6SeedBasic : public ComponentsBasic {
 protected:
     CStatus init() override {
-        auto *g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param)
+//        auto *g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
+//        CGRAPH_ASSERT_NOT_NULL(g_param)
 
-        read_vecs(&g_param->base_path[0], g_param->data, g_param->num, g_param->dim);
-        read_vecs(&g_param->query_path[0], g_param->query, g_param->q_num, g_param->q_dim);
+        auto *t_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
+        auto *s_param = CGRAPH_GET_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM)
+        if (nullptr == t_param || nullptr == s_param) {
+            CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic get param failed")
+        }
 
-        CGraph::CGRAPH_ECHO("vector path: [%s]", g_param->base_path.c_str());
-        CGraph::CGRAPH_ECHO("vector num: [%d]", g_param->num);
-        CGraph::CGRAPH_ECHO("vector dim: [%d]", g_param->dim);
+        CStatus status = s_param->load(GA_NPG_QUERY_PATH);
+        status += t_param->load(GA_NPG_BASE_PATH);
+        if (!status.isOK()) {
+            CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic load param failed")
+        }
+
+//        read_vecs(&g_param->base_path[0], g_param->data, g_param->num, g_param->dim);
+//        read_vecs(&g_param->query_path[0], g_param->query, g_param->q_num, g_param->q_dim);
+
+        CGraph::CGRAPH_ECHO("vector path: [%s]", GA_NPG_BASE_PATH);
+        CGraph::CGRAPH_ECHO("vector num: [%d]", t_param->num);
+        CGraph::CGRAPH_ECHO("vector dim: [%d]", t_param->dim);
         return CStatus();
     }
 

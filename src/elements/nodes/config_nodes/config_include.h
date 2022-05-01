@@ -9,6 +9,6 @@
 #ifndef GRAPHANNS_CONFIG_INCLUDE_H
 #define GRAPHANNS_CONFIG_INCLUDE_H
 
-#include "config_alg/config_npg.h"
+#include "config_alg/config_alg_npg.h"
 
 #endif //GRAPHANNS_CONFIG_INCLUDE_H

@@ -15,7 +15,7 @@ int main() {
 
     GElementPtr a, f, g, h, i, gh_region= nullptr;
     // build
-    CStatus status = pipeline->registerGElement<ConfigNPG>(&a, {}, "config_npg");
+    CStatus status = pipeline->registerGElement<ConfigAlgNPG>(&a, {}, "config_npg");
     status += pipeline->registerGElement<LoadIndex>(&f, {a}, "load_index");
     //search
     g = pipeline->createGNode<C6SeedKGraph>(GNodeInfo({}, "c6_random"));
