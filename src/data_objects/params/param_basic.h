@@ -9,10 +9,10 @@
 #ifndef GRAPHANNS_PARAM_BASIC_H
 #define GRAPHANNS_PARAM_BASIC_H
 
-#include "../../../utils/utils.h"
-#include "../../../data_objects/data_objects.h"
-#include "../../CGraph/src/CGraph.h"
-#include "../../../graph_anns_define.h"
+#include "../../utils/utils.h"
+#include "../data_objects.h"
+#include "../../../../CGraph/src/CGraph.h"
+#include "../../graph_anns_define.h"
 
 //class ParamBasic : public CGraph::GParam {
 //protected:

@@ -11,7 +11,6 @@
 
 #include "../components_basic.h"
 #include "../../utils/utils.h"
-#include "../../elements/nodes/params/params_include.h"
 
 class C2CandidateBasic : public ComponentsBasic {
 protected:

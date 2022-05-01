@@ -11,8 +11,8 @@
 
 #include <fstream>
 
+#include "../../elements_define.h"
 #include "src/CGraph.h"
-#include "../params/params_include.h"
 
 class LoadIndexNode : public CGraph::GNode {
 public:

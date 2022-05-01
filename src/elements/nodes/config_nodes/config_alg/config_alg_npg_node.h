@@ -10,6 +10,7 @@
 #define GRAPHANNS_CONFIG_ALG_NPG_NODE_H
 
 #include "../config_basic.h"
+#include "../../../../data_objects/data_objects.h"
 #include "config_alg_define.h"
 
 class ConfigAlgNPGNode : public ConfigBasic {

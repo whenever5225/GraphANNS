@@ -10,6 +10,7 @@
 #define GRAPHANNS_ELEMENTS_DEFINE_H
 
 #include "../graph_anns_define.h"
+#include "../data_objects/data_objects.h"
 
 static const char* GA_ALG_NPG_TRAIN_PARAM_KEY = "GA_ALG_NPG_TRAIN_PARAM_KEY";        // param key for npg train
 static const char* GA_ALG_NPG_SEARCH_PARAM_KEY = "GA_ALG_NPG_SEARCH_PARAM_KEY";      // param key for npg search

@@ -11,5 +11,6 @@
 
 #include "neighbor_basic.h"
 #include "neighbor_flag.h"
+#include "params/params_include.h"
 
 #endif //GRAPHANNS_DATA_OBJECTS_H
