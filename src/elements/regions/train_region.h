@@ -10,7 +10,7 @@
 #define GRAPHANNS_TRAIN_REGION_H
 
 #include "src/CGraph.h"
-#include "../nodes/params/param_include.h"
+#include "../nodes/params/params_include.h"
 
 class TrainRegion : public CGraph::GRegion {
 public:

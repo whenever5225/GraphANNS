@@ -12,7 +12,7 @@
 #include <fstream>
 
 #include "src/CGraph.h"
-#include "../params/param_include.h"
+#include "../params/params_include.h"
 
 class LoadIndexNode : public CGraph::GNode {
 public:

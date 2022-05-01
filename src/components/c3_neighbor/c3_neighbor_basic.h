@@ -10,7 +10,7 @@
 #define GRAPHANNS_C3_NEIGHBOR_BASIC_H
 
 #include "../components_basic.h"
-#include "../../elements/nodes/params/param_include.h"
+#include "../../elements/nodes/params/params_include.h"
 #include "../../utils/utils.h"
 
 class C3NeighborBasic : public ComponentsBasic {
