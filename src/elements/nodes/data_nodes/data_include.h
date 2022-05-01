@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_DATA_INCLUDE_H
 #define GRAPHANNS_DATA_INCLUDE_H
 
-#include "load_index.h"
-#include "save_index.h"
+#include "load_index_node.h"
+#include "save_index_node.h"
 
 #endif //GRAPHANNS_DATA_INCLUDE_H

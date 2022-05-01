@@ -14,32 +14,32 @@
 class C3NeighborNSG : public C3NeighborBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
-        if (nullptr == g_param) {
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        if (nullptr == t_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        dim_ = g_param->dim;
-        data_ = g_param->data;
-        cur_id_ = g_param->cur_id;
-        C_ = g_param->C_neighbor;
-        R_ = g_param->R_neighbor;
+        dim_ = t_param->dim;
+        data_ = t_param->data;
+        cur_id_ = t_param->cur_id;
+        C_ = t_param->C_neighbor;
+        R_ = t_param->R_neighbor;
 
         return DAnnFuncType::ANN_TRAIN;
     }
 
     CStatus train() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param)
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        CGRAPH_ASSERT_NOT_NULL(t_param)
 
         unsigned start = 0;
-        std::sort(g_param->pool.begin(), g_param->pool.end());
+        std::sort(t_param->pool.begin(), t_param->pool.end());
         result_.clear();
-        if (g_param->pool[start].id_ == cur_id_) start++;
-        result_.push_back(g_param->pool[start]);
+        if (t_param->pool[start].id_ == cur_id_) start++;
+        result_.push_back(t_param->pool[start]);
 
-        while (result_.size() < R_ && (++start) < g_param->pool.size() &&
+        while (result_.size() < R_ && (++start) < t_param->pool.size() &&
                start < C_) {
-            auto &p = g_param->pool[start];
+            auto &p = t_param->pool[start];
             unsigned occlude = false;
             for (auto &t: result_) {
                 if (p.id_ == t.id_) {
@@ -60,11 +60,11 @@ public:
     }
 
     CStatus refreshParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param);
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        CGRAPH_ASSERT_NOT_NULL(t_param);
         {
-            CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param);
-            g_param->cut_graph.push_back(result_);
+            CGRAPH_PARAM_WRITE_CODE_BLOCK(t_param);
+            t_param->cut_graph.push_back(result_);
         }
         return CStatus();
     }

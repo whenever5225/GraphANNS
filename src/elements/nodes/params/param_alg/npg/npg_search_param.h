@@ -6,12 +6,12 @@
 @Desc: 
 ***************************/
 
-#ifndef GRAPHANNS_PARAM_NPG_SEARCH_H
-#define GRAPHANNS_PARAM_NPG_SEARCH_H
+#ifndef GRAPHANNS_NPG_SEARCH_PARAM_H
+#define GRAPHANNS_NPG_SEARCH_PARAM_H
 
-#include "../param_basic_v2.h"
+#include "../../basic_param.h"
 
-struct ParamNpgSearch : public ParamBasicV2<> {
+struct NPGSearchParam : public BasicParam<> {
     VecValType *query = nullptr;
     unsigned top_k = 20;
     unsigned search_L = top_k + 500;    // todo 这个确定是成员变量么？
@@ -25,4 +25,4 @@ struct ParamNpgSearch : public ParamBasicV2<> {
     }
 };
 
-#endif //GRAPHANNS_PARAM_NPG_SEARCH_H
+#endif //GRAPHANNS_NPG_SEARCH_PARAM_H

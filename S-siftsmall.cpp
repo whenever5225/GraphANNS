@@ -15,17 +15,15 @@ int main() {
 
     GElementPtr a, f, g, h, i, gh_region= nullptr;
     // build
-    CStatus status = pipeline->registerGElement<ConfigAlgNPG>(&a, {}, "config_npg");
-    status += pipeline->registerGElement<LoadIndex>(&f, {a}, "load_index");
+    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<LoadIndexNode>(&f, {a}, "load_index");
     //search
     g = pipeline->createGNode<C6SeedKGraph>(GNodeInfo({}, "c6_random"));
     h = pipeline->createGNode<C7RoutingKGraph>(GNodeInfo({g}, "c7_greedy"));
 
     gh_region = pipeline->createGGroup<SearchRegion>({g, h});
     status += pipeline->registerGElement<SearchRegion>(&gh_region, {f}, "search_region");
-    status += pipeline->registerGElement<EvaRecall>(&i, {gh_region}, "eva_recall");
-
-    pipeline->createGParam<ParamNPG>(GRAPH_INFO_PARAM_KEY);     // pipeline执行之前，先构建 ParamNPG 参数
+    status += pipeline->registerGElement<EvaRecallNode>(&i, {gh_region}, "eva_recall");
 
     status += pipeline->process();
     if (!status.isOK()) {

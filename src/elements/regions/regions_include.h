@@ -10,6 +10,6 @@
 #define GRAPHANNS_REGIONS_INCLUDE_H
 
 #include "search_region.h"
-#include "build_region.h"
+#include "train_region.h"
 
 #endif //GRAPHANNS_REGIONS_INCLUDE_H

@@ -14,34 +14,33 @@
 class C3NeighborNSGV1 : public C3NeighborBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
-        if (nullptr == g_param) {
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        if (nullptr == t_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        dim_ = g_param->dim;
-        data_ = g_param->data;
-        num_ = g_param->num;
-        C_ = g_param->C_neighbor;
-        R_ = g_param->R_neighbor;
+        dim_ = t_param->dim;
+        data_ = t_param->data;
+        num_ = t_param->num;
+        C_ = t_param->C_neighbor;
+        R_ = t_param->R_neighbor;
 
         return DAnnFuncType::ANN_TRAIN;
     }
 
     CStatus train() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-
-        CGRAPH_ASSERT_NOT_NULL(g_param)
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        CGRAPH_ASSERT_NOT_NULL(t_param)
 
         for (unsigned i = 0; i < num_; i++) {
             unsigned start = 0;
-            std::sort(g_param->pool_m[i].begin(), g_param->pool_m[i].end());
+            std::sort(t_param->pool_m[i].begin(), t_param->pool_m[i].end());
             std::vector<Neighbor> result;
-            if (g_param->pool_m[i][start].id_ == i) start++;
-            result.push_back(g_param->pool_m[i][start]);
+            if (t_param->pool_m[i][start].id_ == i) start++;
+            result.push_back(t_param->pool_m[i][start]);
 
             while (result.size() < R_
-                   && (++start) < g_param->pool_m[i].size() && start < C_) {
-                auto &p = g_param->pool_m[i][start];
+                   && (++start) < t_param->pool_m[i].size() && start < C_) {
+                auto &p = t_param->pool_m[i][start];
                 bool occlude = false;
                 for (const auto &res: result) {
                     if (p.id_ == res.id_) {
@@ -61,8 +60,8 @@ public:
             }
 
             {
-                CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param);
-                g_param->cut_graph.push_back(result);
+                CGRAPH_PARAM_WRITE_CODE_BLOCK(t_param)
+                t_param->cut_graph.push_back(result);
             }
         }
         return CStatus();

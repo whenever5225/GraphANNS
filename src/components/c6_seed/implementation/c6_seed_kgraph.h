@@ -14,8 +14,8 @@
 class C6SeedKGraph : public C6SeedBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto *t_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
-        auto *s_param = CGRAPH_GET_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM);
+        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
         if (nullptr == t_param || nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
@@ -30,7 +30,7 @@ public:
         /**
          * todo 确认，这个是不是 search的参数鸭，不然要出事的
          */
-        auto *s_param = CGRAPH_GET_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM);
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(s_param)
 
         s_param->sp.reserve(search_L_ + 1);

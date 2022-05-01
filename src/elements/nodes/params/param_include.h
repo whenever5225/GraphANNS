@@ -9,8 +9,7 @@
 #ifndef GRAPHANNS_PARAM_INCLUDE_H
 #define GRAPHANNS_PARAM_INCLUDE_H
 
-#include "param_alg/param_npg.h"
-#include "param_basic_v2.h"
-#include "param_alg/param_alg_include.h"
+#include "param_alg/alg_param_include.h"
+#include "param_eva/eva_param.h"
 
 #endif //GRAPHANNS_PARAM_INCLUDE_H

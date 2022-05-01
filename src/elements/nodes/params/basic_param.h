@@ -6,8 +6,8 @@
 @Desc: 
 ***************************/
 
-#ifndef GRAPHANNS_PARAM_BASIC_V2_H
-#define GRAPHANNS_PARAM_BASIC_V2_H
+#ifndef GRAPHANNS_BASIC_PARAM_H
+#define GRAPHANNS_BASIC_PARAM_H
 
 #include <string>
 
@@ -17,10 +17,11 @@
 #include "../../../graph_anns_define.h"
 
 template<typename T = VecValType>
-struct ParamBasicV2 : public CGraph::GParam {
+struct BasicParam : public CGraph::GParam {
     T *data = nullptr;
     unsigned num = 0;
     unsigned dim = 0;
+    std::string file_path;
 
     CVoid reset() override {
         /**
@@ -33,7 +34,6 @@ struct ParamBasicV2 : public CGraph::GParam {
         if (!in.is_open()) {
             return CStatus(path + " open file error!");
         }
-
         in.read((char *) &dim, 4);
         in.seekg(0, std::ios::end);
         std::ios::pos_type ss = in.tellg();
@@ -47,12 +47,13 @@ struct ParamBasicV2 : public CGraph::GParam {
             in.read((char *) (data + i * dim), dim * sizeof(T));
         }
         in.close();
+        file_path = path;
         return CStatus();
     }
 
-    ~ParamBasicV2() override {
+    ~BasicParam() override {
         CGRAPH_DELETE_PTR(data)
     }
 };
 
-#endif //GRAPHANNS_PARAM_BASIC_V2_H
+#endif //GRAPHANNS_BASIC_PARAM_H

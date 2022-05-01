@@ -14,7 +14,7 @@
 class C7RoutingKGraph : public C7RoutingBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto *s_param = CGRAPH_GET_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM)
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
         if (nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
@@ -29,8 +29,11 @@ public:
     }
 
     CStatus search() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param)
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
+        auto s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
+        if (nullptr == t_param || nullptr == s_param) {
+            CGRAPH_RETURN_ERROR_STATUS("C7RoutingKGraph search get param failed")
+        }
 
         std::vector<char> flags(num_, 0);
         res_.clear();
@@ -39,12 +42,12 @@ public:
         while (k < (int) search_L_) {
             unsigned nk = search_L_;
 
-            if (g_param->sp[k].flag_) {
-                g_param->sp[k].flag_ = false;
-                unsigned n = g_param->sp[k].id_;
+            if (s_param->sp[k].flag_) {
+                s_param->sp[k].flag_ = false;
+                unsigned n = s_param->sp[k].id_;
 
-                for (unsigned m = 0; m < g_param->graph_m[n].size(); ++m) {
-                    unsigned id = g_param->graph_m[n][m];
+                for (unsigned m = 0; m < t_param->graph_m[n].size(); ++m) {
+                    unsigned id = t_param->graph_m[n][m];
 
                     if (flags[id]) continue;
                     flags[id] = 1;
@@ -53,9 +56,9 @@ public:
                     dist_op_.calculate(query_ + (query_id_ * dim_),
                                       data_ + id * dim_, dim_, dim_, dist);
 
-                    if (dist >= g_param->sp[search_L_ - 1].distance_) continue;
+                    if (dist >= s_param->sp[search_L_ - 1].distance_) continue;
                     NeighborFlag nn(id, dist, true);
-                    int r = InsertIntoPool(g_param->sp.data(), search_L_, nn);
+                    int r = InsertIntoPool(s_param->sp.data(), search_L_, nn);
 
                     if (r < nk) nk = r;
                 }
@@ -65,13 +68,13 @@ public:
 
         res_.reserve(K_);
         for (size_t i = 0; i < K_; i++) {
-            res_.push_back(g_param->sp[i].id_);
+            res_.push_back(s_param->sp[i].id_);
         }
         return CStatus();
     }
 
     CStatus refreshParam() override {
-        auto s_param = CGRAPH_GET_GPARAM(ParamNpgSearch, GA_ALG_NPG_SEARCH_PARAM)
+        auto s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(s_param)
 
         {

@@ -14,43 +14,43 @@
 class C2CandidateNSSGV1 : public C2CandidateBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNpgTrain, GA_ALG_NPG_TRAIN_PARAM)
-        if (nullptr == g_param) {
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        if (nullptr == t_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        num_ = g_param->num;
-        dim_ = g_param->dim;
-        data_ = g_param->data;
-        L_ = g_param->L_candidate;
+        num_ = t_param->num;
+        dim_ = t_param->dim;
+        data_ = t_param->data;
+        L_ = t_param->L_candidate;
         return DAnnFuncType::ANN_TRAIN;
     }
 
     CStatus train() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        g_param->pool_m.reserve(num_);
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        t_param->pool_m.reserve(num_);
 
         for (unsigned i = 0; i < num_; i++) {
             std::vector<bool> flags(num_, false);
             flags[i] = true;
-            for (unsigned j = 0; j < g_param->graph_n[i].size(); j++) {
+            for (unsigned j = 0; j < t_param->graph_n[i].size(); j++) {
                 if (flags[j]) continue;
                 flags[j] = true;
-                unsigned nid = g_param->graph_n[i][j].id_;
-                float ndist = g_param->graph_n[i][j].distance_;
-                g_param->pool_m[i].emplace_back(nid, ndist);
+                unsigned nid = t_param->graph_n[i][j].id_;
+                float ndist = t_param->graph_n[i][j].distance_;
+                t_param->pool_m[i].emplace_back(nid, ndist);
             }
-            for (unsigned j = 0; j < g_param->graph_n[i].size(); j++) {
-                unsigned nid = g_param->graph_n[i][j].id_;
-                for (unsigned nn = 0; nn < g_param->graph_n[nid].size(); nn++) {
-                    unsigned nnid = g_param->graph_n[nid][nn].id_;
+            for (unsigned j = 0; j < t_param->graph_n[i].size(); j++) {
+                unsigned nid = t_param->graph_n[i][j].id_;
+                for (unsigned nn = 0; nn < t_param->graph_n[nid].size(); nn++) {
+                    unsigned nnid = t_param->graph_n[nid][nn].id_;
                     if (flags[nnid]) continue;
                     flags[nnid] = true;
                     DistResType dist = 0;
                     dist_op_.calculate(data_ + i * dim_, data_ + nnid * dim_, dim_, dim_, dist);
-                    g_param->pool_m[i].emplace_back(nnid, dist);
-                    if (g_param->pool_m[i].size() >= L_) break;
+                    t_param->pool_m[i].emplace_back(nnid, dist);
+                    if (t_param->pool_m[i].size() >= L_) break;
                 }
-                if (g_param->pool_m[i].size() >= L_) break;
+                if (t_param->pool_m[i].size() >= L_) break;
             }
         }
         return CStatus();
