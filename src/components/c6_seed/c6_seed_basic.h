@@ -16,9 +16,6 @@
 class C6SeedBasic : public ComponentsBasic {
 protected:
     CStatus init() override {
-//        auto *g_param = CGRAPH_GET_GPARAM(NPGParam, GRAPH_INFO_PARAM_KEY);
-//        CGRAPH_ASSERT_NOT_NULL(g_param)
-
         auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
         if (nullptr == t_param || nullptr == s_param) {
@@ -30,9 +27,6 @@ protected:
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic load param failed")
         }
-
-//        read_vecs(&g_param->base_path[0], g_param->data, g_param->num, g_param->dim);
-//        read_vecs(&g_param->query_path[0], g_param->query, g_param->q_num, g_param->q_dim);
 
         CGraph::CGRAPH_ECHO("vector path: [%s]", GA_ALG_BASE_PATH);
         CGraph::CGRAPH_ECHO("vector num: [%d]", t_param->num);

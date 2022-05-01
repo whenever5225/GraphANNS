@@ -17,13 +17,15 @@ int main() {
     // build
     CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
     status += pipeline->registerGElement<LoadIndexNode>(&f, {a}, "load_index");
+
     //search
     g = pipeline->createGNode<C6SeedKGraph>(GNodeInfo({}, "c6_random"));
     h = pipeline->createGNode<C7RoutingKGraph>(GNodeInfo({g}, "c7_greedy"));
 
     gh_region = pipeline->createGGroup<SearchRegion>({g, h});
     status += pipeline->registerGElement<SearchRegion>(&gh_region, {f}, "search_region");
-    status += pipeline->registerGElement<EvaRecallNode>(&i, {gh_region}, "eva_recall");
+
+    //status += pipeline->registerGElement<EvaRecallNode>(&i, {gh_region}, "eva_recall");
 
     status += pipeline->process();
     if (!status.isOK()) {
