@@ -12,7 +12,6 @@
 #include "../../basic_param.h"
 
 struct NPGSearchParam : public BasicParam<> {
-    VecValType *query = nullptr;
     unsigned top_k = 20;
     unsigned search_L = top_k + 500;    // todo 这个确定是成员变量么？
     unsigned query_id = 0;

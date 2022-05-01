@@ -13,6 +13,7 @@
 #include "../basic_param.h"
 
 struct EvaParam : public BasicParam<unsigned > {
+    unsigned gt;
 
     CVoid reset() override {
     }

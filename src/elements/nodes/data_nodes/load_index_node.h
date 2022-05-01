@@ -16,12 +16,7 @@
 
 class LoadIndexNode : public CGraph::GNode {
 public:
-    /**
-     * todo 我又又又想了一下哈，这个应该是写在run里的
-     * 如果是模型扔到线上构图，应该是不用这个节点就可以了对吧。
-     * @return
-     */
-    CStatus run() override {
+    CStatus init() override {
         auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(t_param)
 
@@ -40,6 +35,10 @@ public:
         }
         f_in.close();
         return CStatus();
+    }
+
+    CStatus run() override {
+        CGRAPH_EMPTY_FUNCTION
     }
 };
 

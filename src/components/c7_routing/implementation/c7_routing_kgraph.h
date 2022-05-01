@@ -14,16 +14,18 @@
 class C7RoutingKGraph : public C7RoutingBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
+        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
         if (nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        num_ = s_param->num;
-        dim_ = s_param->dim;
-        data_ = s_param->data;
+        num_ = t_param->num;
+        dim_ = t_param->dim;
+        data_ = t_param->data;
+
         search_L_ = s_param->search_L;
         K_ = s_param->top_k;
-        query_ = s_param->query;
+        query_ = s_param->data;
         query_id_ = s_param->query_id;
         return DAnnFuncType::ANN_SEARCH;
     }

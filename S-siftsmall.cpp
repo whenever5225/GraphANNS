@@ -25,7 +25,7 @@ int main() {
     gh_region = pipeline->createGGroup<SearchRegion>({g, h});
     status += pipeline->registerGElement<SearchRegion>(&gh_region, {f}, "search_region");
 
-    //status += pipeline->registerGElement<EvaRecallNode>(&i, {gh_region}, "eva_recall");
+    status += pipeline->registerGElement<EvaRecallNode>(&i, {gh_region}, "eva_recall");
 
     status += pipeline->process();
     if (!status.isOK()) {

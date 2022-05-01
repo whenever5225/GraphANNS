@@ -25,9 +25,6 @@ struct BasicParam : public CGraph::GParam {
     std::string file_path;
 
     CVoid reset() override {
-        /**
-         * todo 要看一下，这个pipeline结束之后，是否需要 reset啥东西
-         */
     }
 
     CStatus load(const std::string& path) override {
@@ -53,7 +50,10 @@ struct BasicParam : public CGraph::GParam {
     }
 
     ~BasicParam() override {
-        CGRAPH_DELETE_PTR(data)
+        if (data) {
+            delete[] data;
+            data = nullptr;
+        }
     }
 };
 

@@ -15,12 +15,15 @@
 class ConfigAlgNPGNode : public ConfigBasic {
 public:
     CStatus init() override {
+        /**
+         * load search & train param
+         */
         CStatus status = CGRAPH_CREATE_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         status += CGRAPH_CREATE_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
-        if (!status.isOK()) {
-            return CStatus("create param failed");
-        }
+        return status;
+    }
 
+    CStatus run() override {
         auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(t_param)
 
@@ -28,10 +31,6 @@ public:
         t_param->R_neighbor = GA_NPG_R_NEIGHBOR;
         t_param->C_neighbor = GA_NPG_C_NEIGHBOR;
         t_param->k_init_graph = GA_NPG_K_INIT_GRAPH;
-        return CStatus();
-    }
-
-    CStatus run() override {
         return CStatus();
     }
 };

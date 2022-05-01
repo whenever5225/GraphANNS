@@ -17,6 +17,10 @@
 class SaveIndexNode : public CGraph::GNode {
 public:
     CStatus run() override {
+        CGRAPH_EMPTY_FUNCTION
+    }
+
+    CStatus destroy() override {
         auto t_param =  CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(t_param)
 
