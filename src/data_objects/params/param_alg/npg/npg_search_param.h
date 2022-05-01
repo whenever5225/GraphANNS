@@ -13,7 +13,7 @@
 
 struct NPGSearchParam : public BasicParam<> {
     unsigned top_k = 20;
-    unsigned search_L = top_k + 500;    // todo 这个确定是成员变量么？
+    unsigned search_L = top_k + 500;
     unsigned query_id = 0;
 
     std::vector<NeighborFlag> sp;
