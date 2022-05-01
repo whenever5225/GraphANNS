@@ -9,8 +9,8 @@
 #ifndef GRAPHANNS_DATA_OBJECTS_H
 #define GRAPHANNS_DATA_OBJECTS_H
 
-#include "neighbor_basic.h"
-#include "neighbor_flag.h"
+#include "neighbors/neighbors_include.h"
 #include "params/params_include.h"
+#include "distances/distances_include.h"
 
 #endif //GRAPHANNS_DATA_OBJECTS_H

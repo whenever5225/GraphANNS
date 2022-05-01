@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_NEIGHBOR_H
 #define GRAPHANNS_NEIGHBOR_H
 
-#include "../utils/utils_define.h"
+#include "../distances/distances_include.h"
 
 struct Neighbor {
 public:

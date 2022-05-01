@@ -10,6 +10,7 @@
 #define GRAPHANNS_BASIC_PARAM_H
 
 #include <string>
+#include <fstream>
 
 #include "../../utils/utils.h"
 #include "params_define.h"

@@ -10,7 +10,6 @@
 #define GRAPHANNS_UTILS_H
 
 #include "functions/function_include.h"
-#include "distances/distances_include.h"
 #include "utils_define.h"
 
 #endif //GRAPHANNS_UTILS_H
