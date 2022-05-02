@@ -14,18 +14,21 @@
 class C1InitializationVamana : public C1InitializationBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
-        if (nullptr == g_param) {
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
+        if (nullptr == t_param || nullptr == model_) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        num_ = g_param->num;
-        dim_ = g_param->dim;
-        data_ = g_param->data;
-        out_degree_ = g_param->k_init_graph;
-        g_param->graph_n.reserve(num_);
+
+        num_ = model_->train_data.num;
+        dim_ = model_->train_data.dim;
+        data_ = model_->train_data.data;
+        out_degree_ = t_param->k_init_graph;
+        model_->graph_n.reserve(num_);
 
         return DAnnFuncType::ANN_TRAIN;
     }
+
 
     CStatus train() override {
         graph_neigh_.clear();
@@ -41,12 +44,11 @@ public:
         return CStatus();
     }
 
+
     CStatus refreshParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param)
         {
-            CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param)
-            g_param->graph_m.emplace_back(graph_neigh_);
+            CGRAPH_PARAM_WRITE_CODE_BLOCK(model_)
+            model_->graph_m.emplace_back(graph_neigh_);
         }
         return CStatus();
     }

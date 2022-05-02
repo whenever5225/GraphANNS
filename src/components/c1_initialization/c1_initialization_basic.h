@@ -17,15 +17,19 @@
 class C1InitializationBasic : public ComponentsBasic {
 protected:
     CStatus init() override {
-        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        CStatus status = t_param->load(GA_ALG_BASE_PATH);
+        auto *model_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
+        if (!model_param) {
+            CGRAPH_RETURN_ERROR_STATUS("C1InitializationBasic init get param failed")
+        }
+
+        CStatus status = model_param->train_data.load(GA_ALG_BASE_PATH);
         if (!status.isOK()) {
-            return CStatus("C1InitializationBasic load param failed : " + std::string(GA_ALG_BASE_PATH));
+            return CStatus("C1InitializationBasic init load param failed : " + std::string(GA_ALG_BASE_PATH));
         }
 
         CGraph::CGRAPH_ECHO("vector path: [%s]", GA_ALG_BASE_PATH);
-        CGraph::CGRAPH_ECHO("vector num: [%d]", t_param->num);
-        CGraph::CGRAPH_ECHO("vector dim: [%d]", t_param->dim);
+        CGraph::CGRAPH_ECHO("vector num: [%d]", model_param->train_data.num);
+        CGraph::CGRAPH_ECHO("vector dim: [%d]", model_param->train_data.dim);
         return CStatus();
     }
 

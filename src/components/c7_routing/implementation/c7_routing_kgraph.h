@@ -15,25 +15,25 @@ class C7RoutingKGraph : public C7RoutingBasic {
 public:
     DAnnFuncType prepareParam() override {
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
-        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
-        if (nullptr == s_param) {
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        if (nullptr == model_ || nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        num_ = t_param->num;
-        dim_ = t_param->dim;
-        data_ = t_param->data;
+
+        num_ = model_->train_data.num;
+        dim_ = model_->train_data.dim;
+        data_ = model_->train_data.data;
 
         search_L_ = s_param->search_L;
         K_ = s_param->top_k;
-        query_ = s_param->data;
         query_id_ = s_param->query_id;
+        query_ = model_->search_data.data;
         return DAnnFuncType::ANN_SEARCH;
     }
 
     CStatus search() override {
-        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
         auto s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
-        if (nullptr == t_param || nullptr == s_param) {
+        if (nullptr == s_param) {
             CGRAPH_RETURN_ERROR_STATUS("C7RoutingKGraph search get param failed")
         }
 
@@ -48,8 +48,8 @@ public:
                 s_param->sp[k].flag_ = false;
                 unsigned n = s_param->sp[k].id_;
 
-                for (unsigned m = 0; m < t_param->graph_m[n].size(); ++m) {
-                    unsigned id = t_param->graph_m[n][m];
+                for (unsigned m = 0; m < model_->graph_m[n].size(); ++m) {
+                    unsigned id = model_->graph_m[n][m];
 
                     if (flags[id]) continue;
                     flags[id] = 1;

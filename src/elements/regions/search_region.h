@@ -15,9 +15,19 @@
 class SearchRegion : public CGraph::GRegion {
 public:
     CBool isHold() override {
-        auto s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
+        auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
+        if (nullptr == m_param || nullptr == s_param) {
+            // throw exception, CGraph can catch this exception
+            CGRAPH_THROW_EXCEPTION("SearchRegion isHold get param failed")
+        }
+
         s_param->query_id++;
-        return s_param->query_id < s_param->num;
+        return s_param->query_id < m_param->search_data.num;
+    }
+
+    CStatus crashed(const CException& ex) override {
+        return CStatus(ex.what());
     }
 };
 

@@ -12,13 +12,13 @@
 #include "../../../CGraph/src/CGraph.h"
 #include "../utils/utils.h"
 
-
 class ComponentsBasic : public CGraph::DAnnNode {
 protected:
-    VecValType *data_ = nullptr;   // vector data
-    unsigned num_ = 0;  // number of vector
-    unsigned dim_ = 0;  // dimensionality of vector
-    DistCalcType dist_op_;
+    AnnsModelParam* model_ = nullptr;          // ann model ptr
+    VecValType *data_ = nullptr;               // vector data
+    unsigned num_ = 0;                         // number of vector
+    unsigned dim_ = 0;                         // dimensionality of vector
+    DistCalcType dist_op_;                     // distance calc tool
 };
 
 #endif //GRAPHANNS_COMPONENTS_BASIC_H

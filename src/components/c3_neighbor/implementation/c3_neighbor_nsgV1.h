@@ -14,13 +14,20 @@
 class C3NeighborNSGV1 : public C3NeighborBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        if (nullptr == t_param) {
+        /**
+         * todo 这个问题跟c2 中的那个问题，是同样的。为啥会写两份同样的代码捏，对吧
+         * 是所有算法，通用，还是针对nsg通用？
+         */
+        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        if (nullptr == model_ || nullptr == t_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        dim_ = t_param->dim;
-        data_ = t_param->data;
-        num_ = t_param->num;
+
+        num_ = model_->train_data.num;
+        dim_ = model_->train_data.dim;
+        data_ = model_->train_data.data;
+
         C_ = t_param->C_neighbor;
         R_ = t_param->R_neighbor;
 
@@ -33,14 +40,14 @@ public:
 
         for (unsigned i = 0; i < num_; i++) {
             unsigned start = 0;
-            std::sort(t_param->pool_m[i].begin(), t_param->pool_m[i].end());
+            std::sort(model_->pool_m[i].begin(), model_->pool_m[i].end());
             std::vector<Neighbor> result;
-            if (t_param->pool_m[i][start].id_ == i) start++;
-            result.push_back(t_param->pool_m[i][start]);
+            if (model_->pool_m[i][start].id_ == i) start++;
+            result.push_back(model_->pool_m[i][start]);
 
             while (result.size() < R_
-                   && (++start) < t_param->pool_m[i].size() && start < C_) {
-                auto &p = t_param->pool_m[i][start];
+                   && (++start) < model_->pool_m[i].size() && start < C_) {
+                auto &p = model_->pool_m[i][start];
                 bool occlude = false;
                 for (const auto &res: result) {
                     if (p.id_ == res.id_) {
@@ -61,7 +68,7 @@ public:
 
             {
                 CGRAPH_PARAM_WRITE_CODE_BLOCK(t_param)
-                t_param->cut_graph.push_back(result);
+                model_->cut_graph.push_back(result);
             }
         }
         return CStatus();

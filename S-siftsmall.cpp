@@ -13,9 +13,10 @@ using namespace CGraph;
 int main() {
     GPipelinePtr pipeline = GPipelineFactory::create();
 
-    GElementPtr a, f, g, h, i, gh_region= nullptr;
+    GElementPtr a, b, f, g, h, i, gh_region= nullptr;
     // build
     CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
     status += pipeline->registerGElement<LoadIndexNode>(&f, {a}, "load_index");
 
     //search

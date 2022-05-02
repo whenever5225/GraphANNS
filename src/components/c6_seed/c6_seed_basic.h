@@ -16,21 +16,21 @@
 class C6SeedBasic : public ComponentsBasic {
 protected:
     CStatus init() override {
-        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
-        if (nullptr == t_param || nullptr == s_param) {
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        if (nullptr == model_ || nullptr == s_param) {
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic get param failed")
         }
 
-        CStatus status = s_param->load(GA_ALG_QUERY_PATH);
-        status += t_param->load(GA_ALG_BASE_PATH);
+        CStatus status = model_->search_data.load(GA_ALG_QUERY_PATH);
+        status += model_->train_data.load(GA_ALG_BASE_PATH);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic load param failed")
         }
 
-        CGraph::CGRAPH_ECHO("vector path: [%s]", GA_ALG_BASE_PATH);
-        CGraph::CGRAPH_ECHO("vector num: [%d]", t_param->num);
-        CGraph::CGRAPH_ECHO("vector dim: [%d]", t_param->dim);
+        CGraph::CGRAPH_ECHO("C6SeedBasic vector path: [%s]", model_->train_data.file_path.c_str());
+        CGraph::CGRAPH_ECHO("C6SeedBasic vector num: [%d]", model_->train_data.num);
+        CGraph::CGRAPH_ECHO("C6SeedBasic vector dim: [%d]", model_->train_data.dim);
         return CStatus();
     }
 

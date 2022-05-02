@@ -15,9 +15,17 @@
 class TrainRegion : public CGraph::GRegion {
 public:
     CBool isHold() override {
-        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        t_param->cur_id++;
-        return t_param->cur_id < t_param->num;
+        auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        if (nullptr == m_param) {
+            CGRAPH_THROW_EXCEPTION("TrainRegion get param exception")
+        }
+
+        m_param->cur_id++;
+        return m_param->cur_id < m_param->train_data.num;
+    }
+
+    CStatus crashed(const CException& ex) override {
+        return CStatus(ex.what());
     }
 };
 

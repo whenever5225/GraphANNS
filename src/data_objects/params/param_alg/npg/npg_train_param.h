@@ -16,17 +16,6 @@ struct NPGTrainParam : public BasicParam<> {
     unsigned R_neighbor = 100;      // size of neighbor set
     unsigned C_neighbor = 200;      // number of visited candidate neighbors when neighbor selection
     unsigned k_init_graph = 20;     // number of neighbors of initial graph
-
-    std::vector<Neighbor> pool;
-    std::vector<std::vector<Neighbor> > pool_m;
-    std::vector<std::vector<Neighbor> > cut_graph;
-
-    unsigned cur_id = 0;
-    typedef std::vector<std::vector<Neighbor> > graph_neighbor;
-    typedef std::vector<std::vector<unsigned> > graph_matrix;
-
-    graph_neighbor graph_n;
-    graph_matrix graph_m;
 };
 
 #endif //GRAPHANNS_NPG_TRAIN_PARAM_H

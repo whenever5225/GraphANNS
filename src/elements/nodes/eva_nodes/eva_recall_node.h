@@ -20,49 +20,48 @@ public:
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode init create param failed")
         }
 
-        auto *e_param = CGRAPH_GET_GPARAM(EvaParam, GA_ALG_NPG_EVA_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(e_param)
-        status = e_param->load(GA_ALG_GROUNDTRUTH_PATH);
+        auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
+        CGRAPH_ASSERT_NOT_NULL(m_param)
+        status = m_param->eva_data.load(GA_ALG_GROUNDTRUTH_PATH);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode init load param failed")
         }
 
-        gt_num_ = e_param->num;
-        gt_dim_ = e_param->dim;
+        gt_num_ = m_param->eva_data.num;
+        gt_dim_ = m_param->eva_data.dim;
         return status;
     }
 
     CStatus run() override {
-        auto *e_param = CGRAPH_GET_GPARAM(EvaParam, GA_ALG_NPG_EVA_PARAM_KEY);
+        auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
-        if (nullptr == e_param || nullptr == s_param) {
+        if (nullptr == m_param || nullptr == s_param) {
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode run get param failed")
         }
 
-        top_k_ = s_param->top_k;
+        unsigned top_k = s_param->top_k;
         int cnt = 0;
         for (unsigned i = 0; i < gt_num_; i++) {
             if (s_param->results[i].empty()) continue;
-            for (unsigned j = 0; j < top_k_; j++) {
+            for (unsigned j = 0; j < top_k; j++) {
                 unsigned k = 0;
-                for (; k < top_k_; k++) {
-                    if (s_param->results[i][j] == e_param->data[i * gt_dim_ + k])
+                for (; k < top_k; k++) {
+                    if (s_param->results[i][j] == m_param->eva_data.data[i * gt_dim_ + k])
                         break;
                 }
-                if (k == top_k_)
+                if (k == top_k)
                     cnt++;
             }
         }
 
-        float acc = 1 - (float) cnt / (float) (gt_num_ * top_k_);
-        CGraph::CGRAPH_ECHO("%d NN accuracy: %f", top_k_, acc);
+        float acc = 1 - (float) cnt / (float) (gt_num_ * top_k);
+        CGraph::CGRAPH_ECHO("%d NN accuracy: %f", top_k, acc);
         return CStatus();
     }
 
 private:
     unsigned gt_num_ = 0;
     unsigned gt_dim_ = 0;
-    unsigned top_k_ = 0;
 };
 
 #endif //GRAPHANNS_EVA_RECALL_NODE_H

@@ -14,23 +14,21 @@
 class C6SeedKGraph : public C6SeedBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
-        if (nullptr == t_param || nullptr == s_param) {
+        if (nullptr == model_ || nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = t_param->num;
-        dim_ = t_param->dim;
-
+        num_ = model_->train_data.num;
+        dim_ = model_->train_data.dim;
         search_L_ = s_param->search_L;
         return DAnnFuncType::ANN_SEARCH;
     }
 
     CStatus search() override {
-        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY);
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
-        if (nullptr == t_param || nullptr == s_param) {
+        if (nullptr == s_param) {
             CGRAPH_RETURN_ERROR_STATUS("C6SeedKGraph search find param failed")
         }
 
@@ -43,13 +41,12 @@ public:
         for (unsigned i = 0; i < search_L_; i++) {
             unsigned id = init_ids[i];
             DistResType dist = 0;
-            dist_op_.calculate(s_param->data + (s_param->query_id * dim_), t_param->data + id * dim_,
+            dist_op_.calculate(model_->search_data.data + (s_param->query_id * dim_), model_->train_data.data + id * dim_,
                               dim_, dim_, dist);
             s_param->sp[i] = NeighborFlag(id, dist, true);
         }
 
         std::sort(s_param->sp.begin(), s_param->sp.begin() + search_L_);
-
         return CStatus();
     }
 };

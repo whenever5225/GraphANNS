@@ -11,5 +11,6 @@
 
 #include "param_alg/alg_param_include.h"
 #include "param_eva/eva_param.h"
+#include "anns_model_param.h"
 
 #endif //GRAPHANNS_PARAMS_INCLUDE_H

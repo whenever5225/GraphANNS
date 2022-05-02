@@ -12,13 +12,13 @@
 #include <fstream>
 
 #include "../../elements_define.h"
-#include "src/CGraph.h"
+#include "../../CGraph/src/CGraph.h"
 
 class LoadIndexNode : public CGraph::GNode {
 public:
     CStatus init() override {
-        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        CGRAPH_ASSERT_NOT_NULL(t_param)
+        auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        CGRAPH_ASSERT_NOT_NULL(m_param)
 
         std::ifstream f_in(GA_ALG_INDEX_PATH, std::ios::binary);
         if (!f_in.is_open()) {
@@ -31,7 +31,7 @@ public:
             if (f_in.eof()) break;
             std::vector<unsigned> tmp(GK);
             f_in.read((char *) tmp.data(), GK * sizeof(unsigned));
-            t_param->graph_m.push_back(tmp);
+            m_param->graph_m.push_back(tmp);
         }
         f_in.close();
         return CStatus();

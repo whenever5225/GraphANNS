@@ -14,13 +14,16 @@
 class C3NeighborNSG : public C3NeighborBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        if (nullptr == t_param) {
+        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        if (nullptr == model_ || nullptr == t_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        dim_ = t_param->dim;
-        data_ = t_param->data;
-        cur_id_ = t_param->cur_id;
+
+        num_ = model_->train_data.num;
+        dim_ = model_->train_data.dim;
+        data_ = model_->train_data.data;
+
         C_ = t_param->C_neighbor;
         R_ = t_param->R_neighbor;
 
@@ -28,18 +31,14 @@ public:
     }
 
     CStatus train() override {
-        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        CGRAPH_ASSERT_NOT_NULL(t_param)
-
         unsigned start = 0;
-        std::sort(t_param->pool.begin(), t_param->pool.end());
+        std::sort(model_->pool.begin(), model_->pool.end());
         result_.clear();
-        if (t_param->pool[start].id_ == cur_id_) start++;
-        result_.push_back(t_param->pool[start]);
+        if (model_->pool[start].id_ == cur_id_) start++;
+        result_.push_back(model_->pool[start]);
 
-        while (result_.size() < R_ && (++start) < t_param->pool.size() &&
-               start < C_) {
-            auto &p = t_param->pool[start];
+        while (result_.size() < R_ && (++start) < model_->pool.size() && start < C_) {
+            auto &p = model_->pool[start];
             unsigned occlude = false;
             for (auto &t: result_) {
                 if (p.id_ == t.id_) {
@@ -59,12 +58,11 @@ public:
         return CStatus();
     }
 
+
     CStatus refreshParam() override {
-        auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        CGRAPH_ASSERT_NOT_NULL(t_param);
         {
-            CGRAPH_PARAM_WRITE_CODE_BLOCK(t_param);
-            t_param->cut_graph.push_back(result_);
+            CGRAPH_PARAM_WRITE_CODE_BLOCK(model_)
+            model_->cut_graph.push_back(result_);
         }
         return CStatus();
     }

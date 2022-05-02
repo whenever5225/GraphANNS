@@ -12,5 +12,7 @@
 #include "neighbors/neighbors_include.h"
 #include "params/params_include.h"
 #include "distances/distances_include.h"
+#include "meta/meta_include.h"
+
 
 #endif //GRAPHANNS_DATA_OBJECTS_H
