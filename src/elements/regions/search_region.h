@@ -15,9 +15,9 @@
 class SearchRegion : public CGraph::GRegion {
 public:
     CBool isHold() override {
-        auto g_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
-        g_param->query_id++;
-        return g_param->query_id < g_param->num;
+        auto s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
+        s_param->query_id++;
+        return s_param->query_id < s_param->num;
     }
 };
 
