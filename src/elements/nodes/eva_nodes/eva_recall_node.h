@@ -22,13 +22,13 @@ public:
 
         auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(m_param)
-        status = m_param->eva_data.load(GA_ALG_GROUNDTRUTH_PATH);
+        status = m_param->eva_meta_.load(GA_ALG_GROUNDTRUTH_PATH);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode init load param failed")
         }
 
-        gt_num_ = m_param->eva_data.num;
-        gt_dim_ = m_param->eva_data.dim;
+        gt_num_ = m_param->eva_meta_.num;
+        gt_dim_ = m_param->eva_meta_.dim;
         return status;
     }
 
@@ -46,7 +46,7 @@ public:
             for (unsigned j = 0; j < top_k; j++) {
                 unsigned k = 0;
                 for (; k < top_k; k++) {
-                    if (s_param->results[i][j] == m_param->eva_data.data[i * gt_dim_ + k])
+                    if (s_param->results[i][j] == m_param->eva_meta_.data[i * gt_dim_ + k])
                         break;
                 }
                 if (k == top_k)

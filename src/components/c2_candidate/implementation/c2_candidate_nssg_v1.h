@@ -14,30 +14,31 @@
 class C2CandidateNSSGV1 : public C2CandidateNSSG {
 public:
     CStatus train() override {
-        model_->pool_m.reserve(num_);
+        model_->pool_m_.reserve(num_);
 
         for (unsigned i = 0; i < num_; i++) {
             std::vector<bool> flags(num_, false);
             flags[i] = true;
-            for (unsigned j = 0; j < model_->graph_n[i].size(); j++) {
+            for (unsigned j = 0; j < model_->graph_n_[i].size(); j++) {
                 if (flags[j]) continue;
                 flags[j] = true;
-                unsigned nid = model_->graph_n[i][j].id_;
-                float ndist = model_->graph_n[i][j].distance_;
-                model_->pool_m[i].emplace_back(nid, ndist);
+                unsigned nid = model_->graph_n_[i][j].id_;
+                float ndist = model_->graph_n_[i][j].distance_;
+                model_->pool_m_[i].emplace_back(nid, ndist);
             }
-            for (unsigned j = 0; j < model_->graph_n[i].size(); j++) {
-                unsigned nid = model_->graph_n[i][j].id_;
-                for (unsigned nn = 0; nn < model_->graph_n[nid].size(); nn++) {
-                    unsigned nnid = model_->graph_n[nid][nn].id_;
+
+            for (unsigned j = 0; j < model_->graph_n_[i].size(); j++) {
+                unsigned nid = model_->graph_n_[i][j].id_;
+                for (unsigned nn = 0; nn < model_->graph_n_[nid].size(); nn++) {
+                    unsigned nnid = model_->graph_n_[nid][nn].id_;
                     if (flags[nnid]) continue;
                     flags[nnid] = true;
                     DistResType dist = 0;
                     dist_op_.calculate(data_ + i * dim_, data_ + nnid * dim_, dim_, dim_, dist);
-                    model_->pool_m[i].emplace_back(nnid, dist);
-                    if (model_->pool_m[i].size() >= L_) break;
+                    model_->pool_m_[i].emplace_back(nnid, dist);
+                    if (model_->pool_m_[i].size() >= L_) break;
                 }
-                if (model_->pool_m[i].size() >= L_) break;
+                if (model_->pool_m_[i].size() >= L_) break;
             }
         }
 

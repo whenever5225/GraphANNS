@@ -20,8 +20,8 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_data.num;
-        dim_ = model_->train_data.dim;
+        num_ = model_->train_meta_.num;
+        dim_ = model_->train_meta_.dim;
         search_L_ = s_param->search_L;
         return DAnnFuncType::ANN_SEARCH;
     }
@@ -41,8 +41,8 @@ public:
         for (unsigned i = 0; i < search_L_; i++) {
             unsigned id = init_ids[i];
             DistResType dist = 0;
-            dist_op_.calculate(model_->search_data.data + (s_param->query_id * dim_), model_->train_data.data + id * dim_,
-                              dim_, dim_, dist);
+            dist_op_.calculate(model_->search_meta_.data + (s_param->query_id * dim_), model_->train_meta_.data + id * dim_,
+                               dim_, dim_, dist);
             s_param->sp[i] = NeighborFlag(id, dist, true);
         }
 

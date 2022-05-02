@@ -20,8 +20,8 @@ public:
             CGRAPH_THROW_EXCEPTION("TrainRegion get param exception")
         }
 
-        m_param->cur_id++;
-        return m_param->cur_id < m_param->train_data.num;
+        m_param->cur_id_++;
+        return m_param->cur_id_ < m_param->train_meta_.num;
     }
 
     CStatus crashed(const CException& ex) override {

@@ -22,15 +22,15 @@ protected:
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic get param failed")
         }
 
-        CStatus status = model_->search_data.load(GA_ALG_QUERY_PATH);
-        status += model_->train_data.load(GA_ALG_BASE_PATH);
+        CStatus status = model_->search_meta_.load(GA_ALG_QUERY_PATH);
+        status += model_->train_meta_.load(GA_ALG_BASE_PATH);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic load param failed")
         }
 
-        CGraph::CGRAPH_ECHO("C6SeedBasic vector path: [%s]", model_->train_data.file_path.c_str());
-        CGraph::CGRAPH_ECHO("C6SeedBasic vector num: [%d]", model_->train_data.num);
-        CGraph::CGRAPH_ECHO("C6SeedBasic vector dim: [%d]", model_->train_data.dim);
+        CGraph::CGRAPH_ECHO("C6SeedBasic vector path: [%s]", model_->train_meta_.file_path.c_str());
+        CGraph::CGRAPH_ECHO("C6SeedBasic vector num: [%d]", model_->train_meta_.num);
+        CGraph::CGRAPH_ECHO("C6SeedBasic vector dim: [%d]", model_->train_meta_.dim);
         return CStatus();
     }
 

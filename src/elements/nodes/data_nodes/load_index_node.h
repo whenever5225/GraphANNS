@@ -31,7 +31,7 @@ public:
             if (f_in.eof()) break;
             std::vector<unsigned> tmp(GK);
             f_in.read((char *) tmp.data(), GK * sizeof(unsigned));
-            m_param->graph_m.push_back(tmp);
+            m_param->graph_m_.push_back(tmp);
         }
         f_in.close();
         return CStatus();

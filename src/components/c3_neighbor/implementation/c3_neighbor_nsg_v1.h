@@ -19,14 +19,14 @@ public:
 
         for (unsigned i = 0; i < num_; i++) {
             unsigned start = 0;
-            std::sort(model_->pool_m[i].begin(), model_->pool_m[i].end());
+            std::sort(model_->pool_m_[i].begin(), model_->pool_m_[i].end());
             std::vector<Neighbor> result;
-            if (model_->pool_m[i][start].id_ == i) start++;
-            result.push_back(model_->pool_m[i][start]);
+            if (model_->pool_m_[i][start].id_ == i) start++;
+            result.push_back(model_->pool_m_[i][start]);
 
             while (result.size() < R_
-                   && (++start) < model_->pool_m[i].size() && start < C_) {
-                auto &p = model_->pool_m[i][start];
+                   && (++start) < model_->pool_m_[i].size() && start < C_) {
+                auto &p = model_->pool_m_[i][start];
                 bool occlude = false;
                 for (const auto &res: result) {
                     if (p.id_ == res.id_) {
@@ -47,7 +47,7 @@ public:
 
             {
                 CGRAPH_PARAM_WRITE_CODE_BLOCK(t_param)
-                model_->cut_graph.push_back(result);
+                model_->cut_graph_.push_back(result);
             }
         }
         return CStatus();

@@ -20,14 +20,14 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_data.num;
-        dim_ = model_->train_data.dim;
-        data_ = model_->train_data.data;
+        num_ = model_->train_meta_.num;
+        dim_ = model_->train_meta_.dim;
+        data_ = model_->train_meta_.data;
 
         search_L_ = s_param->search_L;
         K_ = s_param->top_k;
         query_id_ = s_param->query_id;
-        query_ = model_->search_data.data;
+        query_ = model_->search_meta_.data;
         return DAnnFuncType::ANN_SEARCH;
     }
 
@@ -48,8 +48,8 @@ public:
                 s_param->sp[k].flag_ = false;
                 unsigned n = s_param->sp[k].id_;
 
-                for (unsigned m = 0; m < model_->graph_m[n].size(); ++m) {
-                    unsigned id = model_->graph_m[n][m];
+                for (unsigned m = 0; m < model_->graph_m_[n].size(); ++m) {
+                    unsigned id = model_->graph_m_[n][m];
 
                     if (flags[id]) continue;
                     flags[id] = 1;

@@ -22,14 +22,14 @@ protected:
             CGRAPH_RETURN_ERROR_STATUS("C1InitializationBasic init get param failed")
         }
 
-        CStatus status = model_param->train_data.load(GA_ALG_BASE_PATH);
+        CStatus status = model_param->train_meta_.load(GA_ALG_BASE_PATH);
         if (!status.isOK()) {
             return CStatus("C1InitializationBasic init load param failed : " + std::string(GA_ALG_BASE_PATH));
         }
 
         CGraph::CGRAPH_ECHO("vector path: [%s]", GA_ALG_BASE_PATH);
-        CGraph::CGRAPH_ECHO("vector num: [%d]", model_param->train_data.num);
-        CGraph::CGRAPH_ECHO("vector dim: [%d]", model_param->train_data.dim);
+        CGraph::CGRAPH_ECHO("vector num: [%d]", model_param->train_meta_.num);
+        CGraph::CGRAPH_ECHO("vector dim: [%d]", model_param->train_meta_.dim);
         return CStatus();
     }
 

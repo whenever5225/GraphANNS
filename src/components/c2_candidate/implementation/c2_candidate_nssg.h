@@ -20,43 +20,42 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_data.num;
-        dim_ = model_->train_data.dim;
-        data_ = model_->train_data.data;
-        cur_id_ = model_->cur_id;
+        num_ = model_->train_meta_.num;
+        dim_ = model_->train_meta_.dim;
+        data_ = model_->train_meta_.data;
+        cur_id_ = model_->cur_id_;
 
         L_ = t_param->L_candidate;
         return DAnnFuncType::ANN_TRAIN;
     }
 
-
     CStatus train() override {
-        model_->pool.clear();    // model_ cannot be nullptr, because it is checked in prepareParam()
-        model_->pool.reserve(L_);
+        model_->pool_.clear();    // model_ cannot be nullptr, because it is checked in prepareParam()
+        model_->pool_.reserve(L_);
         std::vector<unsigned> flags(num_, 0);
         flags[cur_id_] = true;
 
-        for (unsigned j = 0; j < model_->graph_n[cur_id_].size(); j++) {
+        for (unsigned j = 0; j < model_->graph_n_[cur_id_].size(); j++) {
             if (flags[j]) continue;
             flags[j] = true;
-            unsigned nid = model_->graph_n[cur_id_][j].id_;
-            float ndist = model_->graph_n[cur_id_][j].distance_;
-            model_->pool.emplace_back(nid, ndist);
+            unsigned nid = model_->graph_n_[cur_id_][j].id_;
+            float ndist = model_->graph_n_[cur_id_][j].distance_;
+            model_->pool_.emplace_back(nid, ndist);
         }
 
-        for (unsigned j = 0; j < model_->graph_n[cur_id_].size(); j++) {
-            unsigned nid = model_->graph_n[cur_id_][j].id_;
-            for (auto & nn : model_->graph_n[nid]) {
+        for (unsigned j = 0; j < model_->graph_n_[cur_id_].size(); j++) {
+            unsigned nid = model_->graph_n_[cur_id_][j].id_;
+            for (auto &nn : model_->graph_n_[nid]) {
                 unsigned nnid = nn.id_;    // nnid is the id of neighbor's neighbor
                 if (flags[nnid]) continue;
                 flags[nnid] = true;
                 DistResType dist = 0;
                 dist_op_.calculate(data_ + cur_id_ * dim_, data_ + nnid * dim_,
                                   dim_, dim_, dist);
-                model_->pool.emplace_back(nnid, dist);
-                if (model_->pool.size() >= L_) break;
+                model_->pool_.emplace_back(nnid, dist);
+                if (model_->pool_.size() >= L_) break;
             }
-            if (model_->pool.size() >= L_) break;
+            if (model_->pool_.size() >= L_) break;
         }
         return CStatus();
     }

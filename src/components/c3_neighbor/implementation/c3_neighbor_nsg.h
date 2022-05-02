@@ -20,9 +20,9 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_data.num;
-        dim_ = model_->train_data.dim;
-        data_ = model_->train_data.data;
+        num_ = model_->train_meta_.num;
+        dim_ = model_->train_meta_.dim;
+        data_ = model_->train_meta_.data;
 
         C_ = t_param->C_neighbor;
         R_ = t_param->R_neighbor;
@@ -32,13 +32,13 @@ public:
 
     CStatus train() override {
         unsigned start = 0;
-        std::sort(model_->pool.begin(), model_->pool.end());
+        std::sort(model_->pool_.begin(), model_->pool_.end());
         result_.clear();
-        if (model_->pool[start].id_ == cur_id_) start++;
-        result_.push_back(model_->pool[start]);
+        if (model_->pool_[start].id_ == cur_id_) start++;
+        result_.push_back(model_->pool_[start]);
 
-        while (result_.size() < R_ && (++start) < model_->pool.size() && start < C_) {
-            auto &p = model_->pool[start];
+        while (result_.size() < R_ && (++start) < model_->pool_.size() && start < C_) {
+            auto &p = model_->pool_[start];
             unsigned occlude = false;
             for (auto &t: result_) {
                 if (p.id_ == t.id_) {
@@ -62,7 +62,7 @@ public:
     CStatus refreshParam() override {
         {
             CGRAPH_PARAM_WRITE_CODE_BLOCK(model_)
-            model_->cut_graph.push_back(result_);
+            model_->cut_graph_.push_back(result_);
         }
         return CStatus();
     }
