@@ -46,8 +46,8 @@ public:
 
         for (unsigned j = 0; j < model_->graph_n[cur_id_].size(); j++) {
             unsigned nid = model_->graph_n[cur_id_][j].id_;
-            for (unsigned nn = 0; nn < model_->graph_n[nid].size(); nn++) {
-                unsigned nnid = model_->graph_n[nid][nn].id_;    // nnid is the id of neighbor's neighbor
+            for (auto & nn : model_->graph_n[nid]) {
+                unsigned nnid = nn.id_;    // nnid is the id of neighbor's neighbor
                 if (flags[nnid]) continue;
                 flags[nnid] = true;
                 DistResType dist = 0;
