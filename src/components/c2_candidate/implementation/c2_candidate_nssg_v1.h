@@ -6,8 +6,8 @@
 @Desc: get candidate neighbors via second-order neighbor propagation (like 'NSSG' algorithm)
 ***************************/
 
-#ifndef GRAPHANNS_C2_CANDIDATE_NSSGV1_H
-#define GRAPHANNS_C2_CANDIDATE_NSSGV1_H
+#ifndef GRAPHANNS_C2_CANDIDATE_NSSG_V1_H
+#define GRAPHANNS_C2_CANDIDATE_NSSG_V1_H
 
 #include "../c2_candidate_basic.h"
 
@@ -45,4 +45,4 @@ public:
     }
 };
 
-#endif //GRAPHANNS_C2_CANDIDATE_NSSGV1_H
+#endif //GRAPHANNS_C2_CANDIDATE_NSSG_V1_H

@@ -18,7 +18,9 @@ public:
         auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
         if (nullptr == m_param || nullptr == s_param) {
-            // throw exception, CGraph can catch this exception
+            /**
+             * throw exception, CGraph can catch this exception automic
+             */
             CGRAPH_THROW_EXCEPTION("SearchRegion isHold get param failed")
         }
 
@@ -26,7 +28,12 @@ public:
         return s_param->query_id < m_param->search_data.num;
     }
 
+
     CStatus crashed(const CException& ex) override {
+        /**
+         * this function can help you catch exception,
+         * and you can transfer your exception info into other error code & error info
+         */
         return CStatus(ex.what());
     }
 };

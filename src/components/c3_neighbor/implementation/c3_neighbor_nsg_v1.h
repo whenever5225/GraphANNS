@@ -6,8 +6,8 @@
 @Desc: edge selection by RNG (a strategy that considers neighbor distribution and is applied to 'NSG', 'HNSW', etc.)
 ***************************/
 
-#ifndef GRAPHANNS_C3_NEIGHBOR_NSGV1_H
-#define GRAPHANNS_C3_NEIGHBOR_NSGV1_H
+#ifndef GRAPHANNS_C3_NEIGHBOR_NSG_V1_H
+#define GRAPHANNS_C3_NEIGHBOR_NSG_V1_H
 
 #include "../c3_neighbor_basic.h"
 
@@ -54,4 +54,4 @@ public:
     }
 };
 
-#endif //GRAPHANNS_C3_NEIGHBOR_NSGV1_H
+#endif //GRAPHANNS_C3_NEIGHBOR_NSG_V1_H
