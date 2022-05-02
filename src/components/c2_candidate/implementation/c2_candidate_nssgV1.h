@@ -11,29 +11,8 @@
 
 #include "../c2_candidate_basic.h"
 
-class C2CandidateNSSGV1 : public C2CandidateBasic {
+class C2CandidateNSSGV1 : public C2CandidateNSSG {
 public:
-    DAnnFuncType prepareParam() override {
-        /**
-         * todo 这个方法的 prepareParam 方法和 C2CandidateNSSG 的完全一致
-         * 如果频繁出现这种情况，是不是需要考虑以下两种方法：
-         * 1，看看是不是所有的 c2节点都这样，是的话，给这个放到 c2_basic里面去
-         * 2，如果不是的，仅是 nssg这种类型的算法是这样的话，是不是再建立一个文件夹，nssg
-         */
-        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
-        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        if (nullptr == model_ || nullptr == t_param) {
-            return DAnnFuncType::ANN_PREPARE_ERROR;
-        }
-
-        num_ = model_->train_data.num;
-        dim_ = model_->train_data.dim;
-        data_ = model_->train_data.data;
-
-        L_ = t_param->L_candidate;
-        return DAnnFuncType::ANN_TRAIN;
-    }
-
     CStatus train() override {
         model_->pool_m.reserve(num_);
 

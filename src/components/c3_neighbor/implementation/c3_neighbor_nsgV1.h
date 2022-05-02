@@ -11,29 +11,8 @@
 
 #include "../c3_neighbor_basic.h"
 
-class C3NeighborNSGV1 : public C3NeighborBasic {
+class C3NeighborNSGV1 : public C3NeighborNSG {
 public:
-    DAnnFuncType prepareParam() override {
-        /**
-         * todo 这个问题跟c2 中的那个问题，是同样的。为啥会写两份同样的代码捏，对吧
-         * 是所有算法，通用，还是针对nsg通用？
-         */
-        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
-        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
-        if (nullptr == model_ || nullptr == t_param) {
-            return DAnnFuncType::ANN_PREPARE_ERROR;
-        }
-
-        num_ = model_->train_data.num;
-        dim_ = model_->train_data.dim;
-        data_ = model_->train_data.data;
-
-        C_ = t_param->C_neighbor;
-        R_ = t_param->R_neighbor;
-
-        return DAnnFuncType::ANN_TRAIN;
-    }
-
     CStatus train() override {
         auto t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(t_param)
