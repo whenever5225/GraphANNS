@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_UTILS_H
 #define GRAPHANNS_UTILS_H
 
-#include "functions/function_include.h"
+#include "function/function_include.h"
 #include "utils_define.h"
 
 #endif //GRAPHANNS_UTILS_H
