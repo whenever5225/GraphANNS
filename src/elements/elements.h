@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_ELEMENTS_H
 #define GRAPHANNS_ELEMENTS_H
 
-#include "distances/distances_include.h"
+#include "elements_define.h"
 #include "nodes/nodes_include.h"
 #include "regions/regions_include.h"
 

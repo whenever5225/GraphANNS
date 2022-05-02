@@ -9,39 +9,36 @@
 #ifndef GRAPHANNS_C3_NEIGHBOR_NSG_H
 #define GRAPHANNS_C3_NEIGHBOR_NSG_H
 
-#include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils_include.h"
 #include "../c3_neighbor_basic.h"
 
 class C3NeighborNSG : public C3NeighborBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        if (nullptr == g_param) {
+        auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        if (nullptr == model_ || nullptr == t_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        dim_ = g_param->dim;
-        data_ = g_param->data;
-        cur_id_ = g_param->cur_id;
-        C_ = g_param->C_neighbor;
-        R_ = g_param->R_neighbor;
+
+        num_ = model_->train_meta_.num;
+        dim_ = model_->train_meta_.dim;
+        data_ = model_->train_meta_.data;
+
+        C_ = t_param->C_neighbor;
+        R_ = t_param->R_neighbor;
 
         return DAnnFuncType::ANN_TRAIN;
     }
 
     CStatus train() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param)
-
         unsigned start = 0;
-        std::sort(g_param->pool.begin(), g_param->pool.end());
+        std::sort(model_->pool_.begin(), model_->pool_.end());
         result_.clear();
-        if (g_param->pool[start].id_ == cur_id_) start++;
-        result_.push_back(g_param->pool[start]);
+        if (model_->pool_[start].id_ == cur_id_) start++;
+        result_.push_back(model_->pool_[start]);
 
-        while (result_.size() < R_ && (++start) < g_param->pool.size() &&
-               start < C_) {
-            auto &p = g_param->pool[start];
+        while (result_.size() < R_ && (++start) < model_->pool_.size() && start < C_) {
+            auto &p = model_->pool_[start];
             unsigned occlude = false;
             for (auto &t: result_) {
                 if (p.id_ == t.id_) {
@@ -49,7 +46,7 @@ public:
                     break;
                 }
                 DistResType djk = 0;
-                eucDist.calculate(data_ + (t.id_ * dim_),
+                dist_op_.calculate(data_ + (t.id_ * dim_),
                                   data_ + p.id_ * dim_, dim_, dim_, djk);
                 if (djk < p.distance_) {
                     occlude = true;
@@ -61,12 +58,11 @@ public:
         return CStatus();
     }
 
+
     CStatus refreshParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param);
         {
-            CGRAPH_PARAM_WRITE_CODE_BLOCK(g_param);
-            g_param->cut_graph.push_back(result_);
+            CGRAPH_PARAM_WRITE_CODE_BLOCK(model_)
+            model_->cut_graph_.push_back(result_);
         }
         return CStatus();
     }

@@ -9,17 +9,15 @@
 #ifndef GRAPHANNS_C3_NEIGHBOR_BASIC_H
 #define GRAPHANNS_C3_NEIGHBOR_BASIC_H
 
-#include "../../CGraph/src/CGraph.h"
+#include "../components_basic.h"
+#include "../../utils/utils.h"
 
-class C3NeighborBasic : public CGraph::DAnnNode {
+class C3NeighborBasic : public ComponentsBasic {
 protected:
-    unsigned num_ = 0;  // number of vector
-    unsigned dim_ = 0;  // dimensionality of vector
-    VecValType *data_ = nullptr;   // vector data
     unsigned cur_id_ = 0;  // data id being processed
     unsigned C_ = 0;
     unsigned R_ = 0;
-    std::vector<SimpleNeighbor> result_;
+    std::vector<Neighbor> result_;
 };
 
 #endif //GRAPHANNS_C3_NEIGHBOR_BASIC_H

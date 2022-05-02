@@ -10,42 +10,43 @@
 #define GRAPHANNS_C6_SEED_KGRAPH_H
 
 #include "../c6_seed_basic.h"
-#include "../../../elements/nodes/param_nodes/param_include.h"
-#include "../../../utils/utils_include.h"
 
 class C6SeedKGraph : public C6SeedBasic {
 public:
     DAnnFuncType prepareParam() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        if (nullptr == g_param) {
+        model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
+        if (nullptr == model_ || nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
-        num_ = g_param->num;
-        dim_ = g_param->dim;
-        search_L_ = g_param->search_L;
-        return DAnnFuncType::ANN_TRAIN;
+
+        num_ = model_->train_meta_.num;
+        dim_ = model_->train_meta_.dim;
+        search_L_ = s_param->search_L;
+        return DAnnFuncType::ANN_SEARCH;
     }
 
-    CStatus train() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        CGRAPH_ASSERT_NOT_NULL(g_param)
-        g_param->sp.reserve(search_L_ + 1);
+    CStatus search() override {
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
+        if (nullptr == s_param) {
+            CGRAPH_RETURN_ERROR_STATUS("C6SeedKGraph search find param failed")
+        }
 
+        s_param->sp.reserve(search_L_ + 1);
         std::vector<unsigned> init_ids(search_L_);
 
         GenRandomID(init_ids.data(), num_, search_L_);
         std::vector<char> flags(num_);
-        memset(flags.data(), 0, g_param->num * sizeof(char));
+        memset(flags.data(), 0, num_ * sizeof(char));
         for (unsigned i = 0; i < search_L_; i++) {
             unsigned id = init_ids[i];
             DistResType dist = 0;
-            eucDist.calculate(g_param->query + (g_param->query_id * dim_), g_param->data + id * dim_,
-                              dim_, dim_, dist);
-            g_param->sp[i] = SearchPool(id, dist, true);
+            dist_op_.calculate(model_->search_meta_.data + (s_param->query_id * dim_), model_->train_meta_.data + id * dim_,
+                               dim_, dim_, dist);
+            s_param->sp[i] = NeighborFlag(id, dist, true);
         }
 
-        std::sort(g_param->sp.begin(), g_param->sp.begin() + search_L_);
-
+        std::sort(s_param->sp.begin(), s_param->sp.begin() + search_L_);
         return CStatus();
     }
 };

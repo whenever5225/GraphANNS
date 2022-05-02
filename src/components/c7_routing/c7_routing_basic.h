@@ -9,52 +9,47 @@
 #ifndef GRAPHANNS_C7_ROUTING_BASIC_H
 #define GRAPHANNS_C7_ROUTING_BASIC_H
 
-#include "../../CGraph/src/CGraph.h"
+#include "../components_basic.h"
+#include "../../utils/utils.h"
 
-class C7RoutingBasic : public CGraph::DAnnNode {
+class C7RoutingBasic : public ComponentsBasic {
 protected:
-    unsigned num_ = 0;  // number of vector
-    unsigned dim_ = 0;  // dimensionality of vector
-    VecValType *data_ = nullptr;   // vector data
+    static int InsertIntoPool(NeighborFlag *addr, unsigned K, const NeighborFlag& nn) {
+        // find the location to insert
+        int left = 0, right = K - 1;
+        if (addr[left].distance_ > nn.distance_) {
+            memmove((char *) &addr[left + 1], &addr[left], K * sizeof(NeighborFlag));
+            addr[left] = nn;
+            return left;
+        }
+        if (addr[right].distance_ < nn.distance_) {
+            addr[K] = nn;
+            return K;
+        }
+        while (left < right - 1) {
+            int mid = (left + right) / 2;
+            if (addr[mid].distance_ > nn.distance_) right = mid;
+            else left = mid;
+        }
+        //check equal ID
+
+        while (left > 0) {
+            if (addr[left].distance_ < nn.distance_) break;
+            if (addr[left].id_ == nn.id_) return K + 1;
+            left--;
+        }
+        if (addr[left].id_ == nn.id_ || addr[right].id_ == nn.id_) return K + 1;
+        memmove((char *) &addr[right + 1], &addr[right], (K - right) * sizeof(NeighborFlag));
+        addr[right] = nn;
+        return right;
+    }
+
+protected:
     unsigned search_L_; // candidate pool size for search
     unsigned K_;    // top-k for search
     VecValType *query_ = nullptr;    // query data
     unsigned query_id_; // current query id
     std::vector<unsigned> res_; // current query result
-
-    int InsertIntoPool(SearchPool *addr, unsigned K, SearchPool nn) {
-        // find the location to insert
-        left_ = 0, right_ = K - 1;
-        if (addr[left_].distance > nn.distance) {
-            memmove((char *) &addr[left_ + 1], &addr[left_], K * sizeof(SearchPool));
-            addr[left_] = nn;
-            return left_;
-        }
-        if (addr[right_].distance < nn.distance) {
-            addr[K] = nn;
-            return K;
-        }
-        while (left_ < right_ - 1) {
-            int mid = (left_ + right_) / 2;
-            if (addr[mid].distance > nn.distance) right_ = mid;
-            else left_ = mid;
-        }
-        //check equal ID
-
-        while (left_ > 0) {
-            if (addr[left_].distance < nn.distance) break;
-            if (addr[left_].id == nn.id) return K + 1;
-            left_--;
-        }
-        if (addr[left_].id == nn.id || addr[right_].id == nn.id) return K + 1;
-        memmove((char *) &addr[right_ + 1], &addr[right_], (K - right_) * sizeof(SearchPool));
-        addr[right_] = nn;
-        return right_;
-    }
-
-private:
-    int right_ = 0;
-    int left_ = 0;
 };
 
 #endif //GRAPHANNS_C7_ROUTING_BASIC_H

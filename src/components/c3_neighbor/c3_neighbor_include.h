@@ -10,6 +10,6 @@
 #define GRAPHANNS_C3_NEIGHBOR_INCLUDE_H
 
 #include "implementation/c3_neighbor_nsg.h"
-#include "implementation/c3_neighbor_nsgV1.h"
+#include "implementation/c3_neighbor_nsg_v1.h"
 
 #endif //GRAPHANNS_C3_NEIGHBOR_INCLUDE_H

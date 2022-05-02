@@ -5,8 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(CGraph)
 
-file(GLOB_RECURSE SRC_LIST "CGraph/src/*.cpp")
-
+file(GLOB_RECURSE CGRAPH_SRC_LIST "CGraph/src/*.cpp")
 
 IF(APPLE)
     # It does not support automatic generation of session information for non-Mac platform
@@ -19,4 +18,11 @@ ELSEIF(UNIX)
     add_definitions(-D_ENABLE_LIKELY_)
 ENDIF()
 
-add_executable(GraphANNS ${SRC_LIST} main.cpp)
+set(TUTORIAL_LIST
+        T-siftsmall
+        S-siftsmall
+        )
+
+foreach(tut ${TUTORIAL_LIST})
+    add_executable(${tut} ${tut}.cpp ${CGRAPH_SRC_LIST})
+endforeach()

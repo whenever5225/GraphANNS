@@ -9,14 +9,11 @@
 #ifndef GRAPHANNS_C2_CANDIDATE_BASIC_H
 #define GRAPHANNS_C2_CANDIDATE_BASIC_H
 
-#include "../../CGraph/src/CGraph.h"
-#include "../../utils/utils_include.h"
+#include "../components_basic.h"
+#include "../../utils/utils.h"
 
-class C2CandidateBasic : public CGraph::DAnnNode {
+class C2CandidateBasic : public ComponentsBasic {
 protected:
-    unsigned num_ = 0;  // number of vector
-    unsigned dim_ = 0;  // dimensionality of vector
-    VecValType *data_ = nullptr;   // vector data
     unsigned cur_id_ = 0;  // data id being processed
     unsigned L_ = 0;
 };

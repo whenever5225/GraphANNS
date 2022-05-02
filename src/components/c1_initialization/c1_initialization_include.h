@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_C1_INITIALIZATION_INCLUDE_H
 #define GRAPHANNS_C1_INITIALIZATION_INCLUDE_H
 
-#include "implementation/c1_initialization_kraph.h"
+#include "implementation/c1_initialization_kgraph.h"
 #include "implementation/c1_initialization_vamana.h"
 
 #endif //GRAPHANNS_C1_INITIALIZATION_INCLUDE_H

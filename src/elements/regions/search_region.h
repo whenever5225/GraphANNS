@@ -10,14 +10,31 @@
 #define GRAPHANNS_SEARCH_REGION_H
 
 #include "src/CGraph.h"
-#include "../nodes/param_nodes/param_include.h"
+#include "../elements_define.h"
 
 class SearchRegion : public CGraph::GRegion {
 public:
     CBool isHold() override {
-        auto g_param = CGRAPH_GET_GPARAM(ParamNPG, GRAPH_INFO_PARAM_KEY);
-        g_param->query_id++;
-        return g_param->query_id < g_param->q_num;
+        auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
+        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
+        if (nullptr == m_param || nullptr == s_param) {
+            /**
+             * throw exception, CGraph can catch this exception automic
+             */
+            CGRAPH_THROW_EXCEPTION("SearchRegion isHold get param failed")
+        }
+
+        s_param->query_id++;
+        return s_param->query_id < m_param->search_meta_.num;
+    }
+
+
+    CStatus crashed(const CException& ex) override {
+        /**
+         * this function can help you catch exception,
+         * and you can transfer your exception info into other error code & error info
+         */
+        return CStatus(ex.what());
     }
 };
 

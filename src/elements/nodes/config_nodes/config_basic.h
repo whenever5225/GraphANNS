@@ -10,6 +10,7 @@
 #define GRAPHANNS_CONFIG_BASIC_H
 
 #include "../../CGraph/src/CGraph.h"
+#include "../../../graph_anns_define.h"
 
 class ConfigBasic : public CGraph::GNode {
 

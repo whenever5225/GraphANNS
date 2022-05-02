@@ -10,6 +10,6 @@
 #define GRAPHANNS_C2_CANDIDATE_INCLUDE_H
 
 #include "implementation/c2_candidate_nssg.h"
-#include "implementation/c2_candidate_nssgV1.h"
+#include "implementation/c2_candidate_nssg_v1.h"
 
 #endif //GRAPHANNS_C2_CANDIDATE_INCLUDE_H
