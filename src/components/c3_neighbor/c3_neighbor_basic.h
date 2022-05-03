@@ -24,8 +24,9 @@ protected:
 protected:
     /**
      * todo i am not sure weather this function only need in c3
-     * if c2 and c3 both need this function, please move it into /utils/function/***
-     * and then, u may need pass `dist_op_` as a param
+     * if c2 and c3 both need this function, please move it into /utils/function/xxx
+     * and then, u may need pass `dist_op_` as a function param,
+     * just like `const DistCalcType& calc_op`;
      *
      * @desc check weather q in v1 & v2 lune area.
      * return true(represent q in lune area) if q is real in, and calc function work fine
