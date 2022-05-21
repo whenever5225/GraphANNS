@@ -15,5 +15,5 @@ set(TUTORIAL_LIST
         )
 
 foreach(tut ${TUTORIAL_LIST})
-    add_executable(${tut} ${tut}.cpp ${CGRAPH_SRC_LIST})
+    add_executable(${tut} ${tut}.cpp ${CGRAPH_SRC_LIST} src/components/c1_initialization/implementation/c1_initialization_nndescent.h)
 endforeach()
