@@ -7,16 +7,7 @@ include_directories(CGraph)
 
 file(GLOB_RECURSE CGRAPH_SRC_LIST "CGraph/src/*.cpp")
 
-IF(APPLE)
-    # It does not support automatic generation of session information for non-Mac platform
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64 -finline-functions -Wno-deprecated-declarations")
-    add_definitions(-D_GENERATE_SESSION_)
-    add_definitions(-D_ENABLE_LIKELY_)
-ELSEIF(UNIX)
-    # Adding multi-threads to linux platform
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -pthread -Wno-format-overflow")
-    add_definitions(-D_ENABLE_LIKELY_)
-ENDIF()
+include(CGraph/cmake/CGraph-env-include.cmake)
 
 set(TUTORIAL_LIST
         T-siftsmall
@@ -26,3 +17,5 @@ set(TUTORIAL_LIST
 foreach(tut ${TUTORIAL_LIST})
     add_executable(${tut} ${tut}.cpp ${CGRAPH_SRC_LIST})
 endforeach()
+
+# add_subdirectory(anns-pipeline/3rd-annoy)
