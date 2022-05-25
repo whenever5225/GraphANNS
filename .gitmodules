@@ -10,21 +10,9 @@
 [submodule "3rd-anns/hnswlib"]
 	path = 3rd-anns/hnswlib
 	url = git@github.com:nmslib/hnswlib.git
-[submodule "3rd-anns/n2"]
-	path = 3rd-anns/n2
-	url = git@github.com:kakao/n2.git
 [submodule "3rd-anns/mrpt"]
 	path = 3rd-anns/mrpt
 	url = git@github.com:vioshyvo/mrpt.git
 [submodule "3rd-anns/kgraph"]
 	path = 3rd-anns/kgraph
 	url = git@github.com:aaalgo/kgraph.git
-[submodule "3rd-anns/DiskANN"]
-	path = 3rd-anns/DiskANN
-	url = git@github.com:microsoft/DiskANN.git
-[submodule "3rd-anns/SSG"]
-	path = 3rd-anns/SSG
-	url = git@github.com:ZJULearning/SSG.git
-[submodule "3rd-anns/NGT"]
-	path = 3rd-anns/NGT
-	url = git@github.com:yahoojapan/NGT.git
