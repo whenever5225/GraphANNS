@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2.5)
+cmake_minimum_required(VERSION 3.5.0)
 project(3rd-annoy-pipeline)
 
 set(CMAKE_CXX_STANDARD 17)

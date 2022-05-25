@@ -15,7 +15,7 @@ set(TUTORIAL_LIST
         )
 
 foreach(tut ${TUTORIAL_LIST})
-    add_executable(${tut} ${tut}.cpp ${CGRAPH_SRC_LIST} src/components/c1_initialization/implementation/c1_initialization_nndescent.h)
+    add_executable(${tut} ${tut}.cpp ${CGRAPH_SRC_LIST})
 endforeach()
 
-# add_subdirectory(benchmark/3rd-annoy)
+# add_subdirectory(anns-pipeline/3rd-annoy)
