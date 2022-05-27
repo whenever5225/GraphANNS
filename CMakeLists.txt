@@ -5,10 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 #### [required] add CGraph dependence ####
-include_directories(./CGraph)
-file(GLOB_RECURSE CGRAPH_SRC_LIST "./CGraph/src/*.cpp")
-include(./CGraph/cmake/CGraph-env-include.cmake)
-
+include(cmake/GA-CGraph-depend.cmake)
 
 #### [optional] add Eigen3 dependence ####
 # include(cmake/GA-Eigen3-depend.cmake)
