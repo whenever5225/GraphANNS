@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_ANNS_MODEL_PARAM_H
 #define GRAPHANNS_ANNS_MODEL_PARAM_H
 
-#include "../../../../CGraph/src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 #include "../neighbors/neighbors_include.h"
 #include "../meta/meta_include.h"
 

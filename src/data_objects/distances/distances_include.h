@@ -10,6 +10,7 @@
 #define GRAPHANNS_DISTANCES_INCLUDE_H
 
 #include "euclidean_distance.h"
+#include "euclidean_distance_eigen.h"
 
 using VecValType = float;   // vector value type
 using DistResType = float;  // distances value type

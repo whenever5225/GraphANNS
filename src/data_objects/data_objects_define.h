@@ -9,6 +9,6 @@
 #ifndef GRAPHANNS_DATA_OBJECTS_DEFINE_H
 #define GRAPHANNS_DATA_OBJECTS_DEFINE_H
 
-#include "../CGraph/src/CGraph.h"
+#include "../../CGraph/src/CGraph.h"
 
 #endif //GRAPHANNS_DATA_OBJECTS_DEFINE_H

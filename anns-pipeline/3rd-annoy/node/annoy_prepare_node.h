@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_ANNOY_PREPARE_NODE_H
 #define GRAPHANNS_ANNOY_PREPARE_NODE_H
 
-#include "src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 
 #include "../param/annoy_param.h"
 

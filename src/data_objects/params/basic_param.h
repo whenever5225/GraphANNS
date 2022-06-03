@@ -14,7 +14,7 @@
 
 #include "../../utils/utils.h"
 #include "params_define.h"
-#include "../../../../CGraph/src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 #include "../../graph_anns_define.h"
 
 template<typename T = VecValType>

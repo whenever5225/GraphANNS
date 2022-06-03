@@ -11,7 +11,7 @@
 
 #include <fstream>
 
-#include "src/CGraph.h"
+#include "../../../../CGraph/src/CGraph.h"
 #include "../../elements_define.h"
 
 class SaveIndexNode : public CGraph::GNode {

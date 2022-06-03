@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_EUCLIDEAN_DISTANCE_H
 #define GRAPHANNS_EUCLIDEAN_DISTANCE_H
 
-#include "src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 
 /**
  * Euclidean distances calculation
@@ -17,7 +17,7 @@
  * @tparam needSqrt
  */
 
-template<typename TVec = float, typename TRes = TVec, const int needSqrt = false>
+template<typename TVec = float, typename TRes = TVec, const bool needSqrt = false>
 class EuclideanDistance : public CGraph::UDistance<TVec, TRes> {
 public:
     CStatus calc(const TVec *a, const TVec *b, CSize dim1, CSize dim2, TRes &res, CVoidPtr ext) override {
@@ -52,7 +52,7 @@ public:
         }
 
         if (0 == dim1 * dim2 || dim1 != dim2) {
-            return CStatus("input dim error");
+            CGRAPH_RETURN_ERROR_STATUS("input dim error");
         }
 
         return CStatus();
