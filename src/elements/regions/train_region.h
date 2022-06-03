@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_TRAIN_REGION_H
 #define GRAPHANNS_TRAIN_REGION_H
 
-#include "src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 #include "../elements_define.h"
 
 class TrainRegion : public CGraph::GRegion {

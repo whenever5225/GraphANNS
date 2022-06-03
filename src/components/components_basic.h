@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_COMPONENTS_BASIC_H
 #define GRAPHANNS_COMPONENTS_BASIC_H
 
-#include "../../../CGraph/src/CGraph.h"
+#include "../../CGraph/src/CGraph.h"
 #include "../utils/utils.h"
 
 class ComponentsBasic : public CGraph::DAnnNode {

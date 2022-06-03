@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_SEARCH_REGION_H
 #define GRAPHANNS_SEARCH_REGION_H
 
-#include "src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 #include "../elements_define.h"
 
 class SearchRegion : public CGraph::GRegion {

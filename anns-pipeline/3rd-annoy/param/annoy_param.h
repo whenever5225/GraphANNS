@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_ANNOY_PARAM_H
 #define GRAPHANNS_ANNOY_PARAM_H
 
-#include "src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 
 #include "../annoy_define.h"
 

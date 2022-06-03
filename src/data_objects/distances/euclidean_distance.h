@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_EUCLIDEAN_DISTANCE_H
 #define GRAPHANNS_EUCLIDEAN_DISTANCE_H
 
-#include "src/CGraph.h"
+#include "../../../CGraph/src/CGraph.h"
 
 /**
  * Euclidean distances calculation

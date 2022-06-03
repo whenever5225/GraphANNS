@@ -9,7 +9,7 @@
 #ifndef GRAPHANNS_EVA_PARAM_H
 #define GRAPHANNS_EVA_PARAM_H
 
-#include "src/CGraph.h"
+#include "../../../../CGraph/src/CGraph.h"
 #include "../basic_param.h"
 
 struct EvaParam : public BasicParam<unsigned > {
