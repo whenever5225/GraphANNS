@@ -37,8 +37,7 @@ public:
     }
 
     CStatus train() override {
-        CGraph::CGRAPH_ECHO("AnnoyAlgoNode train start ... ");
-        auto param = CGRAPH_GET_GPARAM(AnnoyParam, ANNOY_PARAM_KEY);
+        auto param = CGRAPH_GET_GPARAM(AnnoyParam, ANNOY_PARAM_KEY)
         if (nullptr == param || nullptr == annoy_model_) {
             CGRAPH_RETURN_ERROR_STATUS("AnnoyAlgoNode train input is nullptr")
         }
@@ -57,20 +56,16 @@ public:
             CGRAPH_RETURN_ERROR_STATUS("AnnoyAlgoNode train save model failed");
         }
 
-        CGraph::CGRAPH_ECHO("AnnoyAlgoNode train finish ... ");
         return CStatus();
     }
 
     CStatus search() override {
-        CGraph::CGRAPH_ECHO("AnnoyAlgoNode search start ... ");
         auto param = CGRAPH_GET_GPARAM(AnnoyParam, ANNOY_PARAM_KEY);
         if (nullptr == param || nullptr == annoy_model_) {
             CGRAPH_RETURN_ERROR_STATUS("AnnoyAlgoNode search input is nullptr")
         }
 
         annoy_model_->get_nns_by_vector(param->query_.data(), ANNOY_TOP_K, param->search_k_, &(param->candidate_), &(param->distance_));
-
-        CGraph::CGRAPH_ECHO("AnnoyAlgoNode search finish ... ");
         return CStatus();
     }
 

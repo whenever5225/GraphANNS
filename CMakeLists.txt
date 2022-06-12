@@ -23,3 +23,4 @@ endforeach()
 
 #### [optional] add 3rd-party anns pipeline ####
 # add_subdirectory(anns-pipeline/3rd-annoy)
+# add_subdirectory(anns-pipeline/3rd-hnsw)
