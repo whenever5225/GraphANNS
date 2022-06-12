@@ -16,7 +16,6 @@
 class AnnoyShowNode : public CGraph::GNode {
 public:
     CStatus run() override {
-        CGraph::CGRAPH_ECHO("AnnoyShowNode start ... ");
         auto param = CGRAPH_GET_GPARAM(AnnoyParam, ANNOY_PARAM_KEY);
         if (nullptr == param) {
             CGRAPH_RETURN_ERROR_STATUS("AnnoyShowNode run AnnoyParam is null")
@@ -26,7 +25,6 @@ public:
             printf("==== [%d] candidate [%d], distance is [%f] ==== \n", i, param->candidate_[i], param->distance_[i]);
         }
 
-        CGraph::CGRAPH_ECHO("AnnoyShowNode finish ... ");
         return CStatus();
     }
 };

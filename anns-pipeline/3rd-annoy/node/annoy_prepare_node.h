@@ -16,7 +16,6 @@
 class AnnoyPrepareNode : public CGraph::GNode {
 public:
     CStatus run() override {
-        CGraph::CGRAPH_ECHO("AnnoyPrepareNode start ... ");
         auto param = CGRAPH_GET_GPARAM(AnnoyParam, ANNOY_PARAM_KEY);
         if (nullptr == param) {
             CGRAPH_RETURN_ERROR_STATUS("AnnoyPrepareNode run input is nullptr")
@@ -30,7 +29,6 @@ public:
             CGraph::URandom<ANNOY_DIST_TYPE, ANNOY_QUERY_RANDOM_SEED>::generate(param->query_, param->dim_, ANNOY_MIN_VALUE, ANNOY_MAX_VALUE);
         }
 
-        CGraph::CGRAPH_ECHO("AnnoyPrepareNode finish ... ");
         return CStatus();
     }
 };
