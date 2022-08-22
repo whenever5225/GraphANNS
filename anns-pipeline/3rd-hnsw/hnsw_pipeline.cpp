@@ -1,16 +1,16 @@
 /***************************
 @Author: Chunel
 @Contact: chunel@foxmail.com
-@File: annoy_pipeline.cpp
-@Time: 2022/5/21 15:12
+@File: hnsw_pipeline.cpp
+@Time: 2022/6/4 00:51
 @Desc: 
 ***************************/
 
-#include "annoy_include.h"
+#include "hnsw_include.h"
 
 using namespace CGraph;
 
-void annoy_pipeline() {
+void hnsw_pipeline() {
     GElementPtr prepare, algo, show = nullptr;
     auto pipeline = GPipelineFactory::create();
 
@@ -19,24 +19,17 @@ void annoy_pipeline() {
      * please run train mode before search.
      * param in [ANN_TRAIN, ANN_SEARCH]
      */
-    ANNOY_FUNC_TYPE = DAnnFuncType::ANN_TRAIN;
+    HNSW_FUNC_TYPE = DAnnFuncType::ANN_TRAIN;
 
-    /**
-     * build annoy pipeline
-     * many other param is also given in `annoy_define.h`
-     */
-    CStatus status = pipeline->registerGElement<AnnoyPrepareNode>(&prepare, {}, "prepare");
-    status += pipeline->registerGElement<AnnoyAlgoNode>(&algo, {prepare}, "algo");
-    status += pipeline->registerGElement<AnnoyShowNode>(&show, {algo}, "show");
+    CStatus status = pipeline->registerGElement<HnswPrepareNode>(&prepare, {}, "prepare");
+    status += pipeline->registerGElement<HnswAlgoNode>(&algo, {prepare}, "algo");
+    status += pipeline->registerGElement<HnswShowNode>(&show, {algo}, "show");
 
     /**
      * add trace aspect for all element in this pipeline
      */
     pipeline->addGAspect<TraceAspect>();
 
-    /**
-     * run this annoy pipeline
-     */
     status += pipeline->process();
     if (!status.isOK()) {
         printf("error code is [%d], info is [%s]", status.getCode(), status.getInfo().c_str());
@@ -45,8 +38,6 @@ void annoy_pipeline() {
     GPipelineFactory::clear();
 }
 
-
 int main() {
-    annoy_pipeline();
-    return 0;
+    hnsw_pipeline();
 }
