@@ -13,15 +13,8 @@
 
 struct NeighborFlag : public Neighbor {
 public:
+    explicit NeighborFlag() : Neighbor(), flag_(false) {}
     explicit NeighborFlag(unsigned id, DistResType distance, bool f) : Neighbor(id, distance), flag_(f) {}
-
-    inline bool operator<(const NeighborFlag &other) const {
-        return distance_ < other.distance_;
-    }
-
-    inline bool operator>(const NeighborFlag &other) const {
-        return distance_ > other.distance_;
-    }
 
 public:
     bool flag_;

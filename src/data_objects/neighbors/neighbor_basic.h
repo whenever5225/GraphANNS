@@ -13,7 +13,8 @@
 
 struct Neighbor {
 public:
-    Neighbor(unsigned id, DistResType distance) : id_{id}, distance_{distance} {}
+    explicit Neighbor() : id_(-1), distance_(0) {}
+    explicit Neighbor(unsigned id, DistResType distance) : id_{id}, distance_{distance} {}
 
     inline bool operator<(const Neighbor &other) const {
         return distance_ < other.distance_;
