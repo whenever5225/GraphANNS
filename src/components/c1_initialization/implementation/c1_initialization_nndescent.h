@@ -131,8 +131,8 @@ protected:
         return CStatus();
     }
 
-    float eval_quality(std::vector<unsigned> &ctrl_points,
-                       std::vector<std::vector<unsigned>> &knn_set) {
+    float eval_quality(const std::vector<unsigned> &ctrl_points,
+                       const std::vector<std::vector<unsigned>> &knn_set) {
         float mean_acc = 0;
         unsigned ctrl_points_size = ctrl_points.size();
         for (unsigned i = 0; i < ctrl_points_size; i++) {
@@ -199,10 +199,9 @@ protected:
      */
     CStatus mutual_insert(unsigned pro_id, unsigned cur_id, unsigned nn_type) {
         for (unsigned const j: graph_nn_[nn_type][pro_id]) {
-            if (nn_type == NN_NEW) {
-                if (cur_id < j) bi_insert(cur_id, j);
-            } else if (nn_type == NN_OLD) {
-                if (cur_id != j) bi_insert(cur_id, j);
+            if ((NN_NEW == nn_type && cur_id < j)
+                 || (NN_OLD == nn_type && cur_id != j)) {
+                bi_insert(cur_id, j);
             }
         }
         return CStatus();
@@ -318,7 +317,6 @@ protected:
                     std::vector<std::vector<unsigned>> &knn_set) {
         CStatus status;
         for (unsigned it = 0; it < iter_; it++) {
-
             status += join_neighbor();    // neighbors join each other
 
             status += update_neighbor();    // update candidate neighbors for neighbors join
