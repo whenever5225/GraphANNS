@@ -57,14 +57,14 @@ public:
 
         status += generate_sample_set(sample_points, knn_set);    // calculate exact knn set of sample point id
 
-        nn_descent(sample_points, knn_set);    // update points' neighbors by nn-descent
+        status += nn_descent(sample_points, knn_set);    // update points' neighbors by nn-descent
 
         return status;
     }
 
     CStatus refreshParam() override {
         for (size_t i = 0; i < num_; i++) {
-            unsigned size = std::min((unsigned)graph_pool_[i].size(), out_degree_);
+            unsigned size = std::min((unsigned) graph_pool_[i].size(), out_degree_);
             for (unsigned j = 0; j < size; j++) {
                 model_->graph_n_[i].emplace_back(Neighbor(graph_pool_[i][j].id_, graph_pool_[i][j].distance_));
             }
@@ -137,17 +137,15 @@ protected:
         unsigned ctrl_points_size = ctrl_points.size();
         for (unsigned i = 0; i < ctrl_points_size; i++) {
             unsigned acc = 0;
-            auto &g = graph_pool_[ctrl_points[i]];
-            auto &v = knn_set[i];
-            for (auto &j: g) {
-                for (unsigned int k: v) {
+            for (auto &j: graph_pool_[ctrl_points[i]]) {
+                for (unsigned int k: knn_set[i]) {
                     if (j.id_ == k) {
                         acc++;
                         break;
                     }
                 }
             }
-            mean_acc += ((float) acc / (float) v.size());
+            mean_acc += ((float) acc / (float) knn_set[i].size());
         }
 
         return mean_acc / (float) ctrl_points_size;
@@ -170,7 +168,8 @@ protected:
         unsigned cur_min_size = std::min(cur_pool_size, pool_size_);
         graph_pool_[pro_id].resize(cur_min_size + 1);
 
-        InsertIntoPool(graph_pool_[pro_id].data(), cur_min_size, NeighborFlag(neigh_id, dist, true));
+        InsertIntoPool(graph_pool_[pro_id].data(), cur_min_size,
+                       NeighborFlag(neigh_id, dist, true));
 
         return CStatus();
     }
@@ -190,34 +189,46 @@ protected:
         return CStatus();
     }
 
-    CStatus join_neighbor() {
-        for (unsigned n = 0; n < num_; n++) {
-            for (unsigned const i: graph_nn_[NN_NEW][n]) {
-                for (unsigned const j: graph_nn_[NN_NEW][n]) {
-                    if (i < j) {
-                        bi_insert(i, j);
-                    }
-                }
-                for (unsigned const j: graph_nn_[NN_OLD][n]) {
-                    if (i != j) {
-                        bi_insert(i, j);
-                    }
-                }
+    /**
+     * obtain a new id j from nn_new or nn_old,
+     * satisfying cur_id and j have not been inserted each other
+     * @param pro_id
+     * @param cur_id
+     * @param nn_type: NN_NEW and NN_OLD
+     * @return
+     */
+    CStatus mutual_insert(unsigned pro_id, unsigned cur_id, unsigned nn_type) {
+        for (unsigned const j: graph_nn_[nn_type][pro_id]) {
+            if (nn_type == NN_NEW) {
+                if (cur_id < j) bi_insert(cur_id, j);
+            } else if (nn_type == NN_OLD) {
+                if (cur_id != j) bi_insert(cur_id, j);
             }
         }
         return CStatus();
+    }
+
+    CStatus join_neighbor() {
+        CStatus status;
+        for (unsigned n = 0; n < num_; n++) {
+            for (unsigned const i: graph_nn_[NN_NEW][n]) {
+                status += mutual_insert(n, i, NN_NEW);
+                status += mutual_insert(n, i, NN_OLD);
+            }
+        }
+        return status;
     }
 
     /**
      *
      * @param pro_id
      * @param neigh_id
-     * @param rnn_type : NN_NEW and so on
+     * @param rnn_type : RNN_NEW and RNN_OLD
      * @return
      */
     CStatus generate_reverse_neighbor(unsigned pro_id, unsigned neigh_id, unsigned rnn_type) {
         if (graph_nn_[rnn_type][neigh_id].size() < rnn_size_) {
-            graph_nn_[rnn_type][neigh_id].push_back(pro_id);
+            graph_nn_[rnn_type][neigh_id].emplace_back(pro_id);
         } else {
             unsigned int pos = random() % rnn_size_;
             graph_nn_[rnn_type][neigh_id][pos] = pro_id;
@@ -229,13 +240,20 @@ protected:
     CStatus shuffle_reverse_neighbor(std::vector<unsigned> rnn) const {
         if (rnn_size_ && rnn.size() > rnn_size_) {
             auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-            std::shuffle(rnn.begin(), rnn.end(),std::default_random_engine(seed));
+            std::shuffle(rnn.begin(), rnn.end(), std::default_random_engine(seed));
             rnn.resize(rnn_size_);
         }
         return CStatus();
     }
 
-    CStatus get_cur_neighbor(unsigned pro_id, unsigned neigh_id) {
+    /**
+     * generate pro_id's nn_new, nn_old, rnn_new, and rnn_old,
+     * according to pro_id's neighbor neigh_id in pool
+     * @param pro_id
+     * @param neigh_id
+     * @return
+     */
+    CStatus generate_neighbor(unsigned pro_id, unsigned neigh_id) {
         auto &neigh = graph_pool_[pro_id][neigh_id];
         unsigned nn_type;
         unsigned rnn_type;
@@ -256,6 +274,22 @@ protected:
         return CStatus();
     }
 
+    /**
+     * insert pro_id's reverse neighbor (rnn_type) into nn_type neighbor
+     * @param pro_id
+     * @param nn_type: NN_NEW and NN_OLD
+     * @param rnn_type: RNN_NEW and RNN_OLD
+     * @return
+     */
+    CStatus insert_reverse_neighbor(unsigned pro_id, unsigned nn_type, unsigned rnn_type) {
+        auto &nn = graph_nn_[nn_type][pro_id];
+        auto &rnn = graph_nn_[rnn_type][pro_id];
+        CStatus status = shuffle_reverse_neighbor(rnn);
+        nn.insert(nn.end(), rnn.begin(), rnn.end());
+        std::vector<unsigned>().swap(rnn);
+        return status;
+    }
+
     CStatus update_neighbor() {
         CStatus status;
         for (unsigned i = 0; i < num_; i++) {
@@ -263,41 +297,39 @@ protected:
             std::vector<unsigned>().swap(graph_nn_[NN_OLD][i]);
         }
 
-        for (unsigned n = 0; n < num_; ++n) {
+        for (unsigned i = 0; i < num_; i++) {
             for (unsigned l = 0; l < pool_size_; ++l) {
-                status += get_cur_neighbor(n, l);
+                status += generate_neighbor(i, l);
             }
-        }
-
-        for (unsigned i = 0; i < num_; ++i) {
-            auto &nn_new = graph_nn_[NN_NEW][i];
-            auto &nn_old = graph_nn_[NN_OLD][i];
-            auto &rnn_new = graph_nn_[RNN_NEW][i];
-            auto &rnn_old = graph_nn_[RNN_OLD][i];
-            status += shuffle_reverse_neighbor(rnn_new);
-            nn_new.insert(nn_new.end(), rnn_new.begin(), rnn_new.end());
-            status += shuffle_reverse_neighbor(rnn_old);
-            nn_old.insert(nn_old.end(), rnn_old.begin(), rnn_old.end());
-            std::vector<unsigned>().swap(graph_nn_[RNN_NEW][i]);
-            std::vector<unsigned>().swap(graph_nn_[RNN_OLD][i]);
+            status += insert_reverse_neighbor(i, NN_NEW, RNN_NEW);
+            status += insert_reverse_neighbor(i, NN_OLD, RNN_OLD);
         }
 
         return status;
     }
 
-    void nn_descent(std::vector<unsigned> &sample_points,
-                          std::vector<std::vector<unsigned>> &knn_set) {
+    /**
+     * iteratively optimize vertices' neighbors
+     * @param sample_points
+     * @param knn_set
+     * @return
+     */
+    CStatus nn_descent(std::vector<unsigned> &sample_points,
+                    std::vector<std::vector<unsigned>> &knn_set) {
+        CStatus status;
         for (unsigned it = 0; it < iter_; it++) {
 
-            join_neighbor();    // neighbors join each other
+            status += join_neighbor();    // neighbors join each other
 
-            update_neighbor();    // update candidate neighbors for neighbors join
+            status += update_neighbor();    // update candidate neighbors for neighbors join
 
             float rc = eval_quality(sample_points, knn_set);    // evaluate graph quality for this iteration
             CGraph::CGRAPH_ECHO("iter: [%d], graph quality: [%f]", it, rc);
             if (rc >= graph_quality_threshold_)
                 break;
         }
+
+        return status;
     }
 
 
