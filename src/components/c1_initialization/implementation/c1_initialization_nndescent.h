@@ -48,24 +48,18 @@ public:
     }
 
     CStatus train() override {
-        /**
-         * 这个是主函数，对吧。来个思路，分几步走：
-         * 1，定义和初始化会用到的变量
-         * 2，每个函数依次执行
-         */
         std::vector<unsigned> sample_points(sample_num_);    // sample point id for evaluating graph quality
         std::vector<std::vector<unsigned>> knn_set(sample_num_);    // exact knn set of sample point id
 
-        init_neighbor();    /* todo 有返回值不判断 */
+        CStatus status = init_neighbor();
 
         GenRandomID(sample_points.data(), num_, sample_points.size());    // generate random sample point id
 
-        generate_sample_set(sample_points, knn_set);    // calculate exact knn set of sample point id
+        status += generate_sample_set(sample_points, knn_set);    // calculate exact knn set of sample point id
 
-        // todo 自己改一下名字哈。主流程里，函数式表达挺好看的，对吧
-        my_function_name(sample_points, knn_set);
+        nn_descent(sample_points, knn_set);    // update points' neighbors by nn-descent
 
-        return CStatus();
+        return status;
     }
 
     CStatus refreshParam() override {
@@ -96,7 +90,7 @@ protected:
      * @return
      */
     CStatus init_neighbor() {
-        DistResType dist = 0;    // 不用反复构建了，对吧
+        DistResType dist = 0;
 
         for (unsigned i = 0; i < num_; i++) {
             graph_nn_[NN_NEW][i].resize(nn_size_ * 2);
@@ -121,7 +115,7 @@ protected:
 
         for (unsigned i = 0; i < s.size(); i++) {
             std::vector<Neighbor> cur;
-            cur.reserve(num_);    // todo 感觉是不是一样加一下比较规整
+            cur.reserve(num_);
             for (unsigned j = 0; j < num_; j++) {
                 dist_op_.calculate(data_ + s[i] * dim_, data_ + j * dim_,
                                    dim_, dim_, dist);
@@ -142,7 +136,7 @@ protected:
         float mean_acc = 0;
         unsigned ctrl_points_size = ctrl_points.size();
         for (unsigned i = 0; i < ctrl_points_size; i++) {
-            unsigned acc = 0;    // todo 这个是float类型的么？
+            unsigned acc = 0;
             auto &g = graph_pool_[ctrl_points[i]];
             auto &v = knn_set[i];
             for (auto &j: g) {
@@ -174,13 +168,10 @@ protected:
 
         unsigned cur_pool_size = graph_pool_[pro_id].size();
         unsigned cur_min_size = std::min(cur_pool_size, pool_size_);
-
-        // todo 看看这里能不能咋搞一下
-        if (cur_pool_size <= pool_size_) {
-            graph_pool_[pro_id].resize(cur_pool_size + 1);
-        }
+        graph_pool_[pro_id].resize(cur_min_size + 1);
 
         InsertIntoPool(graph_pool_[pro_id].data(), cur_min_size, NeighborFlag(neigh_id, dist, true));
+
         return CStatus();
     }
 
@@ -191,7 +182,6 @@ protected:
      * @return
      */
     CStatus bi_insert(unsigned a, unsigned b) {
-        // todo two-way search？
         DistResType dist = 0;
         dist_op_.calculate(data_ + a * dim_, data_ + b * dim_,
                            dim_, dim_, dist);
@@ -226,11 +216,6 @@ protected:
      * @return
      */
     CStatus generate_reverse_neighbor(unsigned pro_id, unsigned neigh_id, unsigned rnn_type) {
-        /**
-         * todo 这个不是一个unsigned类型就能结局的问题么，表示1，2，3，4
-         * 一定要搞出点花样的话，可以尝试用 enum来传递。
-         * 但是一般认为，typename是传递类型的
-         */
         if (graph_nn_[rnn_type][neigh_id].size() < rnn_size_) {
             graph_nn_[rnn_type][neigh_id].push_back(pro_id);
         } else {
@@ -250,29 +235,37 @@ protected:
         return CStatus();
     }
 
+    CStatus get_cur_neighbor(unsigned pro_id, unsigned neigh_id) {
+        auto &neigh = graph_pool_[pro_id][neigh_id];
+        unsigned nn_type;
+        unsigned rnn_type;
+        if (neigh.flag_) {
+            nn_type = NN_NEW;
+            rnn_type = RNN_NEW;
+            neigh.flag_ = false;
+        } else {
+            nn_type = NN_OLD;
+            rnn_type = RNN_OLD;
+        }
+        graph_nn_[nn_type][pro_id].emplace_back(neigh.id_);
+
+        if (neigh.distance_ > graph_pool_[neigh.id_].back().distance_) {
+            generate_reverse_neighbor(pro_id, neigh.id_, rnn_type);
+        }
+
+        return CStatus();
+    }
+
     CStatus update_neighbor() {
+        CStatus status;
         for (unsigned i = 0; i < num_; i++) {
             std::vector<unsigned>().swap(graph_nn_[NN_NEW][i]);
             std::vector<unsigned>().swap(graph_nn_[NN_OLD][i]);
         }
 
         for (unsigned n = 0; n < num_; ++n) {
-            auto &nn_new = graph_nn_[NN_NEW][n];
-            auto &nn_old = graph_nn_[NN_OLD][n];
             for (unsigned l = 0; l < pool_size_; ++l) {
-                auto &neigh = graph_pool_[n][l];
-                if (neigh.flag_) {
-                    nn_new.push_back(neigh.id_);    // todo 这里的逻辑，明显还能继续抽象啊
-                    if (neigh.distance_ > graph_pool_[neigh.id_].back().distance_) {
-                        generate_reverse_neighbor(n, neigh.id_, NN_NEW);
-                    }
-                    neigh.flag_ = false;
-                } else {
-                    nn_old.push_back(neigh.id_);
-                    if (neigh.distance_ > graph_pool_[neigh.id_].back().distance_) {
-                        generate_reverse_neighbor(n, neigh.id_, NN_OLD);
-                    }
-                }
+                status += get_cur_neighbor(n, l);
             }
         }
 
@@ -281,22 +274,25 @@ protected:
             auto &nn_old = graph_nn_[NN_OLD][i];
             auto &rnn_new = graph_nn_[RNN_NEW][i];
             auto &rnn_old = graph_nn_[RNN_OLD][i];
-            shuffle_reverse_neighbor(rnn_new);
+            status += shuffle_reverse_neighbor(rnn_new);
             nn_new.insert(nn_new.end(), rnn_new.begin(), rnn_new.end());
-            shuffle_reverse_neighbor(rnn_old);
+            status += shuffle_reverse_neighbor(rnn_old);
             nn_old.insert(nn_old.end(), rnn_old.begin(), rnn_old.end());
             std::vector<unsigned>().swap(graph_nn_[RNN_NEW][i]);
             std::vector<unsigned>().swap(graph_nn_[RNN_OLD][i]);
         }
 
-        return CStatus();
+        return status;
     }
 
-    void my_function_name(std::vector<unsigned> &sample_points,
+    void nn_descent(std::vector<unsigned> &sample_points,
                           std::vector<std::vector<unsigned>> &knn_set) {
         for (unsigned it = 0; it < iter_; it++) {
+
             join_neighbor();    // neighbors join each other
+
             update_neighbor();    // update candidate neighbors for neighbors join
+
             float rc = eval_quality(sample_points, knn_set);    // evaluate graph quality for this iteration
             CGraph::CGRAPH_ECHO("iter: [%d], graph quality: [%f]", it, rc);
             if (rc >= graph_quality_threshold_)
@@ -314,7 +310,6 @@ protected:
     unsigned pool_size_ = 20;
     std::vector<std::vector<NeighborFlag>> graph_pool_; // temp graph neighbor pool during nn-descent
 
-    // todo 不建议有数字哈，比如 4，就不太清楚干什么的哈
     std::vector<std::vector<unsigned>> graph_nn_[MAX_NN_TYPE_SIZE]; // new, old, reverse new, and reverse old graph neighbors
 };
 
