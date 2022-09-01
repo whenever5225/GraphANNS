@@ -10,7 +10,6 @@
 #define GRAPHANNS_C4_CONNECTIVITY_BASIC_H
 
 #include "../components_basic.h"
-#include "../../elements/nodes/param_nodes/param_include.h"
 #include "../../utils/utils.h"
 
 class C4ConnectivityBasic : public ComponentsBasic {

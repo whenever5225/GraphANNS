@@ -14,7 +14,7 @@
 
 class C2CandidateBasic : public ComponentsBasic {
 protected:
-    unsigned cur_id_ = 0;  // data id being processed
+    IDType cur_id_ = 0;  // data id being processed
     unsigned L_ = 0;
 };
 

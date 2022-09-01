@@ -31,9 +31,9 @@ public:
     CStatus train() override {
         graph_neigh_.clear();
         graph_neigh_.reserve(out_degree_);
-        std::vector<unsigned> neighbor_id(out_degree_);
+        std::vector<IDType> neighbor_id(out_degree_);
         GenRandomID(neighbor_id.data(), num_, out_degree_);
-        for (const unsigned int &id: neighbor_id) {
+        for (const IDType &id: neighbor_id) {
             if (id != cur_num_) {
                 DistResType dist = 0;
                 dist_op_.calculate(data_ + (id * dim_),

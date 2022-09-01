@@ -35,7 +35,7 @@ protected:
 
 protected:
     unsigned out_degree_ = 0;        // out-degree of initial graph
-    unsigned cur_num_ = 0;           // data id being processed
+    IDType cur_num_ = 0;           // data id being processed
 };
 
 #endif //GRAPHANNS_C1_INITIALIZATION_BASIC_H

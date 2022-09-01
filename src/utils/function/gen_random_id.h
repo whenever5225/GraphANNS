@@ -18,20 +18,21 @@
  * @param size 生成的n个数，范围在 [0,num) 之间。不重复
  */
 
-void GenRandomID(unsigned *id, unsigned num, unsigned size) {
+template<typename TID = IDType, typename TSize = unsigned>
+void GenRandomID(TID *id, TID num, TSize size) {
     std::mt19937 rng(random());
-    for (unsigned i = 0; i < size; ++i) {
+    for (TSize i = 0; i < size; ++i) {
         id[i] = rng() % (num - size);
     }
     std::sort(id, id + size);
 
-    for (unsigned i = 1; i < size; ++i) {
+    for (TSize i = 1; i < size; ++i) {
         if (id[i] <= id[i - 1]) {
             id[i] = id[i - 1] + 1;
         }
     }
-    unsigned off = rng() % num;
-    for (unsigned i = 0; i < size; ++i) {
+    TID off = rng() % num;
+    for (TSize i = 0; i < size; ++i) {
         id[i] = (id[i] + off) % num;
     }
 }

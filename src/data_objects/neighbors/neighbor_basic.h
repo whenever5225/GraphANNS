@@ -10,6 +10,7 @@
 #define GRAPHANNS_NEIGHBOR_H
 
 #include "../distances/distances_include.h"
+#include "../data_objects_define.h"
 
 struct Neighbor {
 public:
@@ -25,7 +26,7 @@ public:
     }
 
 public:
-    unsigned id_;
+    IDType id_;
     DistResType distance_;
 };
 

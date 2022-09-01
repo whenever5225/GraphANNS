@@ -16,21 +16,21 @@ public:
     CStatus train() override {
         model_->pool_m_.reserve(num_);
 
-        for (unsigned i = 0; i < num_; i++) {
+        for (IDType i = 0; i < num_; i++) {
             std::vector<bool> flags(num_, false);
             flags[i] = true;
             for (unsigned j = 0; j < model_->graph_n_[i].size(); j++) {
                 if (flags[j]) continue;
                 flags[j] = true;
-                unsigned nid = model_->graph_n_[i][j].id_;
+                IDType nid = model_->graph_n_[i][j].id_;
                 float ndist = model_->graph_n_[i][j].distance_;
                 model_->pool_m_[i].emplace_back(nid, ndist);
             }
 
             for (unsigned j = 0; j < model_->graph_n_[i].size(); j++) {
-                unsigned nid = model_->graph_n_[i][j].id_;
+                IDType nid = model_->graph_n_[i][j].id_;
                 for (unsigned nn = 0; nn < model_->graph_n_[nid].size(); nn++) {
-                    unsigned nnid = model_->graph_n_[nid][nn].id_;
+                    IDType nnid = model_->graph_n_[nid][nn].id_;
                     if (flags[nnid]) continue;
                     flags[nnid] = true;
                     DistResType dist = 0;

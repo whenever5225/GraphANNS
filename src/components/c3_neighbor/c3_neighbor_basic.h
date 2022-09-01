@@ -16,7 +16,7 @@
 
 class C3NeighborBasic : public ComponentsBasic {
 protected:
-    unsigned cur_id_ = 0;  // data id being processed
+    IDType cur_id_ = 0;  // data id being processed
     unsigned C_ = 0;
     unsigned R_ = 0;
     std::vector<Neighbor> result_;

@@ -17,7 +17,7 @@ struct NPGSearchParam : public BasicParam<> {
     unsigned query_id = 0;
 
     std::vector<NeighborFlag> sp;
-    std::vector<std::vector<unsigned> > results;
+    std::vector<std::vector<IDType> > results;
 
     CVoid reset() override {
         sp.clear();

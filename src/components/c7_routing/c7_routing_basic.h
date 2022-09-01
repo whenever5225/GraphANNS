@@ -18,7 +18,7 @@ protected:
     unsigned K_;    // top-k for search
     VecValType *query_ = nullptr;    // query data
     unsigned query_id_; // current query id
-    std::vector<unsigned> res_; // current query result
+    std::vector<IDType> res_; // current query result
 };
 
 #endif //GRAPHANNS_C7_ROUTING_BASIC_H

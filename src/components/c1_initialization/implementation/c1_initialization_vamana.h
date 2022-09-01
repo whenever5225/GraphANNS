@@ -33,9 +33,9 @@ public:
     CStatus train() override {
         graph_neigh_.clear();
         graph_neigh_.reserve(out_degree_);
-        std::vector<unsigned> neighbor_id(out_degree_);
+        std::vector<IDType> neighbor_id(out_degree_);
         GenRandomID(neighbor_id.data(), num_, out_degree_);
-        for (const unsigned int &id: neighbor_id) {
+        for (const IDType &id: neighbor_id) {
             if (id != cur_num_) {
                 graph_neigh_.emplace_back(id);
             }
@@ -59,7 +59,7 @@ public:
     }
 
 protected:
-    std::vector<unsigned> graph_neigh_;   // temp neighbor
+    std::vector<IDType> graph_neigh_;   // temp neighbor
 };
 
 #endif //GRAPHANNS_C1_INITIALIZATION_VAMANA_H

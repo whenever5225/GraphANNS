@@ -38,15 +38,15 @@ public:
         for (unsigned j = 0; j < model_->graph_n_[cur_id_].size(); j++) {
             if (flags[j]) continue;
             flags[j] = true;
-            unsigned nid = model_->graph_n_[cur_id_][j].id_;
+            IDType nid = model_->graph_n_[cur_id_][j].id_;
             float ndist = model_->graph_n_[cur_id_][j].distance_;
             model_->pool_.emplace_back(nid, ndist);
         }
 
         for (unsigned j = 0; j < model_->graph_n_[cur_id_].size(); j++) {
-            unsigned nid = model_->graph_n_[cur_id_][j].id_;
+            IDType nid = model_->graph_n_[cur_id_][j].id_;
             for (auto &nn : model_->graph_n_[nid]) {
-                unsigned nnid = nn.id_;    // nnid is the id of neighbor's neighbor
+                IDType nnid = nn.id_;    // nnid is the id of neighbor's neighbor
                 if (flags[nnid]) continue;
                 flags[nnid] = true;
                 DistResType dist = 0;

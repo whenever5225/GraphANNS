@@ -16,7 +16,7 @@ class ComponentsBasic : public CGraph::DAnnNode {
 protected:
     AnnsModelParam* model_ = nullptr;          // ann model ptr
     VecValType *data_ = nullptr;               // vector data
-    unsigned num_ = 0;                         // number of vector
+    IDType num_ = 0;                         // number of vector
     unsigned dim_ = 0;                         // dimensionality of vector
     DistCalcType dist_op_;                     // distance calc tool
 };

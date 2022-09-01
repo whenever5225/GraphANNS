@@ -48,8 +48,8 @@ public:
     }
 
     CStatus train() override {
-        std::vector<unsigned> sample_points(sample_num_);    // sample point id for evaluating graph quality
-        std::vector<std::vector<unsigned>> knn_set(sample_num_);    // exact knn set of sample point id
+        std::vector<IDType> sample_points(sample_num_);    // sample point id for evaluating graph quality
+        std::vector<std::vector<IDType>> knn_set(sample_num_);    // exact knn set of sample point id
 
         CStatus status = init_neighbor();
 
@@ -70,17 +70,17 @@ public:
             }
 
             std::vector<NeighborFlag>().swap(graph_pool_[i]);
-            std::vector<unsigned>().swap(graph_nn_[NN_NEW][i]);
-            std::vector<unsigned>().swap(graph_nn_[NN_OLD][i]);
-            std::vector<unsigned>().swap(graph_nn_[RNN_NEW][i]);
-            std::vector<unsigned>().swap(graph_nn_[RNN_OLD][i]);
+            std::vector<IDType>().swap(graph_nn_[NN_NEW][i]);
+            std::vector<IDType>().swap(graph_nn_[NN_OLD][i]);
+            std::vector<IDType>().swap(graph_nn_[RNN_NEW][i]);
+            std::vector<IDType>().swap(graph_nn_[RNN_OLD][i]);
         }
 
         std::vector<std::vector<NeighborFlag>>().swap(graph_pool_);
-        std::vector<std::vector<unsigned >>().swap(graph_nn_[NN_NEW]);
-        std::vector<std::vector<unsigned >>().swap(graph_nn_[NN_OLD]);
-        std::vector<std::vector<unsigned >>().swap(graph_nn_[RNN_NEW]);
-        std::vector<std::vector<unsigned >>().swap(graph_nn_[RNN_OLD]);
+        std::vector<std::vector<IDType >>().swap(graph_nn_[NN_NEW]);
+        std::vector<std::vector<IDType >>().swap(graph_nn_[NN_OLD]);
+        std::vector<std::vector<IDType >>().swap(graph_nn_[RNN_NEW]);
+        std::vector<std::vector<IDType >>().swap(graph_nn_[RNN_OLD]);
         return CStatus();
     }
 
@@ -92,13 +92,13 @@ protected:
     CStatus init_neighbor() {
         DistResType dist = 0;
 
-        for (unsigned i = 0; i < num_; i++) {
+        for (IDType i = 0; i < num_; i++) {
             graph_nn_[NN_NEW][i].resize(nn_size_ * 2);
             GenRandomID(graph_nn_[NN_NEW][i].data(), num_, graph_nn_[NN_NEW][i].size());
-            std::vector<unsigned> cur(nn_size_ + 1);
+            std::vector<IDType> cur(nn_size_ + 1);
             GenRandomID(cur.data(), num_, cur.size());
             for (unsigned j = 0; j < nn_size_; j++) {
-                unsigned id = cur[j];
+                IDType id = cur[j];
                 if (id == i) continue;
                 dist_op_.calculate(data_ + i * dim_, data_ + id * dim_,
                                    dim_, dim_, dist);
@@ -110,7 +110,7 @@ protected:
         return CStatus();
     }
 
-    CStatus generate_sample_set(std::vector<unsigned> &s, std::vector<std::vector<unsigned>> &g) {
+    CStatus generate_sample_set(std::vector<IDType> &s, std::vector<std::vector<IDType>> &g) {
         DistResType dist = 0;
 
         for (unsigned i = 0; i < s.size(); i++) {
@@ -131,14 +131,14 @@ protected:
         return CStatus();
     }
 
-    float eval_quality(const std::vector<unsigned> &ctrl_points,
-                       const std::vector<std::vector<unsigned>> &knn_set) {
+    float eval_quality(const std::vector<IDType> &ctrl_points,
+                       const std::vector<std::vector<IDType>> &knn_set) {
         float mean_acc = 0;
         unsigned ctrl_points_size = ctrl_points.size();
         for (unsigned i = 0; i < ctrl_points_size; i++) {
             unsigned acc = 0;
             for (auto &j: graph_pool_[ctrl_points[i]]) {
-                for (unsigned int k: knn_set[i]) {
+                for (IDType k: knn_set[i]) {
                     if (j.id_ == k) {
                         acc++;
                         break;
@@ -158,7 +158,7 @@ protected:
      * @param dist
      * @return
      */
-    CStatus insert(unsigned pro_id, unsigned neigh_id, DistResType dist) {
+    CStatus insert(IDType pro_id, IDType neigh_id, DistResType dist) {
         if (dist > graph_pool_[pro_id].back().distance_) return CStatus();
         for (auto &i: graph_pool_[pro_id]) {
             if (neigh_id == i.id_) return CStatus();
@@ -180,7 +180,7 @@ protected:
      * @param b
      * @return
      */
-    CStatus bi_insert(unsigned a, unsigned b) {
+    CStatus bi_insert(IDType a, IDType b) {
         DistResType dist = 0;
         dist_op_.calculate(data_ + a * dim_, data_ + b * dim_,
                            dim_, dim_, dist);
@@ -197,8 +197,8 @@ protected:
      * @param nn_type: NN_NEW and NN_OLD
      * @return
      */
-    CStatus mutual_insert(unsigned pro_id, unsigned cur_id, unsigned nn_type) {
-        for (unsigned const j: graph_nn_[nn_type][pro_id]) {
+    CStatus mutual_insert(IDType pro_id, IDType cur_id, unsigned nn_type) {
+        for (IDType const j: graph_nn_[nn_type][pro_id]) {
             if ((NN_NEW == nn_type && cur_id < j)
                  || (NN_OLD == nn_type && cur_id != j)) {
                 bi_insert(cur_id, j);
@@ -209,7 +209,7 @@ protected:
 
     CStatus join_neighbor() {
         CStatus status;
-        for (unsigned n = 0; n < num_; n++) {
+        for (IDType n = 0; n < num_; n++) {
             for (unsigned const i: graph_nn_[NN_NEW][n]) {
                 status += mutual_insert(n, i, NN_NEW);
                 status += mutual_insert(n, i, NN_OLD);
@@ -225,7 +225,7 @@ protected:
      * @param rnn_type : RNN_NEW and RNN_OLD
      * @return
      */
-    CStatus generate_reverse_neighbor(unsigned pro_id, unsigned neigh_id, unsigned rnn_type) {
+    CStatus generate_reverse_neighbor(IDType pro_id, IDType neigh_id, unsigned rnn_type) {
         if (graph_nn_[rnn_type][neigh_id].size() < rnn_size_) {
             graph_nn_[rnn_type][neigh_id].emplace_back(pro_id);
         } else {
@@ -236,7 +236,7 @@ protected:
         return CStatus();
     }
 
-    CStatus shuffle_reverse_neighbor(std::vector<unsigned> rnn) const {
+    CStatus shuffle_reverse_neighbor(std::vector<IDType> rnn) const {
         if (rnn_size_ && rnn.size() > rnn_size_) {
             auto seed = std::chrono::system_clock::now().time_since_epoch().count();
             std::shuffle(rnn.begin(), rnn.end(), std::default_random_engine(seed));
@@ -252,7 +252,7 @@ protected:
      * @param neigh_id
      * @return
      */
-    CStatus generate_neighbor(unsigned pro_id, unsigned neigh_id) {
+    CStatus generate_neighbor(IDType pro_id, IDType neigh_id) {
         auto &neigh = graph_pool_[pro_id][neigh_id];
         unsigned nn_type;
         unsigned rnn_type;
@@ -280,23 +280,23 @@ protected:
      * @param rnn_type: RNN_NEW and RNN_OLD
      * @return
      */
-    CStatus insert_reverse_neighbor(unsigned pro_id, unsigned nn_type, unsigned rnn_type) {
+    CStatus insert_reverse_neighbor(IDType pro_id, unsigned nn_type, unsigned rnn_type) {
         auto &nn = graph_nn_[nn_type][pro_id];
         auto &rnn = graph_nn_[rnn_type][pro_id];
         CStatus status = shuffle_reverse_neighbor(rnn);
         nn.insert(nn.end(), rnn.begin(), rnn.end());
-        std::vector<unsigned>().swap(rnn);
+        std::vector<IDType>().swap(rnn);
         return status;
     }
 
     CStatus update_neighbor() {
         CStatus status;
-        for (unsigned i = 0; i < num_; i++) {
+        for (IDType i = 0; i < num_; i++) {
             std::vector<unsigned>().swap(graph_nn_[NN_NEW][i]);
             std::vector<unsigned>().swap(graph_nn_[NN_OLD][i]);
         }
 
-        for (unsigned i = 0; i < num_; i++) {
+        for (IDType i = 0; i < num_; i++) {
             for (unsigned l = 0; l < pool_size_; ++l) {
                 status += generate_neighbor(i, l);
             }
@@ -313,8 +313,8 @@ protected:
      * @param knn_set
      * @return
      */
-    CStatus nn_descent(std::vector<unsigned> &sample_points,
-                    std::vector<std::vector<unsigned>> &knn_set) {
+    CStatus nn_descent(std::vector<IDType> &sample_points,
+                    std::vector<std::vector<IDType>> &knn_set) {
         CStatus status;
         for (unsigned it = 0; it < iter_; it++) {
             status += join_neighbor();    // neighbors join each other
@@ -340,7 +340,7 @@ protected:
     unsigned pool_size_ = 20;
     std::vector<std::vector<NeighborFlag>> graph_pool_; // temp graph neighbor pool during nn-descent
 
-    std::vector<std::vector<unsigned>> graph_nn_[MAX_NN_TYPE_SIZE]; // new, old, reverse new, and reverse old graph neighbors
+    std::vector<std::vector<IDType>> graph_nn_[MAX_NN_TYPE_SIZE]; // new, old, reverse new, and reverse old graph neighbors
 };
 
 #endif //GRAPHANNS_C1_INITIALIZATION_NNDESCENT_H

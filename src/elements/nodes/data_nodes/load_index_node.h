@@ -29,8 +29,8 @@ public:
             unsigned GK = 0;
             f_in.read((char *) &GK, sizeof(unsigned));
             if (f_in.eof()) break;
-            std::vector<unsigned> tmp(GK);
-            f_in.read((char *) tmp.data(), GK * sizeof(unsigned));
+            std::vector<IDType> tmp(GK);
+            f_in.read((char *) tmp.data(), GK * sizeof(IDType));
             m_param->graph_m_.push_back(tmp);
         }
         f_in.close();

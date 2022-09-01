@@ -46,10 +46,10 @@ public:
 
             if (s_param->sp[k].flag_) {
                 s_param->sp[k].flag_ = false;
-                unsigned n = s_param->sp[k].id_;
+                IDType n = s_param->sp[k].id_;
 
                 for (unsigned m = 0; m < model_->graph_m_[n].size(); ++m) {
-                    unsigned id = model_->graph_m_[n][m];
+                    IDType id = model_->graph_m_[n][m];
 
                     if (flags[id]) continue;
                     flags[id] = 1;

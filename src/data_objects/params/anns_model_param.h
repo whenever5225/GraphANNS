@@ -18,16 +18,16 @@ struct AnnsModelParam : public CGraph::GParam {
     std::vector<std::vector<Neighbor> > pool_m_;
     std::vector<std::vector<Neighbor> > cut_graph_;
 
-    unsigned cur_id_ = 0;
+    IDType cur_id_ = 0;
     typedef std::vector<std::vector<Neighbor> > graph_neighbor;
-    typedef std::vector<std::vector<unsigned> > graph_matrix;
+    typedef std::vector<std::vector<IDType> > graph_matrix;
 
     graph_neighbor graph_n_;
     graph_matrix graph_m_;
 
     MetaData<VecValType> train_meta_;
     MetaData<VecValType> search_meta_;
-    MetaData<unsigned> eva_meta_;
+    MetaData<IDType> eva_meta_;
 
     CVoid reset() override {
            }

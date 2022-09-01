@@ -33,13 +33,13 @@ public:
         }
 
         s_param->sp.reserve(search_L_ + 1);
-        std::vector<unsigned> init_ids(search_L_);
+        std::vector<IDType> init_ids(search_L_);
 
         GenRandomID(init_ids.data(), num_, search_L_);
         std::vector<char> flags(num_);
         memset(flags.data(), 0, num_ * sizeof(char));
         for (unsigned i = 0; i < search_L_; i++) {
-            unsigned id = init_ids[i];
+            IDType id = init_ids[i];
             DistResType dist = 0;
             dist_op_.calculate(model_->search_meta_.data + (s_param->query_id * dim_), model_->train_meta_.data + id * dim_,
                                dim_, dim_, dist);

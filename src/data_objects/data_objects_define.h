@@ -11,4 +11,6 @@
 
 #include "../../CGraph/src/CGraph.h"
 
+using IDType = unsigned;    // ID value type
+
 #endif //GRAPHANNS_DATA_OBJECTS_DEFINE_H
