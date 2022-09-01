@@ -34,9 +34,10 @@ public:
                         break;
                     }
                     DistResType djk = 0;
-                    dist_op_.calculate(data_ + (res.id_ * dim_),
-                                      data_ + p.id_ * dim_,
-                                      dim_, dim_, djk);
+                    dist_op_.calculate(data_modal1_ + (res.id_ * dim1_),data_modal1_ + p.id_ * dim1_,
+                                      dim1_, dim1_,
+                                       data_modal2_ + (res.id_ * dim2_),data_modal2_ + p.id_ * dim2_,
+                                      dim2_, dim2_, djk);
                     if (djk < p.distance_) {
                         occlude = true;
                         break;

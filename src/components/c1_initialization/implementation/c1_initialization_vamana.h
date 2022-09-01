@@ -20,9 +20,11 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_meta_.num;
-        dim_ = model_->train_meta_.dim;
-        data_ = model_->train_meta_.data;
+        num_ = model_->train_meta_modal1_.num;
+        dim1_ = model_->train_meta_modal1_.dim;
+        dim2_ = model_->train_meta_modal2_.dim;
+        data_modal1_ = model_->train_meta_modal1_.data;
+        data_modal2_ = model_->train_meta_modal2_.data;
         out_degree_ = t_param->k_init_graph;
         model_->graph_n_.reserve(num_);
 

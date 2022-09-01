@@ -17,7 +17,6 @@
 #include "../../../CGraph/src/CGraph.h"
 #include "../../graph_anns_define.h"
 
-template<typename T = VecValType>
 struct BasicParam : public CGraph::GParam {
     CVoid reset() override {
     }

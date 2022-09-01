@@ -11,7 +11,7 @@
 
 #include "../data_objects_define.h"
 
-template<typename T = VecValType>
+template<typename T = float>
 struct MetaData {
     T *data = nullptr;
     IDType num = 0;

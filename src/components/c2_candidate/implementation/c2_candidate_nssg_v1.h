@@ -34,7 +34,10 @@ public:
                     if (flags[nnid]) continue;
                     flags[nnid] = true;
                     DistResType dist = 0;
-                    dist_op_.calculate(data_ + i * dim_, data_ + nnid * dim_, dim_, dim_, dist);
+                    dist_op_.calculate(data_modal1_ + i * dim1_, data_modal1_ + nnid * dim1_,
+                                       dim1_, dim1_,
+                                       data_modal2_ + i * dim2_, data_modal2_ + nnid * dim2_,
+                                       dim2_, dim2_, dist);
                     model_->pool_m_[i].emplace_back(nnid, dist);
                     if (model_->pool_m_[i].size() >= L_) break;
                 }

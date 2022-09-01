@@ -27,9 +27,11 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_meta_.num;
-        dim_ = model_->train_meta_.dim;
-        data_ = model_->train_meta_.data;
+        num_ = model_->train_meta_modal1_.num;
+        dim1_ = model_->train_meta_modal1_.dim;
+        dim2_ = model_->train_meta_modal2_.dim;
+        data_modal1_ = model_->train_meta_modal1_.data;
+        data_modal2_ = model_->train_meta_modal2_.data;
         model_->graph_n_.reserve(num_);
         out_degree_ = t_param->k_init_graph;
         nn_size_ = t_param->nn_size;
@@ -100,8 +102,10 @@ protected:
             for (unsigned j = 0; j < nn_size_; j++) {
                 IDType id = cur[j];
                 if (id == i) continue;
-                dist_op_.calculate(data_ + i * dim_, data_ + id * dim_,
-                                   dim_, dim_, dist);
+                dist_op_.calculate(data_modal1_ + i * dim1_, data_modal1_ + id * dim1_,
+                                   dim1_, dim1_,
+                                   data_modal2_ + i * dim2_, data_modal2_ + id * dim2_,
+                                   dim2_, dim2_,dist);
                 graph_pool_[i].emplace_back(NeighborFlag(id, dist, true));
             }
             graph_pool_[i].reserve(pool_size_ + 1);
@@ -117,8 +121,10 @@ protected:
             std::vector<Neighbor> cur;
             cur.reserve(num_);
             for (unsigned j = 0; j < num_; j++) {
-                dist_op_.calculate(data_ + s[i] * dim_, data_ + j * dim_,
-                                   dim_, dim_, dist);
+                dist_op_.calculate(data_modal1_ + s[i] * dim1_, data_modal1_ + j * dim1_,
+                                   dim1_, dim1_,
+                                   data_modal2_ + s[i] * dim2_, data_modal2_ + j * dim2_,
+                                   dim2_, dim2_, dist);
                 cur.emplace_back(j, dist);
             }
 
@@ -182,8 +188,10 @@ protected:
      */
     CStatus bi_insert(IDType a, IDType b) {
         DistResType dist = 0;
-        dist_op_.calculate(data_ + a * dim_, data_ + b * dim_,
-                           dim_, dim_, dist);
+        dist_op_.calculate(data_modal1_ + a * dim1_, data_modal1_ + b * dim1_,
+                           dim1_, dim1_,
+                           data_modal2_ + a * dim2_, data_modal2_ + b * dim2_,
+                           dim2_, dim2_,dist);
         insert(a, b, dist);
         insert(b, a, dist);
         return CStatus();

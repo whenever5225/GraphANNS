@@ -20,9 +20,11 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_meta_.num;
-        dim_ = model_->train_meta_.dim;
-        data_ = model_->train_meta_.data;
+        num_ = model_->train_meta_modal1_.num;
+        dim1_ = model_->train_meta_modal1_.dim;
+        dim2_ = model_->train_meta_modal2_.dim;
+        data_modal1_ = model_->train_meta_modal1_.data;
+        data_modal2_ = model_->train_meta_modal2_.data;
         cur_id_ = model_->cur_id_;
 
         L_ = t_param->L_candidate;
@@ -50,8 +52,10 @@ public:
                 if (flags[nnid]) continue;
                 flags[nnid] = true;
                 DistResType dist = 0;
-                dist_op_.calculate(data_ + cur_id_ * dim_, data_ + nnid * dim_,
-                                  dim_, dim_, dist);
+                dist_op_.calculate(data_modal1_ + cur_id_ * dim1_, data_modal1_ + nnid * dim1_,
+                                  dim1_, dim1_,
+                                   data_modal2_ + cur_id_ * dim2_, data_modal2_ + nnid * dim2_,
+                                  dim2_, dim2_, dist);
                 model_->pool_.emplace_back(nnid, dist);
                 if (model_->pool_.size() >= L_) break;
             }

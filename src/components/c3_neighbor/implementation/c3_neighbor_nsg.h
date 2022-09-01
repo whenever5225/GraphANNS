@@ -20,9 +20,11 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_meta_.num;
-        dim_ = model_->train_meta_.dim;
-        data_ = model_->train_meta_.data;
+        num_ = model_->train_meta_modal1_.num;
+        dim1_ = model_->train_meta_modal1_.dim;
+        dim2_ = model_->train_meta_modal2_.dim;
+        data_modal1_ = model_->train_meta_modal1_.data;
+        data_modal2_ = model_->train_meta_modal2_.data;
 
         C_ = t_param->C_neighbor;
         R_ = t_param->R_neighbor;
@@ -46,8 +48,10 @@ public:
                     break;
                 }
                 DistResType djk = 0;
-                dist_op_.calculate(data_ + (t.id_ * dim_),
-                                  data_ + p.id_ * dim_, dim_, dim_, djk);
+                dist_op_.calculate(data_modal1_ + (t.id_ * dim1_),data_modal1_ + p.id_ * dim1_,
+                                  dim1_, dim1_,
+                                   data_modal2_ + (t.id_ * dim2_),data_modal2_ + p.id_ * dim2_,
+                                  dim2_, dim2_, djk);
                 if (djk < p.distance_) {
                     occlude = true;
                     break;

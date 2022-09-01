@@ -11,7 +11,7 @@
 
 #include "../../basic_param.h"
 
-struct NPGTrainParam : public BasicParam<> {
+struct NPGTrainParam : public BasicParam {
     unsigned L_candidate = 100;     // size of candidate set for neighbor selection
     unsigned R_neighbor = 100;      // size of neighbor set
     unsigned C_neighbor = 200;      // number of visited candidate neighbors when neighbor selection

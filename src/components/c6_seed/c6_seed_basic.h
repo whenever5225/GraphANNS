@@ -22,15 +22,23 @@ protected:
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic get param failed")
         }
 
-        CStatus status = model_->search_meta_.load(GA_ALG_QUERY_PATH);
-        status += model_->train_meta_.load(GA_ALG_BASE_PATH);
+        CStatus status = model_->search_meta_modal1_.load(GA_ALG_QUERY_MODAL1_PATH);
+        status += model_->search_meta_modal2_.load(GA_ALG_QUERY_MODAL2_PATH);
+        assert(model_->search_meta_modal1_.num == model_->search_meta_modal2_.num);
+        status += model_->train_meta_modal1_.load(GA_ALG_BASE_MODAL1_PATH);
+        status += model_->train_meta_modal2_.load(GA_ALG_BASE_MODAL2_PATH);
+        assert(model_->train_meta_modal1_.num == model_->train_meta_modal2_.num);
+        assert(model_->search_meta_modal1_.dim == model_->train_meta_modal1_.dim);
+        assert(model_->search_meta_modal2_.dim == model_->train_meta_modal2_.dim);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic load param failed")
         }
 
-        CGraph::CGRAPH_ECHO("C6SeedBasic vector path: [%s]", model_->train_meta_.file_path.c_str());
-        CGraph::CGRAPH_ECHO("C6SeedBasic vector num: [%d]", model_->train_meta_.num);
-        CGraph::CGRAPH_ECHO("C6SeedBasic vector dim: [%d]", model_->train_meta_.dim);
+        CGraph::CGRAPH_ECHO("modal 1 query vector path: [%s]", model_->search_meta_modal1_.file_path.c_str());
+        CGraph::CGRAPH_ECHO("modal 2 query vector path: [%s]", model_->search_meta_modal2_.file_path.c_str());
+        CGraph::CGRAPH_ECHO("query vector num: [%d]", model_->search_meta_modal1_.num);
+        CGraph::CGRAPH_ECHO("modal 1 query vector dim: [%d]", model_->search_meta_modal1_.dim);
+        CGraph::CGRAPH_ECHO("modal 2 query vector dim: [%d]", model_->search_meta_modal2_.dim);
         return CStatus();
     }
 

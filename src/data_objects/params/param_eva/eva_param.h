@@ -12,7 +12,7 @@
 #include "../../../../CGraph/src/CGraph.h"
 #include "../basic_param.h"
 
-struct EvaParam : public BasicParam<unsigned > {
+struct EvaParam : public BasicParam {
     CVoid reset() override {
     }
 };

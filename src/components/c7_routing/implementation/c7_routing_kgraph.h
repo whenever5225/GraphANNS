@@ -20,14 +20,17 @@ public:
             return DAnnFuncType::ANN_PREPARE_ERROR;
         }
 
-        num_ = model_->train_meta_.num;
-        dim_ = model_->train_meta_.dim;
-        data_ = model_->train_meta_.data;
+        num_ = model_->train_meta_modal1_.num;
+        dim1_ = model_->train_meta_modal1_.dim;
+        dim2_ = model_->train_meta_modal2_.dim;
+        data_modal1_ = model_->train_meta_modal1_.data;
+        data_modal2_ = model_->train_meta_modal2_.data;
 
         search_L_ = s_param->search_L;
         K_ = s_param->top_k;
         query_id_ = s_param->query_id;
-        query_ = model_->search_meta_.data;
+        query_modal1_ = model_->search_meta_modal1_.data;
+        query_modal2_ = model_->search_meta_modal2_.data;
         return DAnnFuncType::ANN_SEARCH;
     }
 
@@ -55,8 +58,12 @@ public:
                     flags[id] = 1;
 
                     DistResType dist = 0;
-                    dist_op_.calculate(query_ + (query_id_ * dim_),
-                                      data_ + id * dim_, dim_, dim_, dist);
+                    dist_op_.calculate(query_modal1_ + (query_id_ * dim1_),
+                                      data_modal1_ + id * dim1_,
+                                      dim1_, dim1_,
+                                       query_modal2_ + (query_id_ * dim2_),
+                                       data_modal2_ + id * dim2_,
+                                      dim2_, dim2_, dist);
 
                     if (dist >= s_param->sp[search_L_ - 1].distance_) continue;
                     NeighborFlag nn(id, dist, true);

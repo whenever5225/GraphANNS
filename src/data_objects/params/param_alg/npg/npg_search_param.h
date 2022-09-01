@@ -11,7 +11,7 @@
 
 #include "../../basic_param.h"
 
-struct NPGSearchParam : public BasicParam<> {
+struct NPGSearchParam : public BasicParam {
     unsigned top_k = 20;
     unsigned search_L = top_k + 500;
     unsigned query_id = 0;

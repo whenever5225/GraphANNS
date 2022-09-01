@@ -21,7 +21,7 @@ public:
         }
 
         m_param->cur_id_++;
-        return m_param->cur_id_ < m_param->train_meta_.num;
+        return m_param->cur_id_ < m_param->train_meta_modal1_.num;
     }
 
     CStatus crashed(const CException& ex) override {

@@ -9,8 +9,10 @@
 #ifndef GRAPHANNS_GRAPH_ANNS_DEFINE_H
 #define GRAPHANNS_GRAPH_ANNS_DEFINE_H
 
-const static char* GA_ALG_BASE_PATH = "../doc/siftsmall/siftsmall_base.fvecs";
-const static char* GA_ALG_QUERY_PATH = "../doc/siftsmall/siftsmall_query.fvecs";
+const static char* GA_ALG_BASE_MODAL1_PATH = "../doc/siftsmall/siftsmall_base.fvecs";
+const static char* GA_ALG_BASE_MODAL2_PATH = "../doc/siftsmall/siftsmall_base.fvecs";
+const static char* GA_ALG_QUERY_MODAL1_PATH = "../doc/siftsmall/siftsmall_query.fvecs";
+const static char* GA_ALG_QUERY_MODAL2_PATH = "../doc/siftsmall/siftsmall_query.fvecs";
 const static char* GA_ALG_GROUNDTRUTH_PATH = "../doc/siftsmall/siftsmall_groundtruth.ivecs";
 const static char* GA_ALG_INDEX_PATH = "../doc/siftsmall/siftsmall.index";
 

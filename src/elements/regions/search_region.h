@@ -25,7 +25,7 @@ public:
         }
 
         s_param->query_id++;
-        return s_param->query_id < m_param->search_meta_.num;
+        return s_param->query_id < m_param->search_meta_modal1_.num;
     }
 
 

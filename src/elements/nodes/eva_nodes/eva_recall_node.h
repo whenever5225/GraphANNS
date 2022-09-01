@@ -9,7 +9,6 @@
 #ifndef GRAPHANNS_EVA_RECALL_NODE_H
 #define GRAPHANNS_EVA_RECALL_NODE_H
 
-#include "../../elements.h"
 #include "../../elements_define.h"
 
 class EvaRecallNode : public CGraph::GNode {

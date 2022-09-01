@@ -16,7 +16,8 @@ class C7RoutingBasic : public ComponentsBasic {
 protected:
     unsigned search_L_; // candidate pool size for search
     unsigned K_;    // top-k for search
-    VecValType *query_ = nullptr;    // query data
+    VecValType1 *query_modal1_ = nullptr;    // query data
+    VecValType2 *query_modal2_ = nullptr;    // query data
     unsigned query_id_; // current query id
     std::vector<IDType> res_; // current query result
 };
