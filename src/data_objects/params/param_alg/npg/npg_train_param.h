@@ -16,6 +16,12 @@ struct NPGTrainParam : public BasicParam<> {
     unsigned R_neighbor = 100;      // size of neighbor set
     unsigned C_neighbor = 200;      // number of visited candidate neighbors when neighbor selection
     unsigned k_init_graph = 20;     // number of neighbors of initial graph
+    unsigned nn_size = 10;        // size of candidate neighbors during nn-descent
+    unsigned rnn_size = 5;        // size of reverse candidate neighbors during nn-descent
+    unsigned pool_size = 25;        // size of neighbor pool during nn-descent
+    unsigned iter = 5;        // number of nn-descent iteration
+    unsigned sample_num = 100;        // number of sample data when evaluating graph quality for each iteration
+    float graph_quality_threshold = 0.8;         // graph quality threshold
 };
 
 #endif //GRAPHANNS_NPG_TRAIN_PARAM_H

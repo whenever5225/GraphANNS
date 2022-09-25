@@ -10,7 +10,7 @@ Approximate Nearest Neighbor Search(ANNS) is a task that finds the approximate n
 This project supports MacOS, Linux, and Windows platforms, requiring [CGraph](https://github.com/ChunelFeng/CGraph). You can download this project by running the following instructions.
 
 ```
-git clone --recursive https://github.com/whenever5225/GraphANNS.git
+git clone --recursive git@github.com:whenever5225/GraphANNS.git
 ```
 
 If you are a developer using CLion as the IDE, you can open the `CMakeLists.txt` file as a project for compiling. 

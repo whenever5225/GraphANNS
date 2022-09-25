@@ -10,5 +10,6 @@
 #define GRAPHANNS_FUNCTION_INCLUDE_H
 
 #include "gen_random_id.h"
+#include "insert_into_pool.h"
 
 #endif //GRAPHANNS_FUNCTION_INCLUDE_H
