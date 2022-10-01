@@ -12,8 +12,8 @@
 #include "../../basic_param.h"
 
 struct NPGSearchParam : public BasicParam {
-    unsigned top_k = 20;
-    unsigned search_L = top_k + 500;
+    unsigned top_k = 10;
+    unsigned search_L = 9999;
     unsigned query_id = 0;
 
     std::vector<NeighborFlag> sp;

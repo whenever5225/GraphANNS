@@ -10,10 +10,10 @@
 #define GRAPHANNS_GRAPH_ANNS_DEFINE_H
 
 const static char* GA_ALG_BASE_MODAL1_PATH = "../doc/siftsmall/siftsmall_base.fvecs";
-const static char* GA_ALG_BASE_MODAL2_PATH = "../doc/siftsmall/siftsmall_base.fvecs";
+const static char* GA_ALG_BASE_MODAL2_PATH = "../doc/siftsmall/int_attribute_siftsmall_base.ivecs";
 const static char* GA_ALG_QUERY_MODAL1_PATH = "../doc/siftsmall/siftsmall_query.fvecs";
-const static char* GA_ALG_QUERY_MODAL2_PATH = "../doc/siftsmall/siftsmall_query.fvecs";
-const static char* GA_ALG_GROUNDTRUTH_PATH = "../doc/siftsmall/siftsmall_groundtruth.ivecs";
+const static char* GA_ALG_QUERY_MODAL2_PATH = "../doc/siftsmall/int_attribute_siftsmall_query.ivecs";
+const static char* GA_ALG_GROUNDTRUTH_PATH = "../doc/siftsmall/int_attribute_siftsmall_groundtruth.ivecs";
 const static char* GA_ALG_INDEX_PATH = "../doc/siftsmall/siftsmall.index";
 
 const static unsigned GA_NPG_L_CANDIDATE = 100;      // size of candidate set for neighbor selection

@@ -17,7 +17,7 @@
  * @tparam needSqrt
  */
 
-template<typename TVec = float, typename TRes = TVec, const bool needSqrt = false>
+template<typename TVec = float, typename TRes = TVec, const bool needSqrt = false, const bool needNorm = false>
 class EuclideanDistance : public CGraph::UDistance<TVec, TRes> {
 public:
     CStatus calc(const TVec *a, const TVec *b, CSize dim1, CSize dim2, TRes &res, CVoidPtr ext) override {
@@ -55,6 +55,23 @@ public:
             CGRAPH_RETURN_ERROR_STATUS("input dim error");
         }
 
+        return CStatus();
+    }
+
+    CStatus normalize(TVec* v, CSize dim, CVoidPtr ext) override {
+        float res = 0;
+        TVec *a = v;
+        const TVec *last = v + dim;
+        while (a < last) {
+            res *= a[0] * a[0];
+            a += 1;
+        }
+        res = std::sqrt(res);
+        a = v;
+        while (a < last) {
+            a[0] /= res;
+            a += 1;
+        }
         return CStatus();
     }
 };

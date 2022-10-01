@@ -45,7 +45,7 @@ public:
             dist_op_.calculate(model_->search_meta_modal1_.data + (s_param->query_id * dim1_),
                                model_->train_meta_modal1_.data + id * dim1_,
                                dim1_, dim1_,
-                               model_->search_meta_modal1_.data + (s_param->query_id * dim2_),
+                               model_->search_meta_modal2_.data + (s_param->query_id * dim2_),
                                model_->train_meta_modal2_.data + id * dim2_,
                                dim2_, dim2_, dist);
             s_param->sp[i] = NeighborFlag(id, dist, true);
