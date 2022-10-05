@@ -10,6 +10,7 @@
 #define GRAPHANNS_INSERT_INTO_POOL_H
 
 #include "../../data_objects/neighbors/neighbors_include.h"
+#include <cstring>
 
 /**
  * no repeated insertion by binary search

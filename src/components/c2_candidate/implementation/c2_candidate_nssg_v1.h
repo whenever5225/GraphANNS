@@ -14,7 +14,7 @@
 class C2CandidateNSSGV1 : public C2CandidateNSSG {
 public:
     CStatus train() override {
-        model_->pool_m_.reserve(num_);
+        model_->pool_m_.resize(num_);
 
         for (IDType i = 0; i < num_; i++) {
             std::vector<bool> flags(num_, false);

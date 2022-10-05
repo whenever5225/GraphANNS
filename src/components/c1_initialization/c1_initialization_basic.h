@@ -10,6 +10,7 @@
 #define GRAPHANNS_C1_INITIALIZATION_BASIC_H
 
 #include <string>
+#include <cassert>
 
 #include "../components_basic.h"
 #include "../../utils/utils.h"

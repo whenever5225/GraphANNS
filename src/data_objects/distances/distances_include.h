@@ -20,7 +20,7 @@ using DistResType2 = int;
 using DistResType = float;  // distances value type
 
 // distances calculation type
-using DistCalcType1 = CGraph::UDistanceCalculator<VecValType1, DistResType1, EuclideanDistanceEigen<VecValType1, DistResType1> >;
+using DistCalcType1 = CGraph::UDistanceCalculator<VecValType1, DistResType1, EuclideanDistance<VecValType1, DistResType1> >;
 using DistCalcType2 = CGraph::UDistanceCalculator<VecValType2, DistResType2, HammingDistance<VecValType2, DistResType2> >;
 
 template<typename TVec1 = VecValType1,    // vector type of modal1

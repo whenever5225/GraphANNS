@@ -10,6 +10,7 @@
 #define GRAPHANNS_C6_SEED_KGRAPH_H
 
 #include "../c6_seed_basic.h"
+#include <cstring>
 
 class C6SeedKGraph : public C6SeedBasic {
 public:
