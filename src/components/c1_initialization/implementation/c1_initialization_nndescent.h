@@ -9,8 +9,15 @@
 #ifndef GRAPHANNS_C1_INITIALIZATION_NNDESCENT_H
 #define GRAPHANNS_C1_INITIALIZATION_NNDESCENT_H
 
-#include "../c1_initialization_basic.h"
+#if GA_USE_OPENMP
+
+#include <omp.h>
+
+#endif
+
 #include <algorithm>
+#include <mutex>
+#include "../c1_initialization_basic.h"
 
 static const unsigned NN_NEW = 0;     // new graph neighbors
 static const unsigned NN_OLD = 1;     // old graph neighbors
@@ -45,6 +52,9 @@ public:
         graph_nn_[NN_OLD].reserve(num_);
         graph_nn_[RNN_NEW].reserve(num_);
         graph_nn_[RNN_OLD].reserve(num_);
+        for (int i = 0; i < num_; i++) {
+            lock_mutex_.push_back(new std::mutex);
+        }
 
         return DAnnFuncType::ANN_TRAIN;
     }
@@ -61,10 +71,17 @@ public:
 
         status += nn_descent(sample_points, knn_set);    // update points' neighbors by nn-descent
 
+        if (status.isOK()) {
+            CGraph::CGRAPH_ECHO("nndescent init complete!");
+        }
+
         return status;
     }
 
     CStatus refreshParam() override {
+
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+
         for (size_t i = 0; i < num_; i++) {
             unsigned size = std::min((unsigned) graph_pool_[i].size(), out_degree_);
             for (unsigned j = 0; j < size; j++) {
@@ -92,7 +109,8 @@ protected:
      * @return
      */
     CStatus init_neighbor() {
-        DistResType dist = 0;
+
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
 
         for (IDType i = 0; i < num_; i++) {
             graph_nn_[NN_NEW][i].resize(nn_size_ * 2);
@@ -100,12 +118,13 @@ protected:
             std::vector<IDType> cur(nn_size_ + 1);
             GenRandomID(cur.data(), num_, cur.size());
             for (unsigned j = 0; j < nn_size_; j++) {
+                DistResType dist = 0;
                 IDType id = cur[j];
                 if (id == i) continue;
                 dist_op_.calculate(data_modal1_ + i * dim1_, data_modal1_ + id * dim1_,
                                    dim1_, dim1_,
                                    data_modal2_ + i * dim2_, data_modal2_ + id * dim2_,
-                                   dim2_, dim2_,dist);
+                                   dim2_, dim2_, dist);
                 graph_pool_[i].emplace_back(NeighborFlag(id, dist, true));
             }
             graph_pool_[i].reserve(pool_size_ + 1);
@@ -115,12 +134,14 @@ protected:
     }
 
     CStatus generate_sample_set(std::vector<IDType> &s, std::vector<std::vector<IDType>> &g) {
-        DistResType dist = 0;
+
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) shared(s, g) default(none)
 
         for (unsigned i = 0; i < s.size(); i++) {
             std::vector<Neighbor> cur;
             cur.reserve(num_);
             for (unsigned j = 0; j < num_; j++) {
+                DistResType dist = 0;
                 dist_op_.calculate(data_modal1_ + s[i] * dim1_, data_modal1_ + j * dim1_,
                                    dim1_, dim1_,
                                    data_modal2_ + s[i] * dim2_, data_modal2_ + j * dim2_,
@@ -141,6 +162,10 @@ protected:
                        const std::vector<std::vector<IDType>> &knn_set) {
         float mean_acc = 0;
         unsigned ctrl_points_size = ctrl_points.size();
+
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) \
+                         shared(ctrl_points_size, ctrl_points, knn_set, mean_acc) default(none)
+
         for (unsigned i = 0; i < ctrl_points_size; i++) {
             unsigned acc = 0;
             for (auto &j: graph_pool_[ctrl_points[i]]) {
@@ -151,6 +176,7 @@ protected:
                     }
                 }
             }
+#pragma omp atomic
             mean_acc += ((float) acc / (float) knn_set[i].size());
         }
 
@@ -165,6 +191,7 @@ protected:
      * @return
      */
     CStatus insert(IDType pro_id, IDType neigh_id, DistResType dist) {
+        std::lock_guard<std::mutex> LockGuard(*lock_mutex_[pro_id]);
         if (dist > graph_pool_[pro_id].back().distance_) return CStatus();
         for (auto &i: graph_pool_[pro_id]) {
             if (neigh_id == i.id_) return CStatus();
@@ -208,7 +235,7 @@ protected:
     CStatus mutual_insert(IDType pro_id, IDType cur_id, unsigned nn_type) {
         for (IDType const j: graph_nn_[nn_type][pro_id]) {
             if ((NN_NEW == nn_type && cur_id < j)
-                 || (NN_OLD == nn_type && cur_id != j)) {
+                || (NN_OLD == nn_type && cur_id != j)) {
                 bi_insert(cur_id, j);
             }
         }
@@ -216,14 +243,16 @@ protected:
     }
 
     CStatus join_neighbor() {
-        CStatus status;
+
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+
         for (IDType n = 0; n < num_; n++) {
             for (unsigned const i: graph_nn_[NN_NEW][n]) {
-                status += mutual_insert(n, i, NN_NEW);
-                status += mutual_insert(n, i, NN_OLD);
+                mutual_insert(n, i, NN_NEW);
+                mutual_insert(n, i, NN_OLD);
             }
         }
-        return status;
+        return CStatus();
     }
 
     /**
@@ -275,6 +304,7 @@ protected:
         graph_nn_[nn_type][pro_id].emplace_back(neigh.id_);
 
         if (neigh.distance_ > graph_pool_[neigh.id_].back().distance_) {
+            std::lock_guard<std::mutex> LockGuard(*lock_mutex_[neigh.id_]);
             generate_reverse_neighbor(pro_id, neigh.id_, rnn_type);
         }
 
@@ -298,21 +328,26 @@ protected:
     }
 
     CStatus update_neighbor() {
-        CStatus status;
+
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+
         for (IDType i = 0; i < num_; i++) {
             std::vector<unsigned>().swap(graph_nn_[NN_NEW][i]);
             std::vector<unsigned>().swap(graph_nn_[NN_OLD][i]);
         }
 
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+
         for (IDType i = 0; i < num_; i++) {
             for (unsigned l = 0; l < pool_size_; ++l) {
-                status += generate_neighbor(i, l);
+                generate_neighbor(i, l);
             }
-            status += insert_reverse_neighbor(i, NN_NEW, RNN_NEW);
-            status += insert_reverse_neighbor(i, NN_OLD, RNN_OLD);
+            std::lock_guard<std::mutex> LockGuard(*lock_mutex_[i]);
+            insert_reverse_neighbor(i, NN_NEW, RNN_NEW);
+            insert_reverse_neighbor(i, NN_OLD, RNN_OLD);
         }
 
-        return status;
+        return CStatus();
     }
 
     /**
@@ -322,7 +357,7 @@ protected:
      * @return
      */
     CStatus nn_descent(std::vector<IDType> &sample_points,
-                    std::vector<std::vector<IDType>> &knn_set) {
+                       std::vector<std::vector<IDType>> &knn_set) {
         CStatus status;
         for (unsigned it = 0; it < iter_; it++) {
             status += join_neighbor();    // neighbors join each other
@@ -346,6 +381,7 @@ protected:
     unsigned nn_size_ = 10;
     unsigned rnn_size_ = 5;
     unsigned pool_size_ = 20;
+    std::vector<std::mutex *> lock_mutex_;
     std::vector<std::vector<NeighborFlag>> graph_pool_; // temp graph neighbor pool during nn-descent
 
     std::vector<std::vector<IDType>> graph_nn_[MAX_NN_TYPE_SIZE]; // new, old, reverse new, and reverse old graph neighbors

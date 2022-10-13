@@ -12,7 +12,7 @@
 #include "../../../CGraph/src/CGraph.h"
 #include "../elements_define.h"
 
-class SearchRegion : public CGraph::GRegion {
+class SearchRegion : public CGraph::GCluster {
 public:
     CBool isHold() override {
         auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);

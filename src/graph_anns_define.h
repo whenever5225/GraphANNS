@@ -9,6 +9,8 @@
 #ifndef GRAPHANNS_GRAPH_ANNS_DEFINE_H
 #define GRAPHANNS_GRAPH_ANNS_DEFINE_H
 
+#include "../CGraph/src/CGraph.h"
+
 /**
  * siftsmall
  */
@@ -23,6 +25,7 @@
 //const static unsigned GA_NPG_R_NEIGHBOR = 100;       // size of neighbor set
 //const static unsigned GA_NPG_C_NEIGHBOR = 200;       // number of visited candidate neighbors when neighbor selection
 //const static unsigned GA_NPG_K_INIT_GRAPH = 20;      // number of neighbors of initial graph
+//const static unsigned GA_DEFAULT_THREAD_SIZE = 8;    // default thread number
 
 /**
  * sift1m
@@ -38,5 +41,6 @@ const static unsigned GA_NPG_L_CANDIDATE = 100;      // size of candidate set fo
 const static unsigned GA_NPG_R_NEIGHBOR = 100;       // size of neighbor set
 const static unsigned GA_NPG_C_NEIGHBOR = 200;       // number of visited candidate neighbors when neighbor selection
 const static unsigned GA_NPG_K_INIT_GRAPH = 100;      // number of neighbors of initial graph
+const static unsigned GA_DEFAULT_THREAD_SIZE = 8;    // default thread number
 
 #endif //GRAPHANNS_GRAPH_ANNS_DEFINE_H

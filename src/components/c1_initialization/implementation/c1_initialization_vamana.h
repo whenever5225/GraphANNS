@@ -57,6 +57,9 @@ public:
 
     CBool isHold() override {
         cur_num_++;
+        if (cur_num_ >= num_) {
+            CGraph::CGRAPH_ECHO("vamana init complete!");
+        }
         return cur_num_ < num_;
     }
 

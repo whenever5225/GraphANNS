@@ -69,7 +69,7 @@ struct BiDistanceCalculator {
 
         status += dist_op1_.calculate(vec_11, vec_21, dim_11, dim_21, res_1);
         status += dist_op2_.calculate(vec_12, vec_22, dim_12, dim_22, res_2);
-        weight_2_ = res_1 / (float)dim_12;
+//        weight_2_ = res_1 / (float)dim_12;
         result = status.isOK() ? res_1 * weight_1_ + (DistResType)res_2 * weight_2_ : 0.f;
         return status;
     }

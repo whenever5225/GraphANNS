@@ -13,7 +13,7 @@
 
 struct NPGSearchParam : public BasicParam {
     unsigned top_k = 10;
-    unsigned search_L = 9999;
+    unsigned search_L = 400;
     unsigned query_id = 0;
 
     std::vector<NeighborFlag> sp;

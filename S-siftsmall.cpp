@@ -20,8 +20,8 @@ int main() {
     status += pipeline->registerGElement<LoadIndexNode>(&f, {a}, "load_index");
 
     //search
-    g = pipeline->createGNode<C6SeedKGraph>(GNodeInfo({}, "c6_random"));
-    h = pipeline->createGNode<C7RoutingKGraph>(GNodeInfo({g}, "c7_greedy"));
+    g = pipeline->createGNode<C6SeedKGraph>(GNodeInfo("c6_random"));
+    h = pipeline->createGNode<C7RoutingKGraph>(GNodeInfo("c7_greedy"));
 
     gh_region = pipeline->createGGroup<SearchRegion>({g, h});
     status += pipeline->registerGElement<SearchRegion>(&gh_region, {f}, "search_region");

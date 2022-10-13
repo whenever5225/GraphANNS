@@ -10,6 +10,9 @@ include(cmake/GA-CGraph-depend.cmake)
 #### [optional] add Eigen3 dependence ####
 include(cmake/GA-Eigen3-depend.cmake)
 
+#### [optional] add OpenMP dependence ####
+include(cmake/GA-OpenMP-depend.cmake)
+
 
 set(TUTORIAL_LIST
         T-siftsmall
