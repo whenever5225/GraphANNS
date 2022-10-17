@@ -85,7 +85,7 @@ public:
         s_param->results.resize(num_);
         unsigned top_k = s_param->top_k;
 
-#pragma omp parallel for num_threads(16) schedule(dynamic) \
+#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) \
                          shared(m_param, s_param, top_k) default(none)
 
         for (IDType i = 0; i < query_num_; i++) {
