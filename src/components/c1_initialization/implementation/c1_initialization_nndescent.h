@@ -72,7 +72,11 @@ public:
         status += nn_descent(sample_points, knn_set);    // update points' neighbors by nn-descent
 
         if (status.isOK()) {
-            CGraph::CGRAPH_ECHO("nndescent init complete!");
+#if GA_USE_OPENMP
+            CGraph::CGRAPH_ECHO("nndescent openmp init complete!");
+#else
+            CGraph::CGRAPH_ECHO("nndescent no openmp init complete!");
+#endif
         }
 
         return status;
@@ -82,7 +86,7 @@ public:
 
 #pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
 
-        for (size_t i = 0; i < num_; i++) {
+        for (IDType i = 0; i < num_; i++) {
             unsigned size = std::min((unsigned) graph_pool_[i].size(), out_degree_);
             for (unsigned j = 0; j < size; j++) {
                 model_->graph_n_[i].emplace_back(Neighbor(graph_pool_[i][j].id_, graph_pool_[i][j].distance_));

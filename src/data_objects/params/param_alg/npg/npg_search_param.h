@@ -9,15 +9,13 @@
 #ifndef GRAPHANNS_NPG_SEARCH_PARAM_H
 #define GRAPHANNS_NPG_SEARCH_PARAM_H
 
-#include "../../basic_param.h"
+#include "../alg_param_basic.h"
 
 struct NPGSearchParam : public BasicParam {
-    unsigned top_k = 10;
-    unsigned search_L = 400;
+    unsigned search_L = 10;
     unsigned query_id = 0;
 
     std::vector<NeighborFlag> sp;
-    std::vector<std::vector<IDType> > results;
 
     CVoid reset() override {
         sp.clear();

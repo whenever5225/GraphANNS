@@ -20,6 +20,7 @@ public:
          */
         CStatus status = CGRAPH_CREATE_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         status += CGRAPH_CREATE_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
+        status += CGRAPH_CREATE_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY)
         return status;
     }
 
@@ -31,6 +32,9 @@ public:
         t_param->R_neighbor = GA_NPG_R_NEIGHBOR;
         t_param->C_neighbor = GA_NPG_C_NEIGHBOR;
         t_param->k_init_graph = GA_NPG_K_INIT_GRAPH;
+
+        CGraph::CGRAPH_ECHO("ConfigAlgNPGNode Complete!");
+
         return CStatus();
     }
 };

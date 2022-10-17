@@ -13,6 +13,17 @@
 #include "../../../graph_anns_define.h"
 
 class ConfigBasic : public CGraph::GNode {
+public:
+    CStatus init() override {
+        /**
+         * load search param
+         */
+        CStatus status = CGRAPH_CREATE_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY)
+        return status;
+    }
+    CStatus run() override {
+        CGRAPH_EMPTY_FUNCTION
+    }
 
 };
 

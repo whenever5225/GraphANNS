@@ -15,6 +15,7 @@ class C7RoutingKGraph : public C7RoutingBasic {
 public:
     DAnnFuncType prepareParam() override {
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
+        auto *a_param = CGRAPH_GET_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY);
         model_ = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
         if (nullptr == model_ || nullptr == s_param) {
             return DAnnFuncType::ANN_PREPARE_ERROR;
@@ -25,9 +26,8 @@ public:
         dim2_ = model_->train_meta_modal2_.dim;
         data_modal1_ = model_->train_meta_modal1_.data;
         data_modal2_ = model_->train_meta_modal2_.data;
-
         search_L_ = s_param->search_L;
-        K_ = s_param->top_k;
+        K_ = a_param->top_k;
         query_id_ = s_param->query_id;
         query_modal1_ = model_->search_meta_modal1_.data;
         query_modal2_ = model_->search_meta_modal2_.data;
@@ -83,12 +83,12 @@ public:
     }
 
     CStatus refreshParam() override {
-        auto s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY)
-        CGRAPH_ASSERT_NOT_NULL(s_param)
+        auto a_param = CGRAPH_GET_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY);
+        CGRAPH_ASSERT_NOT_NULL(a_param)
 
         {
-            CGRAPH_PARAM_WRITE_CODE_BLOCK(s_param)
-            s_param->results.push_back(res_);
+            CGRAPH_PARAM_WRITE_CODE_BLOCK(a_param)
+            a_param->results.push_back(res_);
         }
         return CStatus();
     }

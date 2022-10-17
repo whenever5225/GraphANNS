@@ -14,14 +14,10 @@
 class EvaRecallNode : public CGraph::GNode {
 public:
     CStatus init() override {
-        CStatus status = CGRAPH_CREATE_GPARAM(EvaParam, GA_ALG_NPG_EVA_PARAM_KEY);
-        if (!status.isOK()) {
-            CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode init create param failed")
-        }
 
         auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(m_param)
-        status = m_param->eva_meta_.load(GA_ALG_GROUNDTRUTH_PATH);
+        CStatus status = m_param->eva_meta_.load(GA_ALG_GROUNDTRUTH_PATH);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode init load param failed")
         }
@@ -33,7 +29,7 @@ public:
 
     CStatus run() override {
         auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
-        auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
+        auto *s_param = CGRAPH_GET_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY);
         if (nullptr == m_param || nullptr == s_param) {
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode run get param failed")
         }

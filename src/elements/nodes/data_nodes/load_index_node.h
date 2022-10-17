@@ -38,7 +38,7 @@ public:
     }
 
     CStatus run() override {
-        CGRAPH_EMPTY_FUNCTION
+        CGraph::CGRAPH_ECHO("LoadIndexNode Complete!");
     }
 };
 
