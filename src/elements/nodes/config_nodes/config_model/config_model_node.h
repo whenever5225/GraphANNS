@@ -19,7 +19,6 @@ public:
     }
 
     CStatus run() override {
-        CGraph::CGRAPH_ECHO("ConfigModelNode Complete!");
         return CStatus();
     }
 };

@@ -28,12 +28,10 @@ public:
         auto *t_param = CGRAPH_GET_GPARAM(NPGTrainParam, GA_ALG_NPG_TRAIN_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(t_param)
 
-        t_param->L_candidate = GA_NPG_L_CANDIDATE;
-        t_param->R_neighbor = GA_NPG_R_NEIGHBOR;
-        t_param->C_neighbor = GA_NPG_C_NEIGHBOR;
-        t_param->k_init_graph = GA_NPG_K_INIT_GRAPH;
-
-        CGraph::CGRAPH_ECHO("ConfigAlgNPGNode Complete!");
+        t_param->L_candidate = Params.L_candidate_;
+        t_param->R_neighbor = Params.R_neighbor_;
+        t_param->C_neighbor = Params.C_neighbor_;
+        t_param->k_init_graph = Params.k_init_graph_;
 
         return CStatus();
     }

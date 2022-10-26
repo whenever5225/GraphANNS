@@ -20,7 +20,7 @@ public:
         auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(m_param)
 
-        std::ifstream f_in(GA_ALG_INDEX_PATH, std::ios::binary);
+        std::ifstream f_in(Params.GA_ALG_INDEX_PATH_, std::ios::binary);
         if (!f_in.is_open()) {
             CGRAPH_RETURN_ERROR_STATUS("load graph error!");
         }
@@ -38,7 +38,6 @@ public:
     }
 
     CStatus run() override {
-        CGraph::CGRAPH_ECHO("LoadIndexNode Complete!");
     }
 };
 

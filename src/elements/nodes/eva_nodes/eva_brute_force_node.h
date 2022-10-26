@@ -28,38 +28,38 @@ public:
             CGRAPH_RETURN_ERROR_STATUS("EvaBruteForceNode get model param failed")
         }
 
-        CStatus status = model_param->train_meta_modal1_.load(GA_ALG_BASE_MODAL1_PATH);
-        status += model_param->train_meta_modal2_.load(GA_ALG_BASE_MODAL2_PATH);
+        CStatus status = model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_);
+        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_);
         assert(model_param->train_meta_modal1_.num == model_param->train_meta_modal2_.num);
 
-        CGraph::CGRAPH_ECHO("modal 1 vector path: [%s]", GA_ALG_BASE_MODAL1_PATH);
-        CGraph::CGRAPH_ECHO("modal 2 vector path: [%s]", GA_ALG_BASE_MODAL2_PATH);
-        CGraph::CGRAPH_ECHO("vector num: [%d]", model_param->train_meta_modal1_.num);
-        CGraph::CGRAPH_ECHO("modal 1 vector dim: [%d]", model_param->train_meta_modal1_.dim);
-        CGraph::CGRAPH_ECHO("modal 2 vector dim: [%d]", model_param->train_meta_modal2_.dim);
+        printf("[PATH] modal 1 vector path: %s\n", Params.GA_ALG_BASE_MODAL1_PATH_);
+        printf("[PATH] modal 2 vector path: %s\n", Params.GA_ALG_BASE_MODAL2_PATH_);
+        printf("[PARAM] vector num: %d\n", model_param->train_meta_modal1_.num);
+        printf("[PARAM] modal 1 vector dim: %d\n", model_param->train_meta_modal1_.dim);
+        printf("[PARAM] modal 2 vector dim: %d\n", model_param->train_meta_modal2_.dim);
 
         auto *s_param = CGRAPH_GET_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY)
         if (!s_param) {
             CGRAPH_RETURN_ERROR_STATUS("EvaBruteForceNode get search param failed")
         }
 
-        status += model_param->search_meta_modal1_.load(GA_ALG_QUERY_MODAL1_PATH);
-        status += model_param->search_meta_modal2_.load(GA_ALG_QUERY_MODAL2_PATH);
-        assert(model_->search_meta_modal1_.num == model_->search_meta_modal2_.num);
-        status += model_param->train_meta_modal1_.load(GA_ALG_BASE_MODAL1_PATH);
-        status += model_param->train_meta_modal2_.load(GA_ALG_BASE_MODAL2_PATH);
-        assert(model_->train_meta_modal1_.num == model_->train_meta_modal2_.num);
-        assert(model_->search_meta_modal1_.dim == model_->train_meta_modal1_.dim);
-        assert(model_->search_meta_modal2_.dim == model_->train_meta_modal2_.dim);
+        status += model_param->search_meta_modal1_.load(Params.GA_ALG_QUERY_MODAL1_PATH_);
+        status += model_param->search_meta_modal2_.load(Params.GA_ALG_QUERY_MODAL2_PATH_);
+        assert(model_param->search_meta_modal1_.num == model_param->search_meta_modal2_.num);
+        status += model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_);
+        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_);
+        assert(model_param->train_meta_modal1_.num == model_param->train_meta_modal2_.num);
+        assert(model_param->search_meta_modal1_.dim == model_param->train_meta_modal1_.dim);
+        assert(model_param->search_meta_modal2_.dim == model_param->train_meta_modal2_.dim);
         if (!status.isOK()) {
             return CStatus("EvaBruteForceNode init load param failed");
         }
 
-        CGraph::CGRAPH_ECHO("modal 1 query vector path: [%s]", model_param->search_meta_modal1_.file_path.c_str());
-        CGraph::CGRAPH_ECHO("modal 2 query vector path: [%s]", model_param->search_meta_modal2_.file_path.c_str());
-        CGraph::CGRAPH_ECHO("query vector num: [%d]", model_param->search_meta_modal1_.num);
-        CGraph::CGRAPH_ECHO("modal 1 query vector dim: [%d]", model_param->search_meta_modal1_.dim);
-        CGraph::CGRAPH_ECHO("modal 2 query vector dim: [%d]", model_param->search_meta_modal2_.dim);
+        printf("[PATH] modal 1 query vector path: %s\n", model_param->search_meta_modal1_.file_path.c_str());
+        printf("[PATH] modal 2 query vector path: %s\n", model_param->search_meta_modal2_.file_path.c_str());
+        printf("[PARAM] query vector num: %d\n", model_param->search_meta_modal1_.num);
+        printf("[PARAM] modal 1 query vector dim: %d\n", model_param->search_meta_modal1_.dim);
+        printf("[PARAM] modal 2 query vector dim: %d\n", model_param->search_meta_modal2_.dim);
         num_ = model_param->train_meta_modal1_.num;
         query_num_ = model_param->search_meta_modal1_.num;
         dim1_ = model_param->train_meta_modal1_.dim;
@@ -85,7 +85,7 @@ public:
         s_param->results.resize(num_);
         unsigned top_k = s_param->top_k;
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) \
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) \
                          shared(m_param, s_param, top_k) default(none)
 
         for (IDType i = 0; i < query_num_; i++) {
@@ -109,7 +109,7 @@ public:
         }
 
 #if GA_USE_OPENMP
-        CGraph::CGRAPH_ECHO("brute force openmp init complete!");
+        printf("[OPENMP] brute force openmp init complete!\n");
 #else
         CGraph::CGRAPH_ECHO("brute force no openmp init complete!");
 #endif

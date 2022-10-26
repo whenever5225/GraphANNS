@@ -38,7 +38,7 @@ public:
 
     CStatus train() override {
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) default(none)
 
         for (IDType i = 0; i < num_; i++) {
             model_->graph_n_[i].reserve(out_degree_);

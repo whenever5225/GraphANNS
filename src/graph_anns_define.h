@@ -9,40 +9,82 @@
 #ifndef GRAPHANNS_GRAPH_ANNS_DEFINE_H
 #define GRAPHANNS_GRAPH_ANNS_DEFINE_H
 
+#include <utility>
+
 #include "../CGraph/src/CGraph.h"
 
-/**
- * siftsmall
- */
-//const static char* GA_ALG_BASE_MODAL1_PATH = "../doc/siftsmall/siftsmall_base_norm.fvecs";
-//const static char* GA_ALG_BASE_MODAL2_PATH = "../doc/siftsmall/int_attribute_siftsmall_base.ivecs";
-//const static char* GA_ALG_QUERY_MODAL1_PATH = "../doc/siftsmall/siftsmall_query_norm.fvecs";
-//const static char* GA_ALG_QUERY_MODAL2_PATH = "../doc/siftsmall/int_attribute_siftsmall_query.ivecs";
-//const static char* GA_ALG_GROUNDTRUTH_PATH = "../doc/siftsmall/int_attribute_siftsmall_groundtruth.ivecs";
-//const static char* GA_ALG_INDEX_PATH = "../doc/siftsmall/siftsmall.index";
-//
-//const static unsigned GA_NPG_L_CANDIDATE = 100;      // size of candidate set for neighbor selection
-//const static unsigned GA_NPG_R_NEIGHBOR = 100;       // size of neighbor set
-//const static unsigned GA_NPG_C_NEIGHBOR = 200;       // number of visited candidate neighbors when neighbor selection
-//const static unsigned GA_NPG_K_INIT_GRAPH = 20;      // number of neighbors of initial graph
-//const static unsigned GA_NPG_SEARCH_TOPK = 1;      // search topk results
-//const static unsigned GA_DEFAULT_THREAD_SIZE = 8;    // default thread number
+struct ParamConfig {
+    explicit ParamConfig() = default;
 
-/**
- * sift1m
- */
-const static char* GA_ALG_BASE_MODAL1_PATH = "/home/zjlab/ANNS/dataset/sift/sift_base.fvecs";
-const static char* GA_ALG_BASE_MODAL2_PATH = "../doc/sift1m/int_attribute_sift_base.ivecs";
-const static char* GA_ALG_QUERY_MODAL1_PATH = "/home/zjlab/ANNS/dataset/sift/sift_query.fvecs";
-const static char* GA_ALG_QUERY_MODAL2_PATH = "../doc/sift1m/int_attribute_sift_query.ivecs";
-const static char* GA_ALG_GROUNDTRUTH_PATH = "/home/zjlab/ANNS/dataset/sift/label_sift_groundtruth.ivecs";
-const static char* GA_ALG_INDEX_PATH = "../doc/siftsmall/sift1m.index";
+    void set_train_param(char *modal1_base_path, char *modal2_base_path, char *index_path,
+                         unsigned l = 100, unsigned r = 30, unsigned c = 200, unsigned k_init_graph = 100,
+                         unsigned nn_size = 50, unsigned rnn_size = 25, unsigned pool_size = 200,
+                         unsigned iter = 8, unsigned sample_num = 100, float graph_quality_threshold = 0.8) {
+        GA_ALG_BASE_MODAL1_PATH_ = modal1_base_path;
+        GA_ALG_BASE_MODAL2_PATH_ = modal2_base_path;
+        GA_ALG_INDEX_PATH_ = index_path;
+        L_candidate_ = l;
+        R_neighbor_ = r;
+        C_neighbor_ = c;
+        k_init_graph_ = k_init_graph;
+        nn_size_ = nn_size;
+        rnn_size_ = rnn_size;
+        pool_size_ = pool_size;
+        iter_ = iter;
+        sample_num_ = sample_num;
+        graph_quality_threshold_ = graph_quality_threshold;
+    }
 
-const static unsigned GA_NPG_L_CANDIDATE = 100;      // size of candidate set for neighbor selection
-const static unsigned GA_NPG_R_NEIGHBOR = 100;       // size of neighbor set
-const static unsigned GA_NPG_C_NEIGHBOR = 200;       // number of visited candidate neighbors when neighbor selection
-const static unsigned GA_NPG_K_INIT_GRAPH = 100;      // number of neighbors of initial graph
-const static unsigned GA_NPG_SEARCH_TOPK = 10;      // search topk results
-const static unsigned GA_DEFAULT_THREAD_SIZE = 32;    // default thread number
+    void set_search_param(char *modal1_base_path, char *modal2_base_path, char *modal1_query_path,
+                          char *modal2_query_path, char *gt_path, unsigned top_k = 1,
+                          unsigned L_search = 200, char *index_path = nullptr) {
+        GA_ALG_BASE_MODAL1_PATH_ = modal1_base_path;
+        GA_ALG_BASE_MODAL2_PATH_ = modal2_base_path;
+        GA_ALG_QUERY_MODAL1_PATH_ = modal1_query_path;
+        GA_ALG_QUERY_MODAL2_PATH_ = modal2_query_path;
+        GA_ALG_GROUND_TRUTH_PATH_ = gt_path;
+        GA_ALG_INDEX_PATH_ = index_path;
+        top_k_ = top_k;
+        L_search_ = L_search;
+    }
+
+    void set_data_param(float w1 = -0.5, float w2 = -0.5) {
+        w1_ = w1;
+        w2_ = w2;
+    }
+
+    void set_general_param(unsigned thread_num = 1) {
+        thread_num_ = thread_num;
+    }
+
+public:
+    char *GA_ALG_BASE_MODAL1_PATH_{};    // base vector data for modal #1
+    char *GA_ALG_BASE_MODAL2_PATH_{};    // base vector data for modal #2
+    char *GA_ALG_QUERY_MODAL1_PATH_{};
+    char *GA_ALG_QUERY_MODAL2_PATH_{};
+    char *GA_ALG_GROUND_TRUTH_PATH_{};
+    char *GA_ALG_INDEX_PATH_{};
+
+    unsigned L_candidate_{};
+    unsigned R_neighbor_{};
+    unsigned C_neighbor_{};
+    unsigned k_init_graph_{};
+    unsigned nn_size_{};
+    unsigned rnn_size_{};
+    unsigned pool_size_{};
+    unsigned iter_{};
+    unsigned sample_num_{};
+    float graph_quality_threshold_{};
+
+    unsigned top_k_{};
+    unsigned L_search_{};
+
+    unsigned thread_num_{};
+
+    float w1_{};
+    float w2_{};
+};
+
+ParamConfig Params{};
 
 #endif //GRAPHANNS_GRAPH_ANNS_DEFINE_H

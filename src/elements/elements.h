@@ -12,5 +12,6 @@
 #include "elements_define.h"
 #include "nodes/nodes_include.h"
 #include "regions/regions_include.h"
+#include "aspects/aspects_include.h"
 
 #endif //GRAPHANNS_ELEMENTS_H

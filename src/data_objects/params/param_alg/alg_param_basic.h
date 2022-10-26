@@ -12,7 +12,7 @@
 #include "../basic_param.h"
 
 struct AlgParamBasic : public BasicParam {
-    unsigned top_k = GA_NPG_SEARCH_TOPK;
+    unsigned top_k = Params.top_k_;
 
     std::vector<std::vector<IDType> > results;
 

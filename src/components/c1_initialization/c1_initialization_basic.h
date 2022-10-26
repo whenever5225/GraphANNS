@@ -23,18 +23,18 @@ protected:
             CGRAPH_RETURN_ERROR_STATUS("C1InitializationBasic init get param failed")
         }
 
-        CStatus status = model_param->train_meta_modal1_.load(GA_ALG_BASE_MODAL1_PATH);
-        status += model_param->train_meta_modal2_.load(GA_ALG_BASE_MODAL2_PATH);
+        CStatus status = model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_);
+        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_);
         if (!status.isOK()) {
             return CStatus("C1InitializationBasic init load param failed");
         }
         assert(model_param->train_meta_modal1_.num == model_param->train_meta_modal2_.num);
 
-        CGraph::CGRAPH_ECHO("modal 1 vector path: [%s]", GA_ALG_BASE_MODAL1_PATH);
-        CGraph::CGRAPH_ECHO("modal 2 vector path: [%s]", GA_ALG_BASE_MODAL2_PATH);
-        CGraph::CGRAPH_ECHO("vector num: [%d]", model_param->train_meta_modal1_.num);
-        CGraph::CGRAPH_ECHO("modal 1 vector dim: [%d]", model_param->train_meta_modal1_.dim);
-        CGraph::CGRAPH_ECHO("modal 2 vector dim: [%d]", model_param->train_meta_modal2_.dim);
+        printf("[PATH] modal 1 vector path: %s\n", Params.GA_ALG_BASE_MODAL1_PATH_);
+        printf("[PATH] modal 2 vector path: %s\n", Params.GA_ALG_BASE_MODAL2_PATH_);
+        printf("[PARAM] vector num: %d\n", model_param->train_meta_modal1_.num);
+        printf("[PARAM] modal 1 vector dim: %d\n", model_param->train_meta_modal1_.dim);
+        printf("[PARAM] modal 2 vector dim: %d\n", model_param->train_meta_modal2_.dim);
         return CStatus();
     }
 

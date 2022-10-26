@@ -73,9 +73,9 @@ public:
 
         if (status.isOK()) {
 #if GA_USE_OPENMP
-            CGraph::CGRAPH_ECHO("nndescent openmp init complete!");
+            printf("[OPENMP] nndescent openmp init complete!\n");
 #else
-            CGraph::CGRAPH_ECHO("nndescent no openmp init complete!");
+            printf("[OPENMP] nndescent no openmp init complete!\n");
 #endif
         }
 
@@ -84,7 +84,7 @@ public:
 
     CStatus refreshParam() override {
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) default(none)
 
         for (IDType i = 0; i < num_; i++) {
             unsigned size = std::min((unsigned) graph_pool_[i].size(), out_degree_);
@@ -114,7 +114,7 @@ protected:
      */
     CStatus init_neighbor() {
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) default(none)
 
         for (IDType i = 0; i < num_; i++) {
             graph_nn_[NN_NEW][i].resize(nn_size_ * 2);
@@ -139,7 +139,7 @@ protected:
 
     CStatus generate_sample_set(std::vector<IDType> &s, std::vector<std::vector<IDType>> &g) {
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) shared(s, g) default(none)
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) shared(s, g) default(none)
 
         for (unsigned i = 0; i < s.size(); i++) {
             std::vector<Neighbor> cur;
@@ -167,7 +167,7 @@ protected:
         float mean_acc = 0;
         unsigned ctrl_points_size = ctrl_points.size();
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) \
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) \
                          shared(ctrl_points_size, ctrl_points, knn_set, mean_acc) default(none)
 
         for (unsigned i = 0; i < ctrl_points_size; i++) {
@@ -248,7 +248,7 @@ protected:
 
     CStatus join_neighbor() {
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) default(none)
 
         for (IDType n = 0; n < num_; n++) {
             for (unsigned const i: graph_nn_[NN_NEW][n]) {
@@ -333,14 +333,14 @@ protected:
 
     CStatus update_neighbor() {
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) default(none)
 
         for (IDType i = 0; i < num_; i++) {
             std::vector<unsigned>().swap(graph_nn_[NN_NEW][i]);
             std::vector<unsigned>().swap(graph_nn_[NN_OLD][i]);
         }
 
-#pragma omp parallel for num_threads(GA_DEFAULT_THREAD_SIZE) schedule(dynamic) default(none)
+#pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) default(none)
 
         for (IDType i = 0; i < num_; i++) {
             for (unsigned l = 0; l < pool_size_; ++l) {
@@ -369,7 +369,7 @@ protected:
             status += update_neighbor();    // update candidate neighbors for neighbors join
 
             float rc = eval_quality(sample_points, knn_set);    // evaluate graph quality for this iteration
-            CGraph::CGRAPH_ECHO("iter: [%d], graph quality: [%f]", it, rc);
+            printf("[NNDESCENT] iter: %d, graph quality: %f\n", it, rc);
             if (rc >= graph_quality_threshold_)
                 break;
         }

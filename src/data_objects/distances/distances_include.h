@@ -24,8 +24,8 @@ using DistResType2 = float;
 using DistResType = float;  // distances value type
 
 // distances calculation type
-using DistCalcType1 = CGraph::UDistanceCalculator<VecValType1, DistResType1, EuclideanDistance<VecValType1, DistResType1> >;
-using DistCalcType2 = CGraph::UDistanceCalculator<VecValType2, DistResType2, AttributeDistance<VecValType2, DistResType2> >;
+using DistCalcType1 = CGraph::UDistanceCalculator<VecValType1, DistResType1, InnerProduct<VecValType1, DistResType1> >;
+using DistCalcType2 = CGraph::UDistanceCalculator<VecValType2, DistResType2, AttributeSimilarity<VecValType2, DistResType2> >;
 
 template<typename TVec1 = VecValType1,    // vector type of modal1
         typename TVec2 = VecValType2,    // vector type of modal2
@@ -42,8 +42,8 @@ struct BiDistanceCalculator {
         set_weight(w1, w2);
     }
 
-    float weight_1_ = 1.f;
-    float weight_2_ = 140000.f;
+    float weight_1_ = Params.w1_;
+    float weight_2_ = Params.w2_;
 
     void set_weight(float a, float b) {
         weight_1_ = a;
@@ -73,7 +73,7 @@ struct BiDistanceCalculator {
 
         status += dist_op1_.calculate(vec_11, vec_21, dim_11, dim_21, res_1);
         status += dist_op2_.calculate(vec_12, vec_22, dim_12, dim_22, res_2);
-//        res_2 /= (DistResType2)dim_12;
+        res_2 /= (DistResType2)dim_12;
 //        res_2 = (DistResType2)(res_2 == 0 ? 0 : (4.32 - 1 / (std::log10(res_2) + 1)));
 //        weight_2_ = res_1 / (float)dim_12;
         result = status.isOK() ? res_1 * weight_1_ + (DistResType)res_2 * weight_2_ : 0.f;

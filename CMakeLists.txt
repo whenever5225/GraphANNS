@@ -15,9 +15,9 @@ include(cmake/GA-OpenMP-depend.cmake)
 
 
 set(TUTORIAL_LIST
-        T-NPG
-        S-NPG
-        S-BruteForce
+        T-MG
+        S-MG
+        S-MB
         )
 
 foreach(tut ${TUTORIAL_LIST})

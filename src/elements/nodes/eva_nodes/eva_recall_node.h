@@ -17,7 +17,7 @@ public:
 
         auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(m_param)
-        CStatus status = m_param->eva_meta_.load(GA_ALG_GROUNDTRUTH_PATH);
+        CStatus status = m_param->eva_meta_.load(Params.GA_ALG_GROUND_TRUTH_PATH_);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode init load param failed")
         }
@@ -50,7 +50,7 @@ public:
         }
 
         float acc = 1 - (float) cnt / (float) (gt_num_ * top_k);
-        CGraph::CGRAPH_ECHO("%d NN accuracy: %f", top_k, acc);
+        printf("[EVA] %d NN accuracy: %f\n", top_k, acc);
         return CStatus();
     }
 

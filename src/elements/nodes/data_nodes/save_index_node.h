@@ -24,7 +24,7 @@ public:
         auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
         CGRAPH_ASSERT_NOT_NULL(m_param)
 
-        std::fstream f_out(GA_ALG_INDEX_PATH, std::ios::binary | std::ios::out);
+        std::fstream f_out(Params.GA_ALG_INDEX_PATH_, std::ios::binary | std::ios::out);
         for (unsigned i = 0; i < m_param->train_meta_modal1_.num; i++) {
             auto GK = (unsigned) m_param->cut_graph_[i].size();
             std::vector<IDType> vec;

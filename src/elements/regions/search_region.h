@@ -25,9 +25,6 @@ public:
         }
 
         s_param->query_id++;
-        if (s_param->query_id == (m_param->search_meta_modal1_.num - 1)) {
-            CGraph::CGRAPH_ECHO("C6SeedKGraph & C7RoutingKGraph Complete!");
-        }
         return s_param->query_id < m_param->search_meta_modal1_.num;
     }
 
