@@ -10,5 +10,6 @@
 #define GRAPHANNS_META_INCLUDE_H
 
 #include "meta_data.h"
+#include "meta_vector.h"
 
 #endif //GRAPHANNS_META_INCLUDE_H

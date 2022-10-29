@@ -18,7 +18,21 @@ struct MetaData {
     unsigned dim = 0;
     std::string file_path;
 
-    CStatus load(const std::string& path) {
+    CStatus norm(T *vec, const unsigned n, const unsigned d) {
+        for (unsigned i = 0; i < n; i++) {
+            float vector_norm = 0;
+            for (unsigned j = 0; j < d; j++) {
+                vector_norm += vec[i * d + j] * vec[i * d + j];
+            }
+            vector_norm = std::sqrt(vector_norm);
+            for (unsigned j = 0; j < d; j++) {
+                vec[i * d + j] /= vector_norm;
+            }
+        }
+        return CStatus();
+    }
+
+    CStatus load(const std::string& path, const unsigned is_norm) {
         std::ifstream in(path.data(), std::ios::binary);
         if (!in.is_open()) {
             return CStatus(path + " open file error!");
@@ -38,6 +52,10 @@ struct MetaData {
         }
         in.close();
         file_path = path;
+        if (is_norm) {
+            norm(data, num, dim);
+            printf("[EXEC] normalize vector complete!\n");
+        }
         return CStatus();
     }
 

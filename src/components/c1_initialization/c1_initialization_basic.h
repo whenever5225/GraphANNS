@@ -23,8 +23,8 @@ protected:
             CGRAPH_RETURN_ERROR_STATUS("C1InitializationBasic init get param failed")
         }
 
-        CStatus status = model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_);
-        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_);
+        CStatus status = model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_, Params.is_norm_modal1_);
+        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_, Params.is_norm_modal2_);
         if (!status.isOK()) {
             return CStatus("C1InitializationBasic init load param failed");
         }

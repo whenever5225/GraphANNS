@@ -9,6 +9,7 @@
 #ifndef GRAPHANNS_EVA_RECALL_NODE_H
 #define GRAPHANNS_EVA_RECALL_NODE_H
 
+#include <iterator>
 #include "../../elements_define.h"
 
 class EvaRecallNode : public CGraph::GNode {
@@ -17,13 +18,12 @@ public:
 
         auto m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
         CGRAPH_ASSERT_NOT_NULL(m_param)
-        CStatus status = m_param->eva_meta_.load(Params.GA_ALG_GROUND_TRUTH_PATH_);
+        CStatus status = m_param->eva_meta_.load(Params.GA_ALG_GROUND_TRUTH_PATH_, 0);
         if (!status.isOK()) {
             CGRAPH_RETURN_ERROR_STATUS("EvaRecallNode init load param failed")
         }
 
         gt_num_ = m_param->eva_meta_.num;
-        gt_dim_ = m_param->eva_meta_.dim;
         return status;
     }
 
@@ -35,28 +35,31 @@ public:
         }
 
         unsigned top_k = s_param->top_k;
+        unsigned gt_k = Params.gt_k_;
         int cnt = 0;
+        std::set<unsigned> gt, res;
         for (unsigned i = 0; i < gt_num_; i++) {
             if (s_param->results[i].empty()) continue;
-            for (unsigned j = 0; j < top_k; j++) {
-                unsigned k = 0;
-                for (; k < top_k; k++) {
-                    if (s_param->results[i][j] == m_param->eva_meta_.data[i * gt_dim_ + k])
-                        break;
-                }
-                if (k == top_k)
-                    cnt++;
-            }
+            gt_look_num_ = (Params.is_multi_res_equal_ ? m_param->eva_meta_.vec[i].size() : gt_k);
+            gt.clear();
+            res.clear();
+            gt.insert(m_param->eva_meta_.vec[i].begin(), m_param->eva_meta_.vec[i].begin() + gt_look_num_);
+            res.insert(s_param->results[i].begin(), s_param->results[i].begin() + top_k);
+            std::vector<IDType> res_intersection;
+            std::set_intersection(gt.begin(), gt.end(), res.begin(), res.end(),
+                                  std::insert_iterator<std::vector<IDType>>(res_intersection,
+                                          res_intersection.begin()));
+            cnt += (res_intersection.size() >= gt_k ? (int) gt_k : (int) res_intersection.size());
         }
 
-        float acc = 1 - (float) cnt / (float) (gt_num_ * top_k);
-        printf("[EVA] %d NN accuracy: %f\n", top_k, acc);
+        float acc = (float) cnt / (float) (gt_num_ * gt_k);
+        printf("[EVA] %d NN accuracy for top%d: %f\n", gt_k, top_k, acc);
         return CStatus();
     }
 
 private:
     unsigned gt_num_ = 0;
-    unsigned gt_dim_ = 0;
+    unsigned gt_look_num_ = 0;
 };
 
 #endif //GRAPHANNS_EVA_RECALL_NODE_H

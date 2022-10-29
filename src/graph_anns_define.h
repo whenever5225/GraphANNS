@@ -36,15 +36,17 @@ struct ParamConfig {
     }
 
     void set_search_param(char *modal1_base_path, char *modal2_base_path, char *modal1_query_path,
-                          char *modal2_query_path, char *gt_path, unsigned top_k = 1,
-                          unsigned L_search = 200, char *index_path = nullptr) {
+                          char *modal2_query_path, char *gt_path, char *res_path, unsigned top_k = 1,
+                          unsigned gt_k = 1, unsigned L_search = 200, char *index_path = nullptr) {
         GA_ALG_BASE_MODAL1_PATH_ = modal1_base_path;
         GA_ALG_BASE_MODAL2_PATH_ = modal2_base_path;
         GA_ALG_QUERY_MODAL1_PATH_ = modal1_query_path;
         GA_ALG_QUERY_MODAL2_PATH_ = modal2_query_path;
         GA_ALG_GROUND_TRUTH_PATH_ = gt_path;
         GA_ALG_INDEX_PATH_ = index_path;
+        GA_ALG_RESULT_PATH_ = res_path;
         top_k_ = top_k;
+        gt_k_ = gt_k;
         L_search_ = L_search;
     }
 
@@ -53,8 +55,14 @@ struct ParamConfig {
         w2_ = w2;
     }
 
-    void set_general_param(unsigned thread_num = 1) {
+    void set_general_param(unsigned thread_num = 1, unsigned is_norm_modal1 = 0, unsigned is_norm_modal2 = 0,
+            unsigned is_skip = 0, unsigned skip_num = 0, unsigned is_multi_res_equal = 0) {
         thread_num_ = thread_num;
+        is_norm_modal1_ = is_norm_modal1;
+        is_norm_modal2_ = is_norm_modal2;
+        is_skip_ = is_skip;
+        skip_num_ = skip_num;
+        is_multi_res_equal_ = is_multi_res_equal;
     }
 
 public:
@@ -64,6 +72,7 @@ public:
     char *GA_ALG_QUERY_MODAL2_PATH_{};
     char *GA_ALG_GROUND_TRUTH_PATH_{};
     char *GA_ALG_INDEX_PATH_{};
+    char *GA_ALG_RESULT_PATH_{};
 
     unsigned L_candidate_{};
     unsigned R_neighbor_{};
@@ -77,9 +86,15 @@ public:
     float graph_quality_threshold_{};
 
     unsigned top_k_{};
+    unsigned gt_k_{};
     unsigned L_search_{};
 
     unsigned thread_num_{};
+    unsigned is_norm_modal1_{};
+    unsigned is_norm_modal2_{};
+    unsigned is_skip_{};
+    unsigned skip_num_{};
+    unsigned is_multi_res_equal_{};
 
     float w1_{};
     float w2_{};

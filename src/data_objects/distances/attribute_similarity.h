@@ -19,20 +19,39 @@ public:
         TRes diff0, diff1, diff2, diff3;
         const TVec *last = a + dim1;
         const TVec *unroll_group = last - 3;
+        unsigned is_skip = Params.is_skip_;
+        unsigned skip_num = Params.skip_num_;
 
-        while (a < unroll_group) {
-            diff0 = (a[0] == b[0]);
-            diff1 = (a[1] == b[1]);
-            diff2 = (a[2] == b[2]);
-            diff3 = (a[3] == b[3]);
-            res += diff0 + diff1 + diff2 + diff3;
-            a += 4;
-            b += 4;
-        }
+        if (is_skip) {
+            while (a < unroll_group) {
+                diff0 = (skip_num == a[0] ? 0 : (a[0] == b[0]));
+                diff1 = (skip_num == a[1] ? 0 : (a[1] == b[1]));
+                diff2 = (skip_num == a[2] ? 0 : (a[2] == b[2]));
+                diff3 = (skip_num == a[3] ? 0 : (a[3] == b[3]));
+                res += diff0 + diff1 + diff2 + diff3;
+                a += 4;
+                b += 4;
+            }
 
-        while (a < last) {
-            diff0 = (*a++ == *b++);
-            res += diff0;
+            while (a < last) {
+                diff0 = (skip_num == *a++ ? 0 : (*a++ == *b++));
+                res += diff0;
+            }
+        } else {
+            while (a < unroll_group) {
+                diff0 = (a[0] == b[0]);
+                diff1 = (a[1] == b[1]);
+                diff2 = (a[2] == b[2]);
+                diff3 = (a[3] == b[3]);
+                res += diff0 + diff1 + diff2 + diff3;
+                a += 4;
+                b += 4;
+            }
+
+            while (a < last) {
+                diff0 = (*a++ == *b++);
+                res += diff0;
+            }
         }
 
         return CStatus();

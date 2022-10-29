@@ -7,6 +7,8 @@ param_${DATASET}_${STRATEGY}
 
 TIME=(`date +%Y_%m_%d`)
 RESULT_PREFIX_PATH="../doc/result/${TIME}"
+SEARCH_RESULT_PATH=${RESULT_PREFIX_PATH}/${DATASET}_${STRATEGY}_res.txt
+#SEARCH_RESULT_PATH=" "
 
 if [ ! -e ${RESULT_PREFIX_PATH} ]
 then
@@ -72,7 +74,11 @@ case $2 in
       ${pool_size} \
       ${iter} \
       ${sample_num} \
-      ${graph_quality_threshold} >> ${RESULT_PREFIX_PATH}/build_${STRATEGY}.log
+      ${graph_quality_threshold} \
+      ${IS_NORM_MODAL1} \
+      ${IS_NORM_MODAL2} \
+      ${IS_SKIP_NUM} \
+      ${SKIP_NUM} >> ${RESULT_PREFIX_PATH}/build_${STRATEGY}.log
   ;;
   search_MG)
     echo "[SCRIPT] Searching by MultimodalGraph on ${DATASET} ..."
@@ -83,11 +89,18 @@ case $2 in
       ${MODAL2_QUERY_PATH} \
       ${GROUNDTRUTH_PATH} \
       ${INDEX_PATH} \
+      ${SEARCH_RESULT_PATH} \
       ${SEARCH_THREAD_NUM} \
       ${W1} \
       ${W2} \
       ${TOPK} \
-      ${L_search} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
+      ${GTK} \
+      ${L_search} \
+      ${IS_NORM_MODAL1} \
+      ${IS_NORM_MODAL2} \
+      ${IS_SKIP_NUM} \
+      ${SKIP_NUM} \
+      ${IS_MULTI_RESULT_EQUAL} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
   ;;
   search_MB)
     echo "[SCRIPT] Searching by MultimodalBruteforce on ${DATASET} ..."
@@ -97,9 +110,16 @@ case $2 in
       ${MODAL1_QUERY_PATH} \
       ${MODAL2_QUERY_PATH} \
       ${GROUNDTRUTH_PATH} \
+      ${SEARCH_RESULT_PATH} \
       ${SEARCH_THREAD_NUM} \
       ${W1} \
       ${W2} \
-      ${TOPK} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
+      ${TOPK} \
+      ${GTK} \
+      ${IS_NORM_MODAL1} \
+      ${IS_NORM_MODAL2} \
+      ${IS_SKIP_NUM} \
+      ${SKIP_NUM} \
+      ${IS_MULTI_RESULT_EQUAL} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
   ;;
 esac

@@ -28,8 +28,10 @@ public:
             CGRAPH_RETURN_ERROR_STATUS("EvaBruteForceNode get model param failed")
         }
 
-        CStatus status = model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_);
-        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_);
+        CStatus status = model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_,
+                                                              Params.is_norm_modal1_);
+        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_,
+                                                       Params.is_norm_modal2_);
         assert(model_param->train_meta_modal1_.num == model_param->train_meta_modal2_.num);
 
         printf("[PATH] modal 1 vector path: %s\n", Params.GA_ALG_BASE_MODAL1_PATH_);
@@ -43,12 +45,12 @@ public:
             CGRAPH_RETURN_ERROR_STATUS("EvaBruteForceNode get search param failed")
         }
 
-        status += model_param->search_meta_modal1_.load(Params.GA_ALG_QUERY_MODAL1_PATH_);
-        status += model_param->search_meta_modal2_.load(Params.GA_ALG_QUERY_MODAL2_PATH_);
+        status += model_param->search_meta_modal1_.load(Params.GA_ALG_QUERY_MODAL1_PATH_,
+                                                        Params.is_norm_modal1_);
+        status += model_param->search_meta_modal2_.load(Params.GA_ALG_QUERY_MODAL2_PATH_,
+                                                        Params.is_norm_modal2_);
+        status += model_param->delete_meta_.load("/home/zjlab/ANNS/wmz/GraphANNS/doc/dataset/celeba/test/celeba_delete_id.ivecs", 0);
         assert(model_param->search_meta_modal1_.num == model_param->search_meta_modal2_.num);
-        status += model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_);
-        status += model_param->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_);
-        assert(model_param->train_meta_modal1_.num == model_param->train_meta_modal2_.num);
         assert(model_param->search_meta_modal1_.dim == model_param->train_meta_modal1_.dim);
         assert(model_param->search_meta_modal2_.dim == model_param->train_meta_modal2_.dim);
         if (!status.isOK()) {
@@ -64,6 +66,7 @@ public:
         query_num_ = model_param->search_meta_modal1_.num;
         dim1_ = model_param->train_meta_modal1_.dim;
         dim2_ = model_param->train_meta_modal2_.dim;
+        delete_num_each_query_ = model_param->delete_meta_.dim;
         return CStatus();
     }
 
@@ -92,6 +95,14 @@ public:
             std::priority_queue<std::pair<DistResType, IDType>,
                     std::vector<std::pair<DistResType, IDType>>, cmp> dist_id;
             for (IDType j = 0; j < num_; j++) {
+                bool is_delete = false;
+                for (IDType k = 0; k < delete_num_each_query_; k++) {
+                    if (j == m_param->delete_meta_.data[i * delete_num_each_query_ + k]) {
+                        is_delete = true;
+                        break;
+                    }
+                }
+                if (is_delete) continue;
                 DistResType dist = 0;
                 dist_op_.calculate(m_param->search_meta_modal1_.data + (i * dim1_),
                                    m_param->train_meta_modal1_.data + j * dim1_,
@@ -120,6 +131,7 @@ public:
 private:
     unsigned dim1_ = 0;
     unsigned dim2_ = 0;
+    unsigned delete_num_each_query_ = 0;
     unsigned query_num_ = 0;
     unsigned num_ = 0;
     DistCalcType dist_op_;

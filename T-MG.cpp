@@ -36,8 +36,16 @@ int main(int argc, char **argv) {
     std::cout << "[PARAM] iter time: " << argv[argv_count++] << std::endl;              // 14
     std::cout << "[PARAM] sample number: " << argv[argv_count++] << std::endl;          // 15
     std::cout << "[PARAM] graph quality threshold: " << argv[argv_count++] << std::endl;// 16
+    std::cout << "[PARAM] is norm for modal1?: " << argv[argv_count++] << std::endl;    // 17
+    std::cout << "[PARAM] is norm for modal2?: " << argv[argv_count++] << std::endl;    // 18
+    std::cout << "[PARAM] is skip number for modal2?: " << argv[argv_count++] << std::endl;    // 19
+    std::cout << "[PARAM] skip number for modal2?: " << argv[argv_count++] << std::endl;    // 20
     unsigned thread_num = strtoul(argv[4], nullptr, 10);
-    Params.set_general_param(thread_num);
+    unsigned is_norm_modal1 = strtoul(argv[17], nullptr, 10);
+    unsigned is_norm_modal2 = strtoul(argv[18], nullptr, 10);
+    unsigned is_skip = strtoul(argv[19], nullptr, 10);
+    unsigned skip_num = strtoul(argv[20], nullptr, 10);
+    Params.set_general_param(thread_num, is_norm_modal1, is_norm_modal2, is_skip, skip_num);
     float w1 = strtof(argv[5], nullptr);
     float w2 = strtof(argv[6], nullptr);
     Params.set_data_param(w1, w2);

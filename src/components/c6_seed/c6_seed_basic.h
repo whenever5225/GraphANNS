@@ -22,11 +22,13 @@ protected:
             CGRAPH_RETURN_ERROR_STATUS("C6SeedBasic get param failed")
         }
 
-        CStatus status = model_->search_meta_modal1_.load(Params.GA_ALG_QUERY_MODAL1_PATH_);
-        status += model_->search_meta_modal2_.load(Params.GA_ALG_QUERY_MODAL2_PATH_);
+        CStatus status = model_->search_meta_modal1_.load(Params.GA_ALG_QUERY_MODAL1_PATH_,
+                                                          Params.is_norm_modal1_);
+        status += model_->search_meta_modal2_.load(Params.GA_ALG_QUERY_MODAL2_PATH_,
+                                                   Params.is_norm_modal2_);
         assert(model_->search_meta_modal1_.num == model_->search_meta_modal2_.num);
-        status += model_->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_);
-        status += model_->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_);
+        status += model_->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_, Params.is_norm_modal1_);
+        status += model_->train_meta_modal2_.load(Params.GA_ALG_BASE_MODAL2_PATH_, Params.is_norm_modal2_);
         assert(model_->train_meta_modal1_.num == model_->train_meta_modal2_.num);
         assert(model_->search_meta_modal1_.dim == model_->train_meta_modal1_.dim);
         assert(model_->search_meta_modal2_.dim == model_->train_meta_modal2_.dim);

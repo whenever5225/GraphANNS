@@ -60,7 +60,7 @@ struct BiDistanceCalculator {
         status += dist_op1_.calculate(vec_11, vec_21, res_1);
         status += dist_op2_.calculate(vec_12, vec_22, res_2);
 //        weight_2_ = res_1 / (float)vec_12.size();
-        result = status.isOK() ? res_1 * weight_1_ + (DistResType)res_2 * weight_2_ : 0.f;
+        result = status.isOK() ? res_1 * weight_1_ + (DistResType) res_2 * weight_2_ : 0.f;
         return status;
     }
 
@@ -71,12 +71,20 @@ struct BiDistanceCalculator {
         DistResType1 res_1;
         DistResType2 res_2;
 
-        status += dist_op1_.calculate(vec_11, vec_21, dim_11, dim_21, res_1);
-        status += dist_op2_.calculate(vec_12, vec_22, dim_12, dim_22, res_2);
-        res_2 /= (DistResType2)dim_12;
+        if (weight_1_ == 0) {
+            res_1 = 0;
+        } else {
+            status += dist_op1_.calculate(vec_11, vec_21, dim_11, dim_21, res_1);
+        }
+        if (weight_2_ == 0) {
+            res_2 = 0;
+        } else {
+            status += dist_op2_.calculate(vec_12, vec_22, dim_12, dim_22, res_2);
+            res_2 /= (DistResType2) dim_12;
+        }
 //        res_2 = (DistResType2)(res_2 == 0 ? 0 : (4.32 - 1 / (std::log10(res_2) + 1)));
 //        weight_2_ = res_1 / (float)dim_12;
-        result = status.isOK() ? res_1 * weight_1_ + (DistResType)res_2 * weight_2_ : 0.f;
+        result = status.isOK() ? res_1 * weight_1_ + (DistResType) res_2 * weight_2_ : 0.f;
         return status;
     }
 };

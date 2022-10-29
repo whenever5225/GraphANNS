@@ -11,5 +11,6 @@
 
 #include "load_index_node.h"
 #include "save_index_node.h"
+#include "save_result_node.h"
 
 #endif //GRAPHANNS_DATA_INCLUDE_H
