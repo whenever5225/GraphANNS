@@ -56,9 +56,9 @@ make -j
 popd
 
 case $2 in
-  build_MG)
-    echo "[SCRIPT] Building MultimodalGraph index on ${DATASET} ..."
-    time $EXE_PATH/T-MG \
+  build_MSAG)
+    echo "[SCRIPT] Building MultimodalSimilarityAggregationGraph index on ${DATASET} ..."
+    time $EXE_PATH/T-MSAG \
       ${MODAL1_BASE_PATH} \
       ${MODAL2_BASE_PATH} \
       ${INDEX_PATH} \
@@ -80,9 +80,81 @@ case $2 in
       ${IS_SKIP_NUM} \
       ${SKIP_NUM} >> ${RESULT_PREFIX_PATH}/build_${STRATEGY}.log
   ;;
-  search_MG)
-    echo "[SCRIPT] Searching by MultimodalGraph on ${DATASET} ..."
-    time $EXE_PATH/S-MG \
+  build_MABG)
+    echo "[SCRIPT] Modal1: Building MultichannelAggregationByGraph index on ${DATASET} ..."
+    time $EXE_PATH/T-MSAG \
+      ${MODAL1_BASE_PATH} \
+      ${MODAL2_BASE_PATH} \
+      ${INDEX_PATH_MODAL1} \
+      ${BUILD_THREAD_NUM} \
+      ${W1} \
+      0 \
+      ${L_candidate} \
+      ${R_neighbor} \
+      ${C_neighbor} \
+      ${k_init_graph} \
+      ${nn_size} \
+      ${rnn_size} \
+      ${pool_size} \
+      ${iter} \
+      ${sample_num} \
+      ${graph_quality_threshold} \
+      ${IS_NORM_MODAL1} \
+      ${IS_NORM_MODAL2} \
+      ${IS_SKIP_NUM} \
+      ${SKIP_NUM} >> ${RESULT_PREFIX_PATH}/build_${STRATEGY}.log
+    echo "[SCRIPT] Modal2: Building MultichannelAggregationByGraph index on ${DATASET} ..."
+    time $EXE_PATH/T-MSAG \
+      ${MODAL1_BASE_PATH} \
+      ${MODAL2_BASE_PATH} \
+      ${INDEX_PATH_MODAL2} \
+      ${BUILD_THREAD_NUM} \
+      0 \
+      ${W2} \
+      ${L_candidate} \
+      ${R_neighbor} \
+      ${C_neighbor} \
+      ${k_init_graph} \
+      ${nn_size} \
+      ${rnn_size} \
+      ${pool_size} \
+      ${iter} \
+      ${sample_num} \
+      ${graph_quality_threshold} \
+      ${IS_NORM_MODAL1} \
+      ${IS_NORM_MODAL2} \
+      ${IS_SKIP_NUM} \
+      ${SKIP_NUM} >> ${RESULT_PREFIX_PATH}/build_${STRATEGY}.log
+  ;;
+  search_MABG)
+    echo "[SCRIPT] Searching by MultichannelAggregationByGraph on ${DATASET} ..."
+    time $EXE_PATH/S-MABG \
+      ${MODAL1_BASE_PATH} \
+      ${MODAL2_BASE_PATH} \
+      ${MODAL1_QUERY_PATH} \
+      ${MODAL2_QUERY_PATH} \
+      ${GROUNDTRUTH_PATH} \
+      ${INDEX_PATH_MODAL1} \
+      ${INDEX_PATH_MODAL2} \
+      ${SEARCH_RESULT_PATH} \
+      ${SEARCH_THREAD_NUM} \
+      ${W1} \
+      ${W2} \
+      ${TOPK} \
+      ${GTK} \
+      ${L_search} \
+      ${IS_NORM_MODAL1} \
+      ${IS_NORM_MODAL2} \
+      ${IS_SKIP_NUM} \
+      ${SKIP_NUM} \
+      ${IS_MULTI_RESULT_EQUAL} \
+      ${IS_DELETE_ID} \
+      ${DELETE_ID_PATH} \
+      ${CANDIDATE_TOPK} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
+  ;;
+  search_MSAG)
+    echo "[SCRIPT] Searching by MultimodalSimilarityAggregationGraph on ${DATASET} ..."
+    time $EXE_PATH/S-MSAG \
       ${MODAL1_BASE_PATH} \
       ${MODAL2_BASE_PATH} \
       ${MODAL1_QUERY_PATH} \
@@ -100,11 +172,13 @@ case $2 in
       ${IS_NORM_MODAL2} \
       ${IS_SKIP_NUM} \
       ${SKIP_NUM} \
-      ${IS_MULTI_RESULT_EQUAL} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
+      ${IS_MULTI_RESULT_EQUAL} \
+      ${IS_DELETE_ID} \
+      ${DELETE_ID_PATH} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
   ;;
-  search_MB)
-    echo "[SCRIPT] Searching by MultimodalBruteforce on ${DATASET} ..."
-    time $EXE_PATH/S-MB \
+  search_MSAB)
+    echo "[SCRIPT] Searching by MultimodalSimilarityAggregationBruteforce on ${DATASET} ..."
+    time $EXE_PATH/S-MSAB \
       ${MODAL1_BASE_PATH} \
       ${MODAL2_BASE_PATH} \
       ${MODAL1_QUERY_PATH} \
@@ -120,6 +194,31 @@ case $2 in
       ${IS_NORM_MODAL2} \
       ${IS_SKIP_NUM} \
       ${SKIP_NUM} \
-      ${IS_MULTI_RESULT_EQUAL} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
+      ${IS_MULTI_RESULT_EQUAL} \
+      ${IS_DELETE_ID} \
+      ${DELETE_ID_PATH} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
+  ;;
+  search_MABB)
+    echo "[SCRIPT] Searching by MultichannelAggregationByBruteforce on ${DATASET} ..."
+    time $EXE_PATH/S-MABB \
+      ${MODAL1_BASE_PATH} \
+      ${MODAL2_BASE_PATH} \
+      ${MODAL1_QUERY_PATH} \
+      ${MODAL2_QUERY_PATH} \
+      ${GROUNDTRUTH_PATH} \
+      ${SEARCH_RESULT_PATH} \
+      ${SEARCH_THREAD_NUM} \
+      ${W1} \
+      ${W2} \
+      ${TOPK} \
+      ${GTK} \
+      ${IS_NORM_MODAL1} \
+      ${IS_NORM_MODAL2} \
+      ${IS_SKIP_NUM} \
+      ${SKIP_NUM} \
+      ${IS_MULTI_RESULT_EQUAL} \
+      ${IS_DELETE_ID} \
+      ${DELETE_ID_PATH} \
+      ${CANDIDATE_TOPK} >> ${RESULT_PREFIX_PATH}/search_${STRATEGY}.log
   ;;
 esac

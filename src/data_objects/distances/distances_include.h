@@ -24,13 +24,16 @@ using DistResType2 = float;
 using DistResType = float;  // distances value type
 
 // distances calculation type
-using DistCalcType1 = CGraph::UDistanceCalculator<VecValType1, DistResType1, InnerProduct<VecValType1, DistResType1> >;
-using DistCalcType2 = CGraph::UDistanceCalculator<VecValType2, DistResType2, AttributeSimilarity<VecValType2, DistResType2> >;
+using DistInnerProduct = CGraph::UDistanceCalculator<VecValType1, DistResType1, InnerProduct<VecValType1, DistResType1> >;
+using DistAttributeSimilarity = CGraph::UDistanceCalculator<VecValType2, DistResType2, AttributeSimilarity<VecValType2, DistResType2> >;
+using DistManhattanDistance = CGraph::UDistanceCalculator<VecValType2, DistResType2, ManhattanDistance<VecValType2, DistResType2> >;
 
-template<typename TVec1 = VecValType1,    // vector type of modal1
+template<typename DistCalcType1 = DistInnerProduct,
+        typename DistCalcType2 = DistAttributeSimilarity,
+        typename TVec1 = VecValType1,    // vector type of modal1
         typename TVec2 = VecValType2,    // vector type of modal2
         typename TRes1 = DistResType1,
-        typename TRes2 = DistCalcType2,
+        typename TRes2 = DistResType2,
         typename TRes = DistResType>    // fusion distance type
 struct BiDistanceCalculator {
     DistCalcType1 dist_op1_;

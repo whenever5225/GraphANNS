@@ -15,9 +15,11 @@ include(cmake/GA-OpenMP-depend.cmake)
 
 
 set(TUTORIAL_LIST
-        T-MG
-        S-MG
-        S-MB
+        T-MSAG
+        S-MSAG
+        S-MSAB
+        S-MABG
+        S-MABB
         )
 
 foreach(tut ${TUTORIAL_LIST})

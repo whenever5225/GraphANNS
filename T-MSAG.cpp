@@ -18,8 +18,9 @@ int main(int argc, char **argv) {
               << "-" << t->tm_hour << "-" << t->tm_min << "-" << t->tm_sec << std::endl;
     std::cout << std::endl;
 
-    unsigned argv_count = 1;
+    unsigned argv_count = 0;
 
+    std::cout << "[RUN] Execution object: " << argv[argv_count++] << std::endl;         // 0
     std::cout << "[PARAM] Modal1 base path: " << argv[argv_count++] << std::endl;       // 1
     std::cout << "[PARAM] Modal2 base path: " << argv[argv_count++] << std::endl;       // 2
     std::cout << "[PARAM] Index path: " << argv[argv_count++] << std::endl;             // 3

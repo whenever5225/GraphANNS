@@ -1,17 +1,17 @@
 /***************************
 @Author: wmz
 @Contact: wmengzhao@qq.com
-@File: c7_routing_kgraph.h
-@Time: 2022/4/8 8:37 AM
-@Desc: greedy route (like 'KGraph' algorithm)
+@File: c7_routing_kgraph_modal1.h
+@Time: 2022/11/1 6:46 PM
+@Desc: modal1 search routing
 ***************************/
 
-#ifndef GRAPHANNS_C7_ROUTING_KGRAPH_H
-#define GRAPHANNS_C7_ROUTING_KGRAPH_H
+#ifndef GRAPHANNS_C7_ROUTING_KGRAPH_MODAL1_H
+#define GRAPHANNS_C7_ROUTING_KGRAPH_MODAL1_H
 
 #include "../c7_routing_basic.h"
 
-class C7RoutingKGraph : public C7RoutingBasic {
+class C7RoutingKGraphModal1 : public C7RoutingBasic {
 public:
     DAnnFuncType prepareParam() override {
         auto *s_param = CGRAPH_GET_GPARAM(NPGSearchParam, GA_ALG_NPG_SEARCH_PARAM_KEY);
@@ -27,13 +27,14 @@ public:
         data_modal1_ = model_->train_meta_modal1_.data;
         data_modal2_ = model_->train_meta_modal2_.data;
         search_L_ = s_param->search_L;
-        K_ = a_param->top_k;
-        query_id_ = s_param->query_id;
+        K_ = Params.candi_top_k_;
+        query_id_modal1_ = s_param->modal1_query_id;
         query_modal1_ = model_->search_meta_modal1_.data;
         query_modal2_ = model_->search_meta_modal2_.data;
         if (Params.is_delete_id_) {
             delete_num_each_query_ = model_->delete_meta_.dim;
         }
+        dist_op_.set_weight(Params.w1_, 0);
         return DAnnFuncType::ANN_SEARCH;
     }
 
@@ -42,25 +43,28 @@ public:
         if (nullptr == s_param) {
             CGRAPH_RETURN_ERROR_STATUS("C7RoutingKGraph search get param failed")
         }
+        assert(search_L_ >= K_);
 
         std::vector<char> flags(num_, 0);
-        res_.clear();
+        res_modal1_.clear();
 
         unsigned k = 0;
         while (k < (int) search_L_) {
             unsigned nk = search_L_;
 
-            if (s_param->sp[k].flag_) {
-                s_param->sp[k].flag_ = false;
-                IDType n = s_param->sp[k].id_;
+            if (s_param->sp_modal1[k].flag_) {
+                s_param->sp_modal1[k].flag_ = false;
+                IDType n = s_param->sp_modal1[k].id_;
 
-                for (unsigned int id : model_->graph_m_[n]) {
+                for (unsigned m = 0; m < model_->graph_m1_[n].size(); ++m) {
+                    IDType id = model_->graph_m1_[n][m];
+
                     if (flags[id]) continue;
                     flags[id] = 1;
                     bool is_delete = false;
                     if (delete_num_each_query_) {
                         for (IDType k = 0; k < delete_num_each_query_; k++) {
-                            if (id == model_->delete_meta_.data[s_param->query_id * delete_num_each_query_ + k]) {
+                            if (id == model_->delete_meta_.data[s_param->modal1_query_id * delete_num_each_query_ + k]) {
                                 is_delete = true;
                                 break;
                             }
@@ -69,16 +73,16 @@ public:
                     if (is_delete) continue;
 
                     DistResType dist = 0;
-                    dist_op_.calculate(query_modal1_ + (query_id_ * dim1_),
-                                      data_modal1_ + id * dim1_,
-                                      dim1_, dim1_,
-                                       query_modal2_ + (query_id_ * dim2_),
+                    dist_op_.calculate(query_modal1_ + (query_id_modal1_ * dim1_),
+                                       data_modal1_ + id * dim1_,
+                                       dim1_, dim1_,
+                                       query_modal2_ + (query_id_modal1_ * dim2_),
                                        data_modal2_ + id * dim2_,
-                                      dim2_, dim2_, dist);
+                                       dim2_, dim2_, dist);
 
-                    if (dist >= s_param->sp[search_L_ - 1].distance_) continue;
+                    if (dist >= s_param->sp_modal1[search_L_ - 1].distance_) continue;
                     NeighborFlag nn(id, dist, true);
-                    int r = InsertIntoPool(s_param->sp.data(), search_L_, nn);
+                    int r = InsertIntoPool(s_param->sp_modal1.data(), search_L_, nn);
 
                     if (r < nk) nk = r;
                 }
@@ -86,9 +90,9 @@ public:
             nk <= k ? (k = nk) : (++k);
         }
 
-        res_.reserve(K_);
+        res_modal1_.reserve(K_);
         for (size_t i = 0; i < K_; i++) {
-            res_.push_back(s_param->sp[i].id_);
+            res_modal1_.push_back(s_param->sp_modal1[i].id_);
         }
         return CStatus();
     }
@@ -99,10 +103,10 @@ public:
 
         {
             CGRAPH_PARAM_WRITE_CODE_BLOCK(a_param)
-            a_param->results.push_back(res_);
+            a_param->results_modal1.push_back(res_modal1_);
         }
         return CStatus();
     }
 };
 
-#endif //GRAPHANNS_C7_ROUTING_KGRAPH_H
+#endif //GRAPHANNS_C7_ROUTING_KGRAPH_MODAL1_H

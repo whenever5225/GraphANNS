@@ -10,5 +10,7 @@
 #define GRAPHANNS_C7_ROUTING_INCLUDE_H
 
 #include "implementation/c7_routing_kgraph.h"
+#include "implementation/c7_routing_kgraph_modal1.h"
+#include "implementation/c7_routing_kgraph_modal2.h"
 
 #endif //GRAPHANNS_C7_ROUTING_INCLUDE_H

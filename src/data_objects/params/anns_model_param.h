@@ -24,6 +24,8 @@ struct AnnsModelParam : public CGraph::GParam {
 
     graph_neighbor graph_n_;
     graph_matrix graph_m_;
+    graph_matrix graph_m1_;
+    graph_matrix graph_m2_;
 
     MetaData<VecValType1> train_meta_modal1_;
     MetaData<VecValType2> train_meta_modal2_;

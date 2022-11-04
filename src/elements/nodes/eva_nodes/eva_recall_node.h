@@ -37,7 +37,7 @@ public:
         unsigned top_k = s_param->top_k;
         unsigned gt_k = Params.gt_k_;
         int cnt = 0;
-        std::set<unsigned> gt, res;
+        std::set<IDType> gt, res;
         for (unsigned i = 0; i < gt_num_; i++) {
             if (s_param->results[i].empty()) continue;
             gt_look_num_ = (Params.is_multi_res_equal_ ? m_param->eva_meta_.vec[i].size() : gt_k);

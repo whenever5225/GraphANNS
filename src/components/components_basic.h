@@ -12,7 +12,7 @@
 #include "../../CGraph/src/CGraph.h"
 #include "../utils/utils.h"
 
-using DistCalcType = BiDistanceCalculator<>;
+using DistCalcType = BiDistanceCalculator<DistInnerProduct, DistAttributeSimilarity>;
 
 class ComponentsBasic : public CGraph::DAnnNode {
 protected:

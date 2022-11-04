@@ -19,7 +19,12 @@ protected:
     VecValType1 *query_modal1_ = nullptr;    // query data
     VecValType2 *query_modal2_ = nullptr;    // query data
     unsigned query_id_; // current query id
+    unsigned query_id_modal1_; // current modal1 query id
+    unsigned query_id_modal2_; // current modal2 query id
+    std::vector<IDType> res_modal1_; // current modal1 query result
+    std::vector<IDType> res_modal2_; // current modal2 query result
     std::vector<IDType> res_; // current query result
+    unsigned delete_num_each_query_ = 0;
 };
 
 #endif //GRAPHANNS_C7_ROUTING_BASIC_H

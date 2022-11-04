@@ -14,11 +14,17 @@
 struct NPGSearchParam : public BasicParam {
     unsigned search_L = Params.L_search_;
     unsigned query_id = 0;
+    unsigned modal1_query_id = 0;
+    unsigned modal2_query_id = 0;
 
     std::vector<NeighborFlag> sp;
+    std::vector<NeighborFlag> sp_modal1;
+    std::vector<NeighborFlag> sp_modal2;
 
     CVoid reset() override {
         sp.clear();
+        sp_modal1.clear();
+        sp_modal2.clear();
     }
 };
 

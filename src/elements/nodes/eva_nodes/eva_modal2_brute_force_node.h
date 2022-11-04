@@ -1,13 +1,13 @@
 /***************************
 @Author: wmz
 @Contact: wmengzhao@qq.com
-@File: eva_brute_force.h
-@Time: 2022/10/13 9:04 PM
-@Desc: obtain result with brute force
+@File: eva_modal2_brute_force_node.h
+@Time: 2022/11/1 8:49 PM
+@Desc: modal2 brute force
 ***************************/
 
-#ifndef GRAPHANNS_EVA_BRUTE_FORCE_NODE_H
-#define GRAPHANNS_EVA_BRUTE_FORCE_NODE_H
+#ifndef GRAPHANNS_EVA_MODAL2_BRUTE_FORCE_NODE_H
+#define GRAPHANNS_EVA_MODAL2_BRUTE_FORCE_NODE_H
 
 #if GA_USE_OPENMP
 
@@ -19,12 +19,12 @@
 #include "../../elements_define.h"
 
 template<typename DistCalcType = BiDistanceCalculator<DistInnerProduct, DistAttributeSimilarity>>
-class EvaBruteForceNode : public CGraph::GNode {
+class EvaModal2BruteForceNode : public CGraph::GNode {
 public:
     CStatus init() override {
         auto *model_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY);
         if (!model_param) {
-            CGRAPH_RETURN_ERROR_STATUS("EvaBruteForceNode get model param failed")
+            CGRAPH_RETURN_ERROR_STATUS("EvaModal2BruteForceNode get model param failed")
         }
 
         CStatus status = model_param->train_meta_modal1_.load(Params.GA_ALG_BASE_MODAL1_PATH_,
@@ -41,7 +41,7 @@ public:
 
         auto *s_param = CGRAPH_GET_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY)
         if (!s_param) {
-            CGRAPH_RETURN_ERROR_STATUS("EvaBruteForceNode get search param failed")
+            CGRAPH_RETURN_ERROR_STATUS("EvaModal2BruteForceNode get search param failed")
         }
 
         status += model_param->search_meta_modal1_.load(Params.GA_ALG_QUERY_MODAL1_PATH_,
@@ -56,7 +56,7 @@ public:
         assert(model_param->search_meta_modal1_.dim == model_param->train_meta_modal1_.dim);
         assert(model_param->search_meta_modal2_.dim == model_param->train_meta_modal2_.dim);
         if (!status.isOK()) {
-            return CStatus("EvaBruteForceNode init load param failed");
+            return CStatus("EvaModal2BruteForceNode init load param failed");
         }
 
         printf("[PATH] modal 1 query vector path: %s\n", model_param->search_meta_modal1_.file_path.c_str());
@@ -68,6 +68,7 @@ public:
         query_num_ = model_param->search_meta_modal1_.num;
         dim1_ = model_param->train_meta_modal1_.dim;
         dim2_ = model_param->train_meta_modal2_.dim;
+        dist_op_.set_weight(0, Params.w2_);
         return CStatus();
     }
 
@@ -83,11 +84,11 @@ public:
         auto *m_param = CGRAPH_GET_GPARAM(AnnsModelParam, GA_ALG_MODEL_PARAM_KEY)
         auto *s_param = CGRAPH_GET_GPARAM(AlgParamBasic, GA_ALG_PARAM_BASIC_KEY);
         if (nullptr == m_param || nullptr == s_param) {
-            CGRAPH_RETURN_ERROR_STATUS("EvaBruteForceNode run get param failed")
+            CGRAPH_RETURN_ERROR_STATUS("EvaModal2BruteForceNode run get param failed")
         }
 
-        s_param->results.resize(num_);
-        unsigned top_k = s_param->top_k;
+        s_param->results_modal2.resize(num_);
+        unsigned top_k = Params.candi_top_k_;
 
 #pragma omp parallel for num_threads(Params.thread_num_) schedule(dynamic) \
                          shared(m_param, s_param, top_k) default(none)
@@ -118,7 +119,7 @@ public:
             for (IDType j = 0; j < top_k; j++) {
                 std::pair<DistResType, IDType> p = dist_id.top();
                 dist_id.pop();
-                s_param->results[i].emplace_back(p.second);
+                s_param->results_modal2[i].emplace_back(p.second);
             }
         }
 
@@ -140,4 +141,4 @@ private:
     DistCalcType dist_op_;
 };
 
-#endif //GRAPHANNS_EVA_BRUTE_FORCE_NODE_H
+#endif //GRAPHANNS_EVA_MODAL2_BRUTE_FORCE_NODE_H

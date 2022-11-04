@@ -15,6 +15,8 @@ struct AlgParamBasic : public BasicParam {
     unsigned top_k = Params.top_k_;
 
     std::vector<std::vector<IDType> > results;
+    std::vector<std::vector<IDType> > results_modal1;
+    std::vector<std::vector<IDType> > results_modal2;
 
     CVoid reset() override {
     }

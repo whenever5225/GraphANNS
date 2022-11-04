@@ -56,13 +56,27 @@ struct ParamConfig {
     }
 
     void set_general_param(unsigned thread_num = 1, unsigned is_norm_modal1 = 0, unsigned is_norm_modal2 = 0,
-            unsigned is_skip = 0, unsigned skip_num = 0, unsigned is_multi_res_equal = 0) {
+            unsigned is_skip = 0, unsigned skip_num = 0, unsigned is_multi_res_equal = 0, unsigned is_delete_id = 0) {
         thread_num_ = thread_num;
         is_norm_modal1_ = is_norm_modal1;
         is_norm_modal2_ = is_norm_modal2;
         is_skip_ = is_skip;
         skip_num_ = skip_num;
         is_multi_res_equal_ = is_multi_res_equal;
+        is_delete_id_ = is_delete_id;
+    }
+
+    void set_modal_index_path(char *modal1_index_path, char *modal2_index_path) {
+        GA_ALG_MODAL1_INDEX_PATH_ = modal1_index_path;
+        GA_ALG_MODAL2_INDEX_PATH_ = modal2_index_path;
+    }
+
+    void set_delete_id_path(char *delete_id_path) {
+        GA_ALG_DELETE_ID_PATH_ = delete_id_path;
+    }
+
+    void set_candidate_top_k(unsigned candi_top_k) {
+        candi_top_k_ = candi_top_k;
     }
 
 public:
@@ -72,7 +86,10 @@ public:
     char *GA_ALG_QUERY_MODAL2_PATH_{};
     char *GA_ALG_GROUND_TRUTH_PATH_{};
     char *GA_ALG_INDEX_PATH_{};
+    char *GA_ALG_MODAL1_INDEX_PATH_{};
+    char *GA_ALG_MODAL2_INDEX_PATH_{};
     char *GA_ALG_RESULT_PATH_{};
+    char *GA_ALG_DELETE_ID_PATH_{};
 
     unsigned L_candidate_{};
     unsigned R_neighbor_{};
@@ -95,6 +112,8 @@ public:
     unsigned is_skip_{};
     unsigned skip_num_{};
     unsigned is_multi_res_equal_{};
+    unsigned is_delete_id_{};
+    unsigned candi_top_k_{};
 
     float w1_{};
     float w2_{};

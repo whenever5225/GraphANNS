@@ -92,18 +92,18 @@ public:
                 model_->graph_n_[i].emplace_back(Neighbor(graph_pool_[i][j].id_, graph_pool_[i][j].distance_));
             }
 
-            std::vector<NeighborFlag>().swap(graph_pool_[i]);
-            std::vector<IDType>().swap(graph_nn_[NN_NEW][i]);
-            std::vector<IDType>().swap(graph_nn_[NN_OLD][i]);
-            std::vector<IDType>().swap(graph_nn_[RNN_NEW][i]);
-            std::vector<IDType>().swap(graph_nn_[RNN_OLD][i]);
+//            std::vector<NeighborFlag>().swap(graph_pool_[i]);
+//            std::vector<IDType>().swap(graph_nn_[NN_NEW][i]);
+//            std::vector<IDType>().swap(graph_nn_[NN_OLD][i]);
+//            std::vector<IDType>().swap(graph_nn_[RNN_NEW][i]);
+//            std::vector<IDType>().swap(graph_nn_[RNN_OLD][i]);
         }
 
-        std::vector<std::vector<NeighborFlag>>().swap(graph_pool_);
-        std::vector<std::vector<IDType >>().swap(graph_nn_[NN_NEW]);
-        std::vector<std::vector<IDType >>().swap(graph_nn_[NN_OLD]);
-        std::vector<std::vector<IDType >>().swap(graph_nn_[RNN_NEW]);
-        std::vector<std::vector<IDType >>().swap(graph_nn_[RNN_OLD]);
+//        std::vector<std::vector<NeighborFlag>>().swap(graph_pool_);
+//        std::vector<std::vector<IDType >>().swap(graph_nn_[NN_NEW]);
+//        std::vector<std::vector<IDType >>().swap(graph_nn_[NN_OLD]);
+//        std::vector<std::vector<IDType >>().swap(graph_nn_[RNN_NEW]);
+//        std::vector<std::vector<IDType >>().swap(graph_nn_[RNN_OLD]);
         return CStatus();
     }
 

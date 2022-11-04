@@ -22,6 +22,10 @@ struct NPGTrainParam : public BasicParam {
     unsigned iter = Params.iter_;                  // number of nn-descent iteration
     unsigned sample_num = Params.sample_num_;      // number of sample data when evaluating graph quality for each iteration
     float graph_quality_threshold = Params.graph_quality_threshold_;         // graph quality threshold
+
+    CVoid reset() override {
+
+    }
 };
 
 #endif //GRAPHANNS_NPG_TRAIN_PARAM_H
