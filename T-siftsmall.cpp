@@ -15,14 +15,17 @@ int main() {
     GElementPtr a, b, c, d, e, f = nullptr;
 
     // build
-    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
-    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
+    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<ConfigModelNode>(&b, {a}, "config_model");
 
     status += pipeline->registerGElement<C1InitializationNNDescent>(&c, {b}, "c1_nssg");
     status += pipeline->registerGElement<C2CandidateNSSGV1>(&d, {c}, "c2_nssg");
     status += pipeline->registerGElement<C3NeighborNSGV1>(&e, {d}, "c3_nsg");
 
     status += pipeline->registerGElement<SaveIndexNode>(&f, {e}, "save_index");
+
+    a->setLevel(-1);
+    b->setLevel(-2);
 
     status += pipeline->process();
     if (!status.isOK()) {
