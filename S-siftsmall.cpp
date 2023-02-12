@@ -15,8 +15,8 @@ int main() {
 
     GElementPtr a, b, f, g, h, i, gh_region= nullptr;
     // build
-    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
-    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
+    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<ConfigModelNode>(&b, {a}, "config_model");
     status += pipeline->registerGElement<LoadIndexNode>(&f, {a}, "load_index");
 
     //search
@@ -27,6 +27,9 @@ int main() {
     status += pipeline->registerGElement<SearchRegion>(&gh_region, {f}, "search_region");
 
     status += pipeline->registerGElement<EvaRecallNode>(&i, {gh_region}, "eva_recall");
+
+    a->setLevel(-1);
+    b->setLevel(-2);
 
     status += pipeline->process();
     if (!status.isOK()) {
