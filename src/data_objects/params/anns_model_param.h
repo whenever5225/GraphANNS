@@ -28,9 +28,6 @@ struct AnnsModelParam : public CGraph::GParam {
     MetaData<VecValType> train_meta_;
     MetaData<VecValType> search_meta_;
     MetaData<IDType> eva_meta_;
-
-    CVoid reset() override {
-           }
 };
 
 #endif //GRAPHANNS_ANNS_MODEL_PARAM_H

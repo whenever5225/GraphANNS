@@ -19,8 +19,6 @@
 
 template<typename T = VecValType>
 struct BasicParam : public CGraph::GParam {
-    CVoid reset() override {
-    }
 };
 
 #endif //GRAPHANNS_BASIC_PARAM_H

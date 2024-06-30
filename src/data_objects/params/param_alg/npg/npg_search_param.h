@@ -19,7 +19,7 @@ struct NPGSearchParam : public BasicParam<> {
     std::vector<NeighborFlag> sp;
     std::vector<std::vector<IDType> > results;
 
-    CVoid reset() override {
+    CVoid reset(const CStatus& status) override {
         sp.clear();
     }
 };
