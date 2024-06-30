@@ -68,8 +68,8 @@ int main(int argc, char **argv) {
 
     GElementPtr a, b, f, g, h, i, p, gh_region= nullptr;
     // build
-    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
-    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
+    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<ConfigModelNode>(&b, {a}, "config_model");
     status += pipeline->registerGElement<LoadIndexNode>(&f, {a}, "load_index");
 
     //search
@@ -85,6 +85,8 @@ int main(int argc, char **argv) {
 //    if (result_path != " ") {
 //        status += pipeline->registerGElement<SaveResultNode>(&p, {i}, "save_result");
 //    }
+    a->setLevel(-1);
+    b->setLevel(-2);
 
     gh_region->addGAspect<TimerAspect>()->addGAspect<TraceAspect>();
     status += pipeline->process();

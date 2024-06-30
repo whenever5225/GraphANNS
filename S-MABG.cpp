@@ -73,8 +73,8 @@ int main(int argc, char **argv) {
 
     GElementPtr a, b, c, d, e, f, g, h, i, j, ef_cluster = nullptr, gh_cluster = nullptr;
     // configuration
-    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
-    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
+    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<ConfigModelNode>(&b, {a}, "config_model");
     status += pipeline->registerGElement<LoadModal1IndexNode>(&c, {a, b}, "load_modal1_index");
     status += pipeline->registerGElement<LoadModal2IndexNode>(&d, {a, b}, "load_modal1_index");
 
@@ -99,6 +99,8 @@ int main(int argc, char **argv) {
 //    if (result_path != " ") {
 //        status += pipeline->registerGElement<SaveResultNode>(&p, {i}, "save_result");
 //    }
+    a->setLevel(-1);
+    b->setLevel(-2);
 
     ef_cluster->addGAspect<TimerAspect>()->addGAspect<TraceAspect>();
     gh_cluster->addGAspect<TimerAspect>()->addGAspect<TraceAspect>();

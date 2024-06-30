@@ -17,9 +17,6 @@ struct AlgParamBasic : public BasicParam {
     std::vector<std::vector<IDType> > results;
     std::vector<std::vector<IDType> > results_modal1;
     std::vector<std::vector<IDType> > results_modal2;
-
-    CVoid reset() override {
-    }
 };
 
 #endif //GRAPHANNS_ALG_PARAM_BASIC_H

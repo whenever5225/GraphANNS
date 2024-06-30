@@ -13,8 +13,6 @@
 #include "../basic_param.h"
 
 struct EvaParam : public BasicParam {
-    CVoid reset() override {
-    }
 };
 
 #endif //GRAPHANNS_EVA_PARAM_H

@@ -67,8 +67,8 @@ int main(int argc, char **argv) {
     GPipelinePtr pipeline = GPipelineFactory::create();
 
     GElementPtr a, b, c, d, f, h, g;
-    CStatus status = pipeline->registerGElement<ConfigAlgBruteForceNode, -1>(&a, {}, "config_brute_force");
-    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
+    CStatus status = pipeline->registerGElement<ConfigAlgBruteForceNode>(&a, {}, "config_brute_force");
+    status += pipeline->registerGElement<ConfigModelNode>(&b, {a}, "config_model");
     status += pipeline->registerGElement<EvaModal1BruteForceNode<BiDistanceCalculator<DistInnerProduct, DistAttributeSimilarity>
     >>(&f, {a, b}, "eva_modal1_brute_force");
     status += pipeline->registerGElement<EvaModal2BruteForceNode<BiDistanceCalculator<DistInnerProduct, DistAttributeSimilarity>
@@ -83,6 +83,9 @@ int main(int argc, char **argv) {
 
     f->addGAspect<TimerAspect>()->addGAspect<TraceAspect>();
     c->addGAspect<TimerAspect>()->addGAspect<TraceAspect>();
+
+    a->setLevel(-1);
+    b->setLevel(-2);
     status += pipeline->process();
     if (!status.isOK()) {
         CGRAPH_ECHO("process graph error, error info is [%s]", status.getInfo().c_str());

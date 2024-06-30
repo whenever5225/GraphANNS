@@ -68,8 +68,8 @@ int main(int argc, char **argv) {
     GElementPtr a, b, c, d, e, cde_region, f = nullptr;
 
     // build
-    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode, -1>(&a, {}, "config_npg");
-    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
+    CStatus status = pipeline->registerGElement<ConfigAlgNPGNode>(&a, {}, "config_npg");
+    status += pipeline->registerGElement<ConfigModelNode>(&b, {a}, "config_model");
 
     c = pipeline->createGNode<C1InitializationNNDescent>(GNodeInfo("c1_nssg"));
     d = pipeline->createGNode<C2CandidateNSSGV1>(GNodeInfo("c2_nssg"));
@@ -80,6 +80,8 @@ int main(int argc, char **argv) {
     status += pipeline->registerGElement<GCluster>(&cde_region, {b}, "build");
     status += pipeline->registerGElement<SaveIndexNode>(&f, {cde_region}, "save_index");
 
+    a->setLevel(-1);
+    b->setLevel(-2);
     pipeline->addGAspect<TimerAspect>()->addGAspect<TraceAspect>();
 
     status += pipeline->process();

@@ -38,6 +38,7 @@ public:
     }
 
     CStatus run() override {
+        return CStatus();
     }
 };
 

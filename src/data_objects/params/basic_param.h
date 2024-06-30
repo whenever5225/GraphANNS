@@ -18,8 +18,6 @@
 #include "../../graph_anns_define.h"
 
 struct BasicParam : public CGraph::GParam {
-    CVoid reset() override {
-    }
 };
 
 #endif //GRAPHANNS_BASIC_PARAM_H

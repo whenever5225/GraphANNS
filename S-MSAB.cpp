@@ -64,8 +64,8 @@ int main(int argc, char **argv) {
     GPipelinePtr pipeline = GPipelineFactory::create();
 
     GElementPtr a, b, f, h, g;
-    CStatus status = pipeline->registerGElement<ConfigAlgBruteForceNode, -1>(&a, {}, "config_brute_force");
-    status += pipeline->registerGElement<ConfigModelNode, -2>(&b, {a}, "config_model");
+    CStatus status = pipeline->registerGElement<ConfigAlgBruteForceNode>(&a, {}, "config_brute_force");
+    status += pipeline->registerGElement<ConfigModelNode>(&b, {a}, "config_model");
     status += pipeline->registerGElement<EvaBruteForceNode<BiDistanceCalculator<DistInnerProduct, DistAttributeSimilarity>
                                           >>(&f, {a}, "eva_brute_force");
     status += pipeline->registerGElement<EvaRecallNode>(&h, {f}, "eva_recall");
@@ -74,6 +74,9 @@ int main(int argc, char **argv) {
     if (result_path != " ") {
         status += pipeline->registerGElement<SaveResultNode>(&g, {f}, "save_result");
     }
+
+    a->setLevel(-1);
+    b->setLevel(-2);
 
     f->addGAspect<TimerAspect>()->addGAspect<TraceAspect>();
     status += pipeline->process();

@@ -21,7 +21,7 @@ struct NPGSearchParam : public BasicParam {
     std::vector<NeighborFlag> sp_modal1;
     std::vector<NeighborFlag> sp_modal2;
 
-    CVoid reset() override {
+    CVoid reset(const CStatus& status) override {
         sp.clear();
         sp_modal1.clear();
         sp_modal2.clear();
